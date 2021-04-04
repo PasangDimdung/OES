@@ -1,0 +1,242 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/dashboard']">Dashboard</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Subject List</li>
+    </ol>
+  </nav>
+  <!-- Admin View -->
+  <div class="row" *ngIf="authority === 'admin'">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Subject Table
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Start Date Time</th>
+                <th>End Date Time</th>
+                <th>Duration</th>
+                <th>Full Marks</th>
+                <th>Pass Marks</th>
+                <th>Status</th>
+                <th>Question Paper</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let element of sDates; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a>
+                      {{ element.subject.name }}
+                    </a>
+                  </td>
+                    <td >
+                      <a> {{element.starting_date}} </a>
+                    </td>
+                    <td>
+                      <a> {{element.ending_date}} </a>
+                    </td>
+                  <td>
+                    {{ element.subject.duration }}
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.fullMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.passMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <span class="badge badge-pill badge-warning">Pending</span>
+                  </td>
+                  <td style="padding-left: 33px">
+                    <button (click)="viewQuestionPaper(element.subject.name)"class="btn btn-sm btn-primary">View</button>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!sDates">
+                <td colspan="10">Loading...</td>
+              </tr>
+              <tr *ngIf="sDates && sDates.length == 0">
+                <td colspan="10">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Teacher View -->
+  <div class="row" *ngIf="authority === 'pm'">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Subject Table
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Start Date Time</th>
+                <th>End Date Time</th>
+                <th>Duration</th>
+                <th>Full Marks</th>
+                <th>Pass Marks</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let element of sDates; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a>
+                      {{ element.subject.name }}
+                    </a>
+                  </td>
+                    <td >
+                      <a> {{element.starting_date}} </a>
+                    </td>
+                    <td>
+                      <a> {{element.ending_date}} </a>
+                    </td>
+                  <td>
+                    {{ element.subject.duration }}
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.fullMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.passMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <span class="badge badge-pill badge-warning">Pending</span>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!sDates">
+                <td colspan="10">Loading...</td>
+              </tr>
+              <tr *ngIf="sDates && sDates.length == 0">
+                <td colspan="10">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Student View -->
+  <div class="row" *ngIf="authority === 'user'">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Subject Table
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Start Date Time</th>
+                <th>End Date Time</th>
+                <th>Duration</th>
+                <th>Full Marks</th>
+                <th>Pass Marks</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let element of sDates; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a>
+                      {{ element.subject.name }}
+                    </a>
+                  </td>
+                    <td >
+                      <a> {{element.starting_date}} </a>
+                    </td>
+                    <td>
+                      <a> {{element.ending_date}} </a>
+                    </td>
+                  <td>
+                    {{ element.subject.duration }}
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.fullMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.subject.passMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <span class="badge badge-pill badge-warning">Pending</span>
+                  </td>
+                  <!-- <td style="padding-left: 33px">
+                    <button (click)="viewQuestionPaper(element.subject.name)"class="btn btn-sm btn-primary">Take Exam</button>
+                  </td> -->
+                  <td>
+                    <button  (click)="viewQuestionPaper(element.subject.name)" class="btn btn-sm btn-primary" 
+                    *ngIf="currentDateTime >= element.starting_date &&  element.ending_date >= currentDateTime" >
+                      Start
+                    </button>
+                    <div *ngIf="currentDateTime > element.starting_date && currentDateTime > element.ending_date">
+                      <button disabled class="btn btn-sm btn-primary">
+                        Start
+                      </button>
+                    </div>
+                    <div *ngIf="element.starting_date >  currentDateTime &&  element.ending_date > currentDateTime">
+                      <button disabled class="btn btn-sm btn-primary">
+                        Start
+                      </button>
+                    </div>
+                  </td>  
+                </tr>
+              </ng-container>
+              <tr *ngIf="!sDates">
+                <td colspan="10">Loading...</td>
+              </tr>
+              <tr *ngIf="sDates && sDates.length == 0">
+                <td colspan="10">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

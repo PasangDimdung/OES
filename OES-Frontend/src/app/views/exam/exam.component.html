@@ -1,0 +1,32 @@
+{{ currentDateTime }}
+<div class="animated fadeIn">
+  <div class="card mt-4 mx-4">
+    <div class="card-header text-muted">
+      Question {{ questionProgress + 1 }} of {{ questionLength.length }}
+    </div>
+    <div class="card-body" *ngIf="questions && questions[0]">
+      <p><strong>{{ questions[questionProgress].title }}</strong></p>
+      <ng-container *ngFor="let option of questions[questionProgress].op; let i = index">
+        <div class="form-check">
+          <input (click)="onOptionClick(questions[questionProgress].id, questions[questionProgress].op[i].id)"
+            class="form-check-input" type="radio" name="exampleRadios" id="{{option.op}}">
+          <label class="form-check-label" for="{{option.op}}">
+            {{option.op}}
+          </label>
+        </div>
+        <p></p>
+      </ng-container>
+
+      <div class="form-actions mt-4">
+        <button (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary">
+          <i class="fa fa-dot-circle-o"></i> Submit
+        </button>
+      </div>
+
+    </div>
+
+    <div *ngIf="!questions">
+      <div class="container m-4">Loading...</div>
+    </div>
+  </div>
+</div>

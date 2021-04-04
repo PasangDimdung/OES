@@ -1,0 +1,53 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/question-type/add']">Question Type</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div *ngIf="editMode == 0" class="card-header">
+          <strong>Question Type </strong>
+          <small>Form</small>
+        </div>
+        <div *ngIf="editMode == 1" class="card-header">
+          <strong>Edit Question Type </strong>
+          <small>Form</small>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" #userform="ngForm">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input formControlName="name" type="text" class="form-control" id="name"
+                    placeholder="Enter question type"
+                    [class.is-invalid]='form.get("name").errors && form.get("name").touched' />
+                    <div class="invalid-feedback">&nbsp; Question type name is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button *ngIf="editMode == 0" (click)="onSubmit()" [disabled]="!form.valid || isSubmitted"
+            type="submit" class="btn btn-sm btn-primary">
+            <i class="fa fa-dot-circle-o"></i> Submit
+          </button>
+          <button *ngIf="editMode == 1" (click)="onSubmit()" [disabled]="!form.valid || isSubmitted"
+            type="submit" class="btn btn-sm btn-primary">
+            <i class="fa fa-dot-circle-o"></i> Update
+          </button>
+          <button (click)="onFormReset()" type="reset" class="btn btn-sm btn-danger">
+            <i class="fa fa-ban"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

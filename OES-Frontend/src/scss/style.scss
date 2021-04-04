@@ -1,0 +1,23 @@
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// If you want to add something do it here
+@import "custom";
+
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.breadcrumb {
+    background-color: #e4e5e6;
+    border-bottom: none;
+    padding: 0px;
+}
+
+.table {
+    margin-bottom: 0px;
+}
+
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{opacity:1}

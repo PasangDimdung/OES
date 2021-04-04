@@ -1,0 +1,102 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/subject/add']">Subject</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+  <div class="form-group row pt-3">
+    <label class="col-md-1" for="select-department">Department:</label>
+    <div class="col-md-2">
+      <select id="select-department" name="select-department" class="form-control form-control-sm" 
+      style="background-color: #e4e5e6; border-color: rgb(169, 169, 169);">
+        <option value="0">All</option>
+        <option value="1">CSIT</option>
+        <option value="2">BCA</option>
+      </select>
+    </div>
+    <label class="col-md-1" for="select-semester">Semester:</label>
+    <div class="col-md-2">
+      <select id="select-semester" name="select-semester" class="form-control form-control-sm"  
+      style="background-color: #e4e5e6; border-color: rgb(169, 169, 169);">
+        <option value="0">All</option>
+        <option value="1">First Semester</option>
+        <option value="2">Second Semester</option>
+        <option value="1">Third Semester</option>
+        <option value="2">Fourth Semester</option>
+        <option value="1">Fifth Semester</option>
+        <option value="2">Sixth Semester</option>
+        <option value="1">Seventh Semester</option>
+        <option value="2">Eight Semester</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-7">
+      <div class="card">  
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Subject Table
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Subject Name</th>
+                <th>Full Marks</th>
+                <th>Pass Marks</th>
+                <th>Duration</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let element of subjectList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a [routerLink]="['/subject/add-unit', element.id]">
+                      {{ element.name }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.fullMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.passMarks }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.duration }}
+                    </a>
+                  </td>
+                  <td>
+                    <button (click)="onDelete(element.id)" class="btn btn-link btn-icon btn-md remove"
+                      style="color: #ef8157">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!subjectList">
+                <td colspan="6">Loading...</td>
+              </tr>
+              <tr *ngIf="subjectList && subjectList.length == 0">
+                <td colspan="6">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

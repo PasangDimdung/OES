@@ -1,0 +1,115 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <!-- Nav tabs -->
+      <tabset>
+        <tab>
+          <ng-template tabHeading><i class="icon-user"></i> Profile</ng-template>
+          <div class="bd-example my-4 mx-2">
+            <dl class="row">
+              <dt class="col-sm-3">Full Name:</dt>
+              <dd class="col-sm-9">{{ info.username }}</dd>
+
+              <dt class="col-sm-3">Username:</dt>
+              <dd class="col-sm-9">
+                <p>{{ info.username }}</p>
+              </dd>
+
+              <dt class="col-sm-3">Email:</dt>
+              <dd class="col-sm-9">{{ info.username }}@gmail.com</dd>
+
+              <dt class="col-sm-3 text-truncate">Department:</dt>
+              <dd class="col-sm-9">Computer science and information technology (CSIT)</dd>
+
+              <dt class="col-sm-3 text-truncate">Semester:</dt>
+              <dd class="col-sm-9">Seventh Semester</dd>
+            </dl>
+            <!-- 
+            <button type="button" class="btn btn-sm btn-light">
+              <i class="fa fa-dot-circle-o"></i> Edit
+            </button> -->
+
+            <button (click)="logout()" type="button" class="btn btn-sm btn-primary">
+              <i class="fa fa-dot-circle-o"></i> Logout
+            </button>
+
+          </div>
+        </tab>
+        <tab>
+          <ng-template tabHeading><i class="icon-lock"></i> Change Password</ng-template>
+          <div class="bd-example my-3 mx-2">
+            <form [formGroup]="changePasswordForm">
+              <dl class="row">
+                <dt class="col-sm-5">Current Password:</dt>
+                <dd class="col-sm-7">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="oldPassword" type="password" name="oldPassword"
+                        class="form-control" placeholder="Password"
+                        [class.is-invalid]='changePasswordForm.get("oldPassword").errors && changePasswordForm.get("oldPassword").touched' />
+                      <div *ngIf="changePasswordForm.get('oldPassword').hasError('required')" class="invalid-feedback"> 
+                        Current Password is required
+                      </div>
+                      <div *ngIf="changePasswordForm.get('oldPassword').hasError('minlength')" class="invalid-feedback">
+                        Current Password must be at least 4 characters
+                      </div>
+                      <div *ngIf="changePasswordForm.get('oldPassword').hasError('maxlength')" class="invalid-feedback">
+                        Current Password must be at most 10 characters
+                      </div>
+                    </div>
+                  </div>
+                </dd>
+                <dt class="col-sm-5">New Password:</dt>
+                <dd class="col-sm-7">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="newPassword" type="password" name="newPassword" class="form-control"
+                        placeholder="Password" 
+                        [class.is-invalid]='changePasswordForm.get("newPassword").errors && changePasswordForm.get("newPassword").touched' />
+                        <div *ngIf="changePasswordForm.get('newPassword').hasError('required')" class="invalid-feedback"> 
+                          New Password is required
+                        </div>
+                        <div *ngIf="changePasswordForm.get('newPassword').hasError('minlength')" class="invalid-feedback">
+                          New Password must be at least 4 characters
+                        </div>
+                        <div *ngIf="changePasswordForm.get('newPassword').hasError('maxlength')" class="invalid-feedback">
+                          New Password must be at most 10 characters
+                        </div>
+                    </div>
+                  </div>
+                </dd>
+                <dt class="col-sm-5">Confirm New Password:</dt>
+                <dd class="col-sm-7">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input formControlName="confirmPassword" type="password" name="confirmPassword"
+                        class="form-control" placeholder="Password" 
+                        [class.is-invalid]='changePasswordForm.get("confirmPassword").errors && changePasswordForm.get("confirmPassword").touched' />
+                        <div *ngIf="changePasswordForm.get('confirmPassword').hasError('required')" class="invalid-feedback">
+                          Confirm Password is required
+                        </div>
+                        <div *ngIf="changePasswordForm.get('confirmPassword').hasError('isMatching')" class="invalid-feedback">
+                         Confirm Password must match password
+                        </div>
+                    </div>
+                  </div>
+                </dd>
+              </dl>
+            </form>
+            <button (click)="updatePassword()" type="button" class="btn btn-sm btn-primary">
+              <i class="fa fa-dot-circle-o"></i> Update
+            </button>
+          </div>
+        </tab>
+      </tabset>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>

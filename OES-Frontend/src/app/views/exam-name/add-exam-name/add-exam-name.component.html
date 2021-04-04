@@ -1,0 +1,143 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/exam-name/add']">Exam Name</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <!-- Exam Name Column -->
+    <div class="col-sm-6">
+      <div class="card">
+        <div *ngIf="editMode == 0" class="card-header">
+          <strong>Exam Name </strong>
+          <small>Form</small>
+        </div>
+        <div *ngIf="editMode == 1" class="card-header">
+          <strong>Edit Exam Name </strong>
+          <small>Form</small>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" #userform="ngForm">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input formControlName="name" type="text" class="form-control" id="name"
+                    placeholder="Enter exam name" 
+                    [class.is-invalid]='form.get("name").errors && form.get("name").touched' />
+                    <div class="invalid-feedback">&nbsp; Exam name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="startDate">Start Date</label>
+                  <input formControlName="starting_date" type="date" class="form-control" id="startDate"
+                    name="startDate" 
+                    [class.is-invalid]='form.get("starting_date").errors && form.get("starting_date").touched' />
+                    <div class="invalid-feedback">&nbsp; Starting date is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="endDate">End Date</label>
+                  <input formControlName="ending_date" type="date" class="form-control" id="endDate" name="endDate" 
+                  [class.is-invalid]='form.get("ending_date").errors && form.get("ending_date").touched' />
+                  <div class="invalid-feedback">&nbsp; Ending date is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <fieldset>
+                  <label for="customSelect">Department:</label>
+                  <select class="custom-select" formControlName="department">
+                    <option hidden value="" disabled selected>
+                      Select department
+                    </option>
+                    <option *ngFor="let department of departments" [value]="department.name">
+                      {{ department.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <fieldset>
+                  <label for="customSelect">Academic Year:</label>
+                  <select class="custom-select" formControlName="academic_year">
+                    <option hidden value="" disabled selected>
+                      Select academic year
+                    </option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-12">
+                <fieldset>
+                  <label for="customSelect">Semester:</label>
+                  <select class="custom-select" formControlName="semester">
+                    <option hidden value="" disabled selected>
+                      Select semester
+                    </option>
+                    <option *ngFor="let semester of semesters" [value]="semester.name">
+                      {{ semester.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="onSubmit()" [disabled]="!form.valid" type="submit"
+            class="btn btn-sm btn-primary">
+            <i class="fa fa-dot-circle-o"></i> Submit
+          </button>
+          <button (click)="onFormReset()" type="reset" class="btn btn-sm btn-danger">
+            <i class="fa fa-ban"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subject Column -->
+    <div class="col-sm-6" *ngIf="subjectList.length > 0">
+      <div class="card">
+        <div class="card-header">
+          <strong>Add Date and Time To Subjects</strong>
+          <small>Form</small>
+        </div>
+        <div class="card-body">
+          <form>
+            <ng-container>
+              <form [formGroup]="formGroup" #f="ngForm">
+                <app-subject-form-array [formArray]="formGroup.get('subjectDates')" (add)="add($event)" #subjectDates>
+                  <app-subject-form [formGroup]="subjectFormGroup"
+                    *ngFor="let subjectFormGroup of subjectDates.formArray.controls; let i = index">
+                  </app-subject-form>
+                </app-subject-form-array>
+              </form>
+            </ng-container>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="onSumitSubjectForm()" type="button" class="btn btn-sm btn-primary">
+            <i class="fa fa-dot-circle-o"></i> Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<ng-container [formGroup]="formGroup">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input readonly formControlName="name" type="text" class="form-control" id="name" name="name" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label for="startDate">Start Date and Time</label>
+        <input formControlName="starting_date" type="datetime-local" class="form-control" id="startDate" name="startDate" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label for="endDate">End Date and Time</label>
+        <input formControlName="ending_date" type="datetime-local" class="form-control" id="endDate" name="endDate" />
+      </div>
+    </div>
+  </div>
+</ng-container>
+<br>

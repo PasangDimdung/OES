@@ -1,0 +1,47 @@
+<div class="loading-bar" [class.loading]="isSubmitted"></div>
+<div class="app-body animated fadeIn">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row" style="align-items: center; justify-content: center">
+        <div class="col-md-8 col-lg-5">
+          <div class="card-group">
+            <div class="card p-4">
+              <div class="card-body">
+                <form class="login-form" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                  <h1>Login</h1>
+                  <p class="text-muted">Sign In to your account</p>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input [(ngModel)]="form.username" name="username" #username="ngModel" type="text"
+                      class="form-control" placeholder="Username" autocomplete="username" required />
+                  </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input [(ngModel)]="form.password" name="password" #password="ngModel" type="password"
+                      class="form-control" placeholder="Password" autocomplete="current-password" required />
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button type="submit" class="btn btn-primary px-4">
+                        Login
+                      </button>
+                    </div>
+                    <div class="col-6 text-right">
+                      <button type="button" class="btn btn-link px-0" [routerLink]="['/forget-password']">
+                        Forgot password?
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

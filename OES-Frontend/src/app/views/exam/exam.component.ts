@@ -1,0 +1,167 @@
+import { formatDate } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+import { CanComponentDeactivate, CanDeactivateGuard } from '../../_auth/can-deactivate';
+import { TokenStorageService } from '../../_auth/token-storage.service';
+import { Question } from '../../_models/questions';
+import { ExamSubjectService } from '../../_services/exam-subject.service';
+import { UserService } from '../../_services/user.service';
+
+@Component({
+  templateUrl: 'exam.component.html'
+})
+
+export class ExamComponent implements CanDeactivateGuard{
+  errorMessage: string = '';
+  isSubmitted: boolean;
+
+  //Forms
+  answerForm: FormGroup;
+  form: FormGroup;
+
+  //Quesiton and answer array
+  questionAnsArray = [];
+
+  //Properties to hold question details value
+  questionDetails: any;
+  questionMarks: any;
+
+  //Properties required to hit api and get questions
+  departments: any;
+  semesters: any;
+  subjects: any;
+  today: number;
+
+  //Properties for displaying questions and progress
+  questions: Question;
+  questionProgress: any;
+  questionLength = [];
+
+  //Storing selected answer and question
+  selectedQuestion: any;
+  selectedAnswer: any;
+  subjectID: any;
+  currentDateTime: string;
+
+  constructor(
+    private examSubjectService: ExamSubjectService,
+    private tokenService: TokenStorageService,
+    private formBuilder: FormBuilder,
+    private toastr: ToastrService,
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService
+  ) { }
+
+  canDeactivate() {
+    console.log(this.isSubmitted);
+    if(this.isSubmitted){
+      return true
+    }else{
+      return confirm("Are you sure you want to exit? All progress will be lost and you willl not be able to receive a report");
+    }
+  }
+
+  ngOnInit() {
+    this.questionProgress = 0;
+
+    let date: Date = new Date();
+    this.today = date.getFullYear();
+
+    this.form = this.formBuilder.group({
+      semester: this.examSubjectService.getSemester(),
+      department: this.examSubjectService.getDepartment(),
+      year: this.today,
+      subject: this.examSubjectService.getSubject()
+    })
+
+    this.answerForm = this.formBuilder.group({
+      exam: { 
+        id: this.examSubjectService.getExamId()
+      },
+      question: { 
+        id: ''
+      },
+      choice: { 
+        id: ''
+      },
+      student: { 
+        id: this.tokenService.getUserId()
+      },
+      subject: {
+        id: ''
+      }
+    })
+
+    this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
+      .subscribe(response => {
+        if (response['status'] === true) {
+          let resources = response['data'];
+          this.questionDetails = resources;
+          this.questions = resources['questions'];
+          this.questionLength = resources['questions'];
+          this.subjectID = this.questions[0]['subjectUnit'].subject.id;
+          this.form.reset({
+            year: this.today,
+            examName: '',
+            department: '',
+            semester: '',
+            subject: '',
+          })
+        } else {
+          this.toastr.error(response['message']);
+        }
+      }, (error) => {
+        this.errorMessage = error.error.message;
+        this.toastr.error(this.errorMessage);
+      })
+  }
+
+  x = setInterval(() => {        
+    this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
+  }, 1000);
+
+  onOptionClick(question, answer) {
+
+    //To store selected question and answer
+    this.selectedQuestion = question;
+    this.selectedAnswer = answer;
+
+    //Update value to the form after getting selected values
+    this.answerForm.patchValue({
+      question: { 
+        id: this.selectedQuestion
+      },
+      choice: {
+        id: this.selectedAnswer
+      },
+      subject: {
+        id: this.subjectID
+      }
+    })
+  }
+
+  onSubmit() {
+    console.log(this.answerForm.value);
+    //Increase the question progress if it is 1 more than question length or navigate to exam result. 
+    if (this.questionProgress <= (this.questionLength.length - 2)) {
+      this.questionProgress++;
+      this.isSubmitted = false;
+    } else {
+      this.isSubmitted = true;
+      this.router.navigate(['dashboard/exam-result']);
+    }
+
+    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
+    .subscribe(()=> {
+      this.userService.saveSubjectID(this.subjectID);
+    })
+
+    this.questionAnsArray.push(this.answerForm.value);
+  }
+}
+

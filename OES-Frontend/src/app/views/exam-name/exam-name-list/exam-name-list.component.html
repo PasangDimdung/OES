@@ -1,0 +1,92 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/exam-name/add']">Exam Name</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Exam Name Table
+        </div>
+        <div class="card-body table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Exam Name</th>
+                <th>Academic Year</th>
+                <th>Department</th>
+                <th>Semester</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor=" let element of examNameList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a>
+                      {{ element.name }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.academic_year }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.department }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.semester }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.starting_date }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.ending_date }}
+                    </a>
+                  </td>
+                  <td>
+                    <button [routerLink]="['/exam-name/edit', element.id]" class="btn btn-link btn-icon btn-md edit"
+                      style="color: #51bcda">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button [disabled]="isSubmitted" (click)="onDelete(element.id)" class="btn btn-link btn-icon btn-md remove"
+                      style="color: #ef8157">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!examNameList">
+                <td colspan="8">Loading...</td>
+              </tr>
+              <tr *ngIf="examNameList && examNameList.length == 0">
+                <td colspan="8">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,172 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Register</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="signUpForm">
+            <h1>Register</h1>
+            <p class="text-muted">Role</p>
+            <div class="row">
+              <div class="form-group col-sm-12 input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-male"></i></span>
+                </div>
+                <select class="custom-select" id="role" formControlName="role"
+                  (change)="onRoleChange($event.target.value)">
+                  <option hidden value="" disabled selected>Select role</option>
+                  <option value="user">Student</option>
+                  <option *ngIf="authority === 'admin'" value="admin">Admin</option>
+                  <option *ngIf="authority === 'admin'" value="pm">Teacher</option>
+                </select>
+              </div>
+            </div>
+            <p class="text-muted">Create your account</p>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-user"></i></span>
+              </div>
+              <input formControlName="name" type="text" class="form-control" placeholder="Full Name" autocomplete="name"
+                required [class.is-invalid]='signUpForm.get("name").errors && signUpForm.get("name").touched' />
+              <div class="invalid-feedback"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Full Name is required</div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-user"></i></span>
+              </div>
+              <input formControlName="username" type="text" class="form-control" placeholder="Username"
+                autocomplete="username" required
+                [class.is-invalid]='signUpForm.get("username").errors && signUpForm.get("username").touched' />
+              <div class="invalid-feedback"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Username is required</div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">@</span>
+              </div>
+              <input formControlName="email" type="text" class="form-control" placeholder="Email" autocomplete="email"
+                required [class.is-invalid]='signUpForm.get("email").errors && signUpForm.get("email").touched' />
+              <div class="invalid-feedback"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Email is required</div>
+            </div>
+            <div class="input-group mb-4">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-lock"></i></span>
+              </div>
+              <input formControlName="password" type="password" class="form-control" placeholder="Password"
+                autocomplete="new-password" required
+                [class.is-invalid]='signUpForm.get("password").errors && signUpForm.get("password").touched' />
+              <div *ngIf="signUpForm.get('password').hasError('required')" class="invalid-feedback"> &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Password is required</div>
+              <div *ngIf="signUpForm.get('password').hasError('minlength')" class="invalid-feedback"> &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Password must be at least 4 characters</div>
+              <div *ngIf="signUpForm.get('password').hasError('maxlength')" class="invalid-feedback"> &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Password must be at most 10 characters</div>
+            </div>
+            <div class="input-group mb-4">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="icon-lock"></i></span>
+              </div>
+              <input formControlName="confirmPassword" type="password" class="form-control"
+                placeholder="Confirm Password" autocomplete="new-password" required
+                [class.is-invalid]='signUpForm.get("confirmPassword").errors && signUpForm.get("confirmPassword").touched' />
+              <div *ngIf="signUpForm.get('confirmPassword').hasError('required')" class="invalid-feedback"> &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Confirm Password is required
+              </div>
+              <div *ngIf="signUpForm.get('confirmPassword').hasError('isMatching')" class="invalid-feedback"> &nbsp; &nbsp;
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+               Confirm Password must match password
+              </div>
+            </div>
+
+            <ng-container *ngIf="isStudent" formGroupName="sDetails">
+              <p class="text-muted">Add student details</p>
+              <div class="row">
+                <div class="form-group col-sm-12 input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
+                  </div>
+                  <select class="custom-select" formControlName="batch">
+                    <option hidden value="" disabled selected>
+                      Select batch
+                    </option>
+                    <option value="2077">2077</option>
+                    <option value="2078">2078</option>
+                    <option value="2079">2079</option>
+                    <option value="2080">2080</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-12 input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-plus-o"></i></span>
+                  </div>
+                  <select class="custom-select" formControlName="academic_year">
+                    <option hidden value="" disabled selected>
+                      Select academic year
+                    </option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="form-group col-sm-12 input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
+                  </div>
+                  <select class="custom-select" formControlName="department">
+                    <option hidden value="" disabled selected>
+                      Select department
+                    </option>
+                    <option *ngFor="let department of departments" [value]="department.name">
+                      {{ department.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="form-group col-sm-12 input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-cube"></i></span>
+                  </div>
+                  <select class="custom-select" formControlName="semester">
+                    <option hidden value="" disabled selected>
+                      Select semester
+                    </option>
+                    <option *ngFor="let semester of semesters" [value]="semester.name">
+                      {{ semester.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fa fa-address-card-o"></i></span>
+                </div>
+                <input formControlName="registration_num" type="text" class="form-control"
+                  placeholder="Registration Number" autocomplete="email" />
+              </div>
+            </ng-container>
+          </form>
+          <button (click)="onSubmit()" [disabled]="!signUpForm.valid" type="button"
+            class="btn btn-block btn-success mt-3">
+            Create Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

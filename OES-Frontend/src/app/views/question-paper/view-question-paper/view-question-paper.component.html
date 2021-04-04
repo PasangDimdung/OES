@@ -1,0 +1,125 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/question-paper']">Question Paper</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">View</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>View Question Paper</strong>
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal" [formGroup]="form" #f="ngForm">
+            <div class="row">
+              <div class="form-group col-sm-3">
+                <label for="customSelect">Year:</label>
+                <input formControlName="year" name="year" class="form-control" type="number" min="1900" max="2099"
+                  step="1" value="{{ today }}" />
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Exam Name:</label>
+                  <select class="custom-select" formControlName="examName"
+                    (change)="onExamNameChange($event.target.value)">
+                    <option hidden value="" disabled selected>
+                      Select exam name
+                    </option>
+                    <option *ngFor="let examName of examNames" [value]="examName.id">
+                      {{ examName.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Department:</label>
+                  <select class="custom-select" formControlName="department">
+                    <option hidden value="" disabled selected>
+                      Select department
+                    </option>
+                    <option *ngFor="let department of departments" [value]="department.name">
+                      {{ department.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Semester:</label>
+                  <select class="custom-select" formControlName="semester">
+                    <option hidden value="" disabled selected>
+                      Select semester
+                    </option>
+                    <option *ngFor="let semester of semesters" [value]="semester.name">
+                      {{ semester.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Subject:</label>
+                  <select class="custom-select" formControlName="subject">
+                    <option hidden value="" disabled selected>
+                      Select subject
+                    </option>
+                    <option *ngFor="let subject of subjects" [value]="subject.name">
+                      {{ subject.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+            <ng-container *ngIf="questionDetails">
+              <div class="row mb-4">
+                <div class="col-lg-10">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>
+                          <p class="muted">
+                            {{ questionDetails.department }}
+                            ({{ questionDetails.semester }}),
+                            {{ questionDetails.subject }} Questions Paper
+                          </p>
+                        </th>
+                      </tr>
+                      <p *ngIf="questionMarks">
+                        Total Questions: {{ questionPaperList.length }},
+                        FullMarks: {{ questionMarks.subject.fullMarks }},
+                        PassMarks: {{ questionMarks.subject.passMarks }}
+                      </p>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let element of questionPaperList; let i = index">
+                        <tr>
+                          <td>
+                            <a> Q{{ i + 1 }}. {{ element.title }} </a>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+            <div class="form-actions">
+              <button [disabled]="!f.valid || isSubmitted" (click)="onSubmit()" type="submit"
+                class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> View Paper
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>

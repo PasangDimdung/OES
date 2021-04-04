@@ -1,0 +1,170 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/question/add']">Question</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Question</strong>
+          <small>Form</small>
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal">
+            <div class="row">
+              <div class="form-group col-sm-3">
+                <label for="customSelect">Year:</label>
+                <input [(ngModel)]="selectedYear" name="year" class="form-control" type="number" min="1900" max="2099"
+                  step="1" />
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Department:</label>
+                  <select (change)="onDepartmentChange(selectedDepartment.id)" class="custom-select d-block w-100" id="department"
+                    [(ngModel)]="selectedDepartment" name="department" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select department
+                    </option>
+                    <option *ngFor="let department of departments" [ngValue]="department">
+                      {{ department.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <label for="ccyear">Academic Year:</label>
+                <select class="custom-select d-block w-100" id="ccyear">
+                  <option hidden value="" disabled selected>
+                    Select academic year
+                  </option>
+                  <option>First Year</option>
+                  <option>Second Year</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Semester:</label>
+                  <select (change)="onSemesterChange()" class="custom-select d-block w-100" id="semester"
+                    [(ngModel)]="selectedSemester" name="semester" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select semester
+                    </option>
+                    <option *ngFor="let semester of semesters" [ngValue]="semester">
+                      {{ semester.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Subject:</label>
+                  <select (change)="onSubjectChange()" class="custom-select d-block w-100" id="subject"
+                    [(ngModel)]="selectedSubject" name="subject" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select subject
+                    </option>
+                    <option *ngFor="let subject of subjects" [ngValue]="subject">
+                      {{ subject.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Unit:</label>
+                  <select (change)="onUnitChange()" class="custom-select d-block w-100" id="unit"
+                    [(ngModel)]="selectedUnit" name="unit" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select unit
+                    </option>
+                    <option *ngFor="let unit of units" [ngValue]="unit">
+                      {{ unit.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+              <div class="form-group col-sm-3">
+                <fieldset class="form-group">
+                  <label for="customSelect">Type:</label>
+                  <select (change)="onUnitChange()" class="custom-select d-block w-100" id="type"
+                    [(ngModel)]="selectedType" name="type" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select type
+                    </option>
+                    <option *ngFor="let type of types" [ngValue]="type">
+                      {{ type.name }}
+                    </option>
+                  </select>
+                </fieldset>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-2 mb-4">
+                <div>
+                  <label for="ccnumber">Points</label>
+                  <input [(ngModel)]="selectedPoints" name="point" type="text" class="control" id="ccnumber"
+                    placeholder="0" />
+                </div>
+              </div>
+            </div>
+            <div [formGroup]="questionForm" #userform="ngForm">
+              <div class="form-group">
+                <label class="col-form-label" for="appendedInputButtons">Question Title</label>
+                <div class="controls">
+                  <div class="input-group">
+                    <textarea formControlName="title" name="title" id="textarea-input" name="textarea-input" rows="5"
+                      class="form-control" placeholder="Content.."></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-8">
+                  <div formArrayName="op">
+                    <button class="btn btn-sm btn-primary" type="button" [disabled]="isAddOption" (click)="addOption()">
+                      Add Option
+                    </button>
+                    <div *ngFor="
+                        let hobbyControl of optionArray.controls;
+                        let i = index
+                      " [formGroupName]="i">
+                      <input formControlName="op" type="text" class="form-control mt-3"
+                        placeholder="Write option {{ i + 1 }}" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" formGroupName="answer">
+                <div class="col-sm-8 mt-3">
+                  <div class="form-group">
+                    <label for="ccnumber">Correct Answer</label>
+                    <input formControlName="answer" name="answer" type="text" class="form-control" id="ccnumber"
+                      placeholder="Write answer" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions mt-3">
+                <button [disabled]="!questionForm.valid" (click)="onSubmit(); userform.resetForm()" type="submit"
+                  class="btn btn-sm btn-primary">
+                  <i class="fa fa-dot-circle-o"></i> Add Question
+                </button>
+                <button (click)="onFormReset()" type="reset" class="btn btn-sm btn-danger">
+                  <i class="fa fa-ban"></i> Reset
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>

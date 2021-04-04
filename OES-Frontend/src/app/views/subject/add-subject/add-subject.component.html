@@ -1,0 +1,108 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/subject/add']">Subject</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Add</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          <strong>Subject</strong>
+          <small>Form</small>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" #userform="ngForm">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input formControlName="name" type="text" class="form-control" id="name"
+                    placeholder="Enter subject" 
+                    [class.is-invalid]='form.get("name").errors && form.get("name").touched' />
+                  <div class="invalid-feedback">&nbsp; Subject name is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Full Marks</label>
+                  <input formControlName="fullMarks" type="number" class="form-control" id="name"
+                    placeholder="Enter full marks"
+                    [class.is-invalid]='form.get("fullMarks").errors && form.get("fullMarks").touched' />
+                    <div class="invalid-feedback">&nbsp; Full marks is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Pass Marks</label>
+                  <input formControlName="passMarks" type="number" class="form-control" id="name"
+                    placeholder="Enter pass marks"  
+                    [class.is-invalid]='form.get("passMarks").errors && form.get("passMarks").touched' />
+                    <div class="invalid-feedback">&nbsp; Pass marks is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="name">Duration</label>
+                  <input formControlName="duration" type="text" class="form-control" id="name"
+                    placeholder="Enter duration" 
+                    [class.is-invalid]='form.get("duration").errors && form.get("duration").touched' />
+                    <div class="invalid-feedback">&nbsp; Duration is required</div>
+                </div>
+              </div>
+            </div>
+            <div class="row" formGroupName="department">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="customSelect">Department</label>
+                  <select class="custom-select" formControlName="id">
+                    <option hidden value="" disabled selected>
+                      Select department
+                    </option>
+                    <option *ngFor="let department of departments" [value]="department.id">
+                      {{ department.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row" formGroupName="semester">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="customSelect">Semester</label>
+                  <select class="custom-select" formControlName="id">
+                    <option hidden value="" disabled selected>
+                      Select semester
+                    </option>
+                    <option *ngFor="let semester of semesters" [value]="semester.id">
+                      {{ semester.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button (click)="onSubmit()" [disabled]="!form.valid" type="submit"
+            class="btn btn-sm btn-primary">
+            <i class="fa fa-dot-circle-o"></i> Submit
+          </button>
+          <button (click)="onFormReset()" type="reset" class="btn btn-sm btn-danger">
+            <i class="fa fa-ban"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
