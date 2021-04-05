@@ -14,7 +14,7 @@ import { UserService } from '../../_services/user.service';
   templateUrl: 'exam.component.html'
 })
 
-export class ExamComponent implements CanDeactivateGuard{
+export class ExamComponent implements CanDeactivateGuard {
   errorMessage: string = '';
   isSubmitted: boolean;
 
@@ -61,9 +61,9 @@ export class ExamComponent implements CanDeactivateGuard{
 
   canDeactivate() {
     console.log(this.isSubmitted);
-    if(this.isSubmitted){
+    if (this.isSubmitted) {
       return true
-    }else{
+    } else {
       return confirm("Are you sure you want to exit? All progress will be lost and you willl not be able to receive a report");
     }
   }
@@ -82,16 +82,16 @@ export class ExamComponent implements CanDeactivateGuard{
     })
 
     this.answerForm = this.formBuilder.group({
-      exam: { 
+      exam: {
         id: this.examSubjectService.getExamId()
       },
-      question: { 
+      question: {
         id: ''
       },
-      choice: { 
+      choice: {
         id: ''
       },
-      student: { 
+      student: {
         id: this.tokenService.getUserId()
       },
       subject: {
@@ -121,10 +121,16 @@ export class ExamComponent implements CanDeactivateGuard{
         this.errorMessage = error.error.message;
         this.toastr.error(this.errorMessage);
       })
+
+    //checks the session if there is any selected radio btn value.
+    if (window.sessionStorage.getItem(this.questionProgress)) {
+      //if there is any it sets to the checkedRadioBtnValue
+      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
+    }
   }
 
   //timer
-  timeout = setInterval(() => {        
+  timeout = setInterval(() => {
     this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
   }, 1000);
 
@@ -137,7 +143,7 @@ export class ExamComponent implements CanDeactivateGuard{
 
     //Update value to the form after getting selected values
     this.answerForm.patchValue({
-      question: { 
+      question: {
         id: this.selectedQuestion
       },
       choice: {
@@ -148,37 +154,129 @@ export class ExamComponent implements CanDeactivateGuard{
       }
     })
 
+    console.log("ON OPTION CLICK", this.answerForm.value)
+
     //Sets value to the session - {0,"choice1"}
-    window.sessionStorage.setItem(this.questionProgress, choiceName );
+    window.sessionStorage.setItem(this.questionProgress, choiceName);
   }
 
-  onStep(selectedStep: any){
+  onStep(selectedStep: any) {
+
     this.questionProgress = Number(selectedStep);
 
     //checks the session if there is any selected radio btn value.
-    if(window.sessionStorage.getItem(this.questionProgress)) {
+    if (window.sessionStorage.getItem(this.questionProgress)) {
       //if there is any it sets to the checkedRadioBtnValue
       this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
     }
 
   }
 
-  onSubmit() {
-    console.log(this.answerForm.value);
-    //Increase the question progress if it is 1 more than question length or navigate to exam result. 
-    if (this.questionProgress <= (this.questionLength.length - 2)) {
-      this.questionProgress++;
-      this.isSubmitted = false;
+  onNext() {
+    //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
+    if (this.selectedAnswer == null) {
+      this.answerForm.patchValue({
+        question: {
+          id: this.questions[this.questionProgress].id
+        },
+        choice: {
+          id: ""
+        },
+        subject: {
+          id: this.subjectID
+        }
+      })
     } else {
-      this.isSubmitted = true;
-      this.router.navigate(['dashboard/exam-result']);
+      this.answerForm.patchValue({
+        question: {
+          id: this.questions[this.questionProgress].id
+        },
+        choice: {
+          id: this.selectedAnswer
+        },
+        subject: {
+          id: this.subjectID
+        }
+      })
+    }
+
+    this.questionProgress++;
+
+    //checks the session if there is any selected radio btn value.
+    if (window.sessionStorage.getItem(this.questionProgress)) {
+      //if there is any it sets to the checkedRadioBtnValue
+      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
     }
 
     this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
-    .subscribe(()=> {
-      this.userService.saveSubjectID(this.subjectID);
-    })
+      .subscribe(() => {
+        this.userService.saveSubjectID(this.subjectID);
+      })
 
+    console.log("ON NEXT", this.answerForm.value);
+  }
+
+  onPrev() {
+    //if choice isn't selected and prev button is clicked. Patch empty string to the choice id 
+    if (this.selectedAnswer == null) {
+      this.answerForm.patchValue({
+        question: {
+          id: this.questions[this.questionProgress].id
+        },
+        choice: {
+          id: ""
+        },
+        subject: {
+          id: this.subjectID
+        }
+      })
+    } else {
+      this.answerForm.patchValue({
+        question: {
+          id: this.questions[this.questionProgress].id
+        },
+        choice: {
+          id: this.selectedAnswer
+        },
+        subject: {
+          id: this.subjectID
+        }
+      })
+    }
+    this.questionProgress--;
+
+    //checks the session if there is any selected radio btn value.
+    if (window.sessionStorage.getItem(this.questionProgress)) {
+      //if there is any it sets to the checkedRadioBtnValue
+      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
+    }
+
+    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
+      .subscribe(() => {
+        this.userService.saveSubjectID(this.subjectID);
+      })
+
+    console.log("ON PREV", this.answerForm.value);
+  }
+
+  onSubmit() {
+    console.log(this.answerForm.value);
+    //Increase the question progress if it is 1 more than question length or navigate to exam result. 
+    // if (this.questionProgress <= (this.questionLength.length - 2)) {
+    //   this.questionProgress++;
+    //   this.isSubmitted = false;
+    // } else {
+    //   this.isSubmitted = true;
+    //   this.router.navigate(['dashboard/exam-result']);
+    // }
+
+    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
+      .subscribe(() => {
+        this.userService.saveSubjectID(this.subjectID);
+      })
+
+    this.isSubmitted = true;
+    this.router.navigate(['dashboard/exam-result']);
     this.questionAnsArray.push(this.answerForm.value);
   }
 }

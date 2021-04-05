@@ -1,7 +1,7 @@
 {{ currentDateTime }}
 
 <div class="container pb-2" *ngFor="let option of questions; let i = index">
-    <input type="button" class="btn btn-sm btn-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">
+  <input type="button" class="btn btn-sm btn-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">
 </div>
 
 <div class="animated fadeIn">
@@ -13,9 +13,10 @@
       <p><strong>{{ questions[questionProgress].title }}</strong></p>
       <ng-container *ngFor="let option of questions[questionProgress].op; let i = index">
         <div class="form-check">
-          <input (click)="onOptionClick(questions[questionProgress].id, questions[questionProgress].op[i].id, questions[questionProgress].op[i].op)"
+          <input
+            (click)="onOptionClick(questions[questionProgress].id, questions[questionProgress].op[i].id, questions[questionProgress].op[i].op)"
             class="form-check-input" type="radio" name="{{questions[questionProgress].op[i].op}}" id="{{option.op}}"
-            value="{{questions[questionProgress].op[i].op}}" [(ngModel)]= "checkedRadioBtnValue">
+            value="{{questions[questionProgress].op[i].op}}" [(ngModel)]="checkedRadioBtnValue">
           <label class="form-check-label" for="{{option.op}}">
             {{option.op}}
           </label>
@@ -23,16 +24,24 @@
         <p></p>
       </ng-container>
 
-      <div class="form-actions mt-4">
+      <!-- <div class="form-actions mt-4">
         <button (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary">
           <i class="fa fa-dot-circle-o"></i> Submit
         </button>
+      </div> -->
+
+      <button *ngIf="questionProgress > 0" (click)="onPrev()" type="submit" class="btn btn-sm btn-primary">
+        <i class="fa fa-arrow-left"></i> Prev
+      </button>
+      <button  *ngIf="(questionLength.length -1 ) > questionProgress" (click)="onNext()" type="submit" class="btn btn-sm btn-primary"> Next
+        <i class="fa fa-arrow-right"></i> 
+      </button>
+      <button *ngIf="questionProgress == (questionLength.length - 1)" (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary"> 
+         <i class="fa fa-dot-circle-o"></i> Finish
+       </button>
+
+      <div *ngIf="!questions">
+        <div class="container m-4">Loading...</div>
       </div>
-
-    </div>
-
-    <div *ngIf="!questions">
-      <div class="container m-4">Loading...</div>
     </div>
   </div>
-</div>
