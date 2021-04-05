@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -38,7 +39,6 @@ public class Subject {
 
     @ManyToOne()
     @JsonIgnoreProperties("subjects")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private Semester semester;
 
     @ManyToOne()
@@ -49,16 +49,18 @@ public class Subject {
     @OneToMany(targetEntity = SubjectUnit.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "subject_id", referencedColumnName = "id")
     @JsonIgnoreProperties("subject")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private List<SubjectUnit> units;
 
     @OneToMany(mappedBy = "subject")
+    @JsonIgnoreProperties("subject")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private List<ExamSubject> sDates;
 
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
-    private List<AnswerSheet> answerSheets = new ArrayList<>();
+    // @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    // @JsonIgnore
+    // private List<AnswerSheet> answerSheets = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -132,11 +134,11 @@ public class Subject {
         this.sDates = sDates;
     }
 
-    public List<AnswerSheet> getAnswerSheets() {
-        return answerSheets;
-    }
+    // public List<AnswerSheet> getAnswerSheets() {
+    //     return answerSheets;
+    // }
 
-    public void setAnswerSheets(List<AnswerSheet> answerSheets) {
-        this.answerSheets = answerSheets;
-    }
+    // public void setAnswerSheets(List<AnswerSheet> answerSheets) {
+    //     this.answerSheets = answerSheets;
+    // }
 }

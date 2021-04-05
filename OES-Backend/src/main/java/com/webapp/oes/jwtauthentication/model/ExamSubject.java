@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class ExamSubject {
@@ -19,7 +19,7 @@ public class ExamSubject {
         @ManyToOne
         @JoinColumn(name = "exam_id")
         @JsonIgnoreProperties("sDates")
-        @JsonIgnore
+        @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
         Exam exam;
     
         @ManyToOne

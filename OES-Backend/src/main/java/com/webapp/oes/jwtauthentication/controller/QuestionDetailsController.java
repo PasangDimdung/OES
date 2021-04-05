@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.webapp.oes.jwtauthentication.mappers.customMapper;
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.model.Question;
 import com.webapp.oes.jwtauthentication.model.QuestionDetails;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,6 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class QuestionDetailsController {
+
+    @Autowired
+    public customMapper mapper;
 
     @Autowired
     public QuestionDetailsRepository qDetailsRepository;
@@ -51,18 +56,22 @@ public class QuestionDetailsController {
 			Question q = new Question(question.getTitle(), question.getOp(), question.getAnswer(), question.getSubjectUnit(), question.getPoints());
 
 			qdRepository.findById(qd.getId()).get().getQuestions().add(q);
+
+            var qmap = mapper.questionDetailsToQuestionDetailsGetDto(qdRepository.save(qd));
 			
-			return new  ResponseEntity<>(new ApiResponse(true, "Question added to already existed details.", qdRepository.save(qd)), HttpStatus.OK);
+			return new  ResponseEntity<>(new ApiResponse(true, "Question added to already existed details.", qmap), HttpStatus.OK);
 		}
+
+        var q = mapper.questionToQuestionGetDto(qRepository.save(question));
 		
-		return new ResponseEntity<>(new ApiResponse(true, "Question added with new details..", qRepository.save(question)), HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse(true, "Question added with new details..", q), HttpStatus.OK);
 	}
 
     @PutMapping("/api/question/{qId}")
     public ResponseEntity<?> updateQuestionDetails(@RequestBody Question question, @PathVariable int qId) {
         var q = qRepository.findById(qId);
 
-        if (q.isPresent()) {
+        if (q != null) {
             var _q = q.get();
 
             _q.setTitle(question.getTitle());
@@ -75,6 +84,20 @@ public class QuestionDetailsController {
         }
 
         return new ResponseEntity<>(new ApiResponse(true, "Question Details with id " + qId + "not found", null),
+                HttpStatus.OK);
+    }
+
+    @GetMapping("/api/questionDetails/{qdId}/questions")
+    public ResponseEntity<?> getQuestionsOfQd(@PathVariable int qdId) {
+        var q = qDetailsRepository.findById(qdId);
+
+        if (q.isPresent()) {
+            var c = mapper.questionDetailsToQuestionDetailsGetDto(q.get());
+            return new ResponseEntity<>(new ApiResponse(true, "Question Details question list", c),
+                    HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ApiResponse(true, "Question Details with id " + qdId + "not found", null),
                 HttpStatus.OK);
     }
 

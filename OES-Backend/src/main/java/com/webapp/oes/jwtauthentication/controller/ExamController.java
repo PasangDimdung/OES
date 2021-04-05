@@ -152,7 +152,10 @@ public class ExamController {
 
         var sem_id = sRepository.findByName(exam.getSemester()).getId();
 
-       return new ResponseEntity<>(new ApiResponse(true, "Subject list", suRepository.findSubjects(dep_id, sem_id)), HttpStatus.OK);
+        var su = suRepository.findSubjects(dep_id, sem_id);
+
+
+       return new ResponseEntity<>(new ApiResponse(true, "Subject list", su), HttpStatus.OK);
     }
 
     @PostMapping("/api/exam/{id}/subjects") // add subjects as well dates of subject for a exam
