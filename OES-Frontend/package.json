@@ -28,7 +28,6 @@
     "bootstrap": "^4.5.0",
     "core-js": "^3.6.5",
     "font-awesome": "^4.7.0",
-    "khalti-checkout-web": "^2.2.0",
     "moment": "^2.27.0",
     "mutationobserver-shim": "^0.3.7",
     "ngx-bootstrap": "^5.6.1",
