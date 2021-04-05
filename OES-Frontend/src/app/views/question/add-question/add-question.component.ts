@@ -62,8 +62,8 @@ export class AddQuestionComponent implements OnInit {
         semester: [''],
         type: [''],
         subject: [''],
-        points: [''],
       }),
+      points: [''],
       title: ['', [Validators.required]],
       subjectUnit: this.fb.group({
         id: [''],
@@ -162,9 +162,9 @@ export class AddQuestionComponent implements OnInit {
         academic_year: "First year",
         semester: this.selectedSemester["name"],
         type: this.selectedType["name"],
-        subject: this.selectedSubject["name"],
-        points: this.selectedPoints,
+        subject: this.selectedSubject["name"]
       },
+      points: this.selectedPoints,
       subjectUnit: {
         id: this.selectedUnit["id"],
       },

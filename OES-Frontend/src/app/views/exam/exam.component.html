@@ -1,4 +1,9 @@
 {{ currentDateTime }}
+
+<div class="container pb-2" *ngFor="let option of questions; let i = index">
+    <input type="button" class="btn btn-sm btn-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">
+</div>
+
 <div class="animated fadeIn">
   <div class="card mt-4 mx-4">
     <div class="card-header text-muted">
@@ -8,8 +13,9 @@
       <p><strong>{{ questions[questionProgress].title }}</strong></p>
       <ng-container *ngFor="let option of questions[questionProgress].op; let i = index">
         <div class="form-check">
-          <input (click)="onOptionClick(questions[questionProgress].id, questions[questionProgress].op[i].id)"
-            class="form-check-input" type="radio" name="exampleRadios" id="{{option.op}}">
+          <input (click)="onOptionClick(questions[questionProgress].id, questions[questionProgress].op[i].id, questions[questionProgress].op[i].op)"
+            class="form-check-input" type="radio" name="{{questions[questionProgress].op[i].op}}" id="{{option.op}}"
+            value="{{questions[questionProgress].op[i].op}}" [(ngModel)]= "checkedRadioBtnValue">
           <label class="form-check-label" for="{{option.op}}">
             {{option.op}}
           </label>

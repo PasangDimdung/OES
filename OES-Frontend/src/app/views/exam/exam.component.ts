@@ -1,11 +1,10 @@
 import { formatDate } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
-import { CanComponentDeactivate, CanDeactivateGuard } from '../../_auth/can-deactivate';
+import { CanDeactivateGuard } from '../../_auth/can-deactivate';
 import { TokenStorageService } from '../../_auth/token-storage.service';
 import { Question } from '../../_models/questions';
 import { ExamSubjectService } from '../../_services/exam-subject.service';
@@ -46,6 +45,9 @@ export class ExamComponent implements CanDeactivateGuard{
   selectedAnswer: any;
   subjectID: any;
   currentDateTime: string;
+
+  //Default selected radio buttion when you step, next or previous.
+  checkedRadioBtnValue;
 
   constructor(
     private examSubjectService: ExamSubjectService,
@@ -121,15 +123,17 @@ export class ExamComponent implements CanDeactivateGuard{
       })
   }
 
-  x = setInterval(() => {        
+  //timer
+  timeout = setInterval(() => {        
     this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
   }, 1000);
 
-  onOptionClick(question, answer) {
+
+  onOptionClick(questionID: any, choiceID: any, choiceName: any) {
 
     //To store selected question and answer
-    this.selectedQuestion = question;
-    this.selectedAnswer = answer;
+    this.selectedQuestion = questionID;
+    this.selectedAnswer = choiceID;
 
     //Update value to the form after getting selected values
     this.answerForm.patchValue({
@@ -143,6 +147,20 @@ export class ExamComponent implements CanDeactivateGuard{
         id: this.subjectID
       }
     })
+
+    //Sets value to the session - {0,"choice1"}
+    window.sessionStorage.setItem(this.questionProgress, choiceName );
+  }
+
+  onStep(selectedStep: any){
+    this.questionProgress = Number(selectedStep);
+
+    //checks the session if there is any selected radio btn value.
+    if(window.sessionStorage.getItem(this.questionProgress)) {
+      //if there is any it sets to the checkedRadioBtnValue
+      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
+    }
+
   }
 
   onSubmit() {
