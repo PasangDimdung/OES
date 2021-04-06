@@ -261,14 +261,6 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onSubmit() {
     console.log(this.answerForm.value);
-    //Increase the question progress if it is 1 more than question length or navigate to exam result. 
-    // if (this.questionProgress <= (this.questionLength.length - 2)) {
-    //   this.questionProgress++;
-    //   this.isSubmitted = false;
-    // } else {
-    //   this.isSubmitted = true;
-    //   this.router.navigate(['dashboard/exam-result']);
-    // }
 
     this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
       .subscribe(() => {

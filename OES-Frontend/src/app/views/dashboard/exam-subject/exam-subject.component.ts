@@ -67,7 +67,6 @@ export class ExamSubjectComponent {
 
   x = setInterval(() => {        
     this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm', 'en');
-    console.log(this.currentDateTime);
   }, 1000);
 
   loadSubject() {
@@ -77,7 +76,6 @@ export class ExamSubjectComponent {
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
-       console.log(formatDate(new Date(), 'yyyy-MM-ddTH:mm', 'en'));
       })
   }
 

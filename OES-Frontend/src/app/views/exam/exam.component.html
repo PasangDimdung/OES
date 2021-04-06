@@ -1,7 +1,9 @@
-{{ currentDateTime }}
-
-<div class="container pb-2" *ngFor="let option of questions; let i = index">
-  <input type="button" class="btn btn-sm btn-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">
+<div class="container pt-4" style="margin-left:20px;">
+    <div class="row">
+        <div class="pl-2" *ngFor="let option of questions; let i = index">
+          <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">Qn{{i+1}}</button>
+        </div>
+       </div>
 </div>
 
 <div class="animated fadeIn">
@@ -24,24 +26,25 @@
         <p></p>
       </ng-container>
 
-      <!-- <div class="form-actions mt-4">
-        <button (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary">
-          <i class="fa fa-dot-circle-o"></i> Submit
-        </button>
-      </div> -->
-
       <button *ngIf="questionProgress > 0" (click)="onPrev()" type="submit" class="btn btn-sm btn-primary">
-        <i class="fa fa-arrow-left"></i> Prev
+        <em class="fa fa-arrow-left"></em> Prev
       </button>
       <button  *ngIf="(questionLength.length -1 ) > questionProgress" (click)="onNext()" type="submit" class="btn btn-sm btn-primary"> Next
-        <i class="fa fa-arrow-right"></i> 
+        <em class="fa fa-arrow-right"></em> 
       </button>
       <button *ngIf="questionProgress == (questionLength.length - 1)" (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary"> 
-         <i class="fa fa-dot-circle-o"></i> Finish
+         <em class="fa fa-dot-circle-o"></em> Finish
        </button>
 
       <div *ngIf="!questions">
         <div class="container m-4">Loading...</div>
       </div>
     </div>
+    <!-- <div class="card-footer">
+      <div class="row">
+        <div class="pl-2" *ngFor="let option of questions; let i = index">
+          <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">{{i+1}}</button>
+        </div>
+       </div>
+    </div> -->
   </div>
