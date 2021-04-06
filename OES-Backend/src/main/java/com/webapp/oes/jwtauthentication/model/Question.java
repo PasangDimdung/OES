@@ -17,11 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
+
 public class Question {
     
     @Id
@@ -39,19 +39,16 @@ public class Question {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "answer_id")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private QuestionAnswer answer;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "qdetails_id", referencedColumnName = "id")
     @JsonIgnoreProperties("questions")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private QuestionDetails questionDetails;
 
     @ManyToOne()
     @JoinColumn(name = "unit_id", referencedColumnName = "id")
     @JsonIgnoreProperties("questions")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private SubjectUnit subjectUnit;
 
     
@@ -64,7 +61,7 @@ public class Question {
     private List<QuestionPaper> qPapers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
+    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private List<AnswerSheet> answerSheets = new ArrayList<>();
 
     public Question(String title2, List<QuestionChoice> op2, QuestionAnswer answer2, SubjectUnit subjectUnit, int points) {

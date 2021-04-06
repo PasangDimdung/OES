@@ -75,7 +75,6 @@ public class User{
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties("user")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private StudentDetails sDetails;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

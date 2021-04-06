@@ -48,12 +48,9 @@ public class Exam {
     	joinColumns = @JoinColumn(name = "exam_id"), 
         inverseJoinColumns = @JoinColumn(name = "department_id")) 
     @JsonIgnoreProperties("exams")  
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private Set<Department> departments = new HashSet<>();
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("exam")  
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private List<ExamSubject> sDates = new ArrayList<>();
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
