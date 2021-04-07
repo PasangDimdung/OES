@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class AnswerSheet {
@@ -23,6 +24,7 @@ public class AnswerSheet {
     @ManyToOne
     @JoinColumn(name = "student_id")
     @JsonIgnoreProperties("answerSheets")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private User student;
 
     @ManyToOne
@@ -38,6 +40,7 @@ public class AnswerSheet {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     @JsonIgnoreProperties("answerSheets")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private Subject subject;
 
     public int getId() {
