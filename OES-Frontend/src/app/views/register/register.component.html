@@ -96,15 +96,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-calendar-o"></i></span>
                   </div>
-                  <select class="custom-select" formControlName="batch">
-                    <option hidden value="" disabled selected>
-                      Select batch
-                    </option>
-                    <option value="2077">2077</option>
-                    <option value="2078">2078</option>
-                    <option value="2079">2079</option>
-                    <option value="2080">2080</option>
-                  </select>
+                  <input formControlName="batch"  class="form-control" type="text" placeholder="Enter batch" />
                 </div>
               </div>
               <div class="row">
@@ -156,7 +148,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="fa fa-address-card-o"></i></span>
                 </div>
-                <input formControlName="registration_num" type="text" class="form-control"
+                <input formControlName="registration_num" type="number" min="0" class="form-control"
                   placeholder="Registration Number" autocomplete="email" />
               </div>
             </ng-container>

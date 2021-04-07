@@ -1,3 +1,4 @@
+import { formatDate } from "@angular/common";
 import { ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import { FormGroup, FormBuilder } from "@angular/forms";
   
@@ -23,6 +24,7 @@ export function SubjectDatesFormGroup(formBuilder: FormBuilder) {
 
 export class SubjectFormComponent {
     @Input() formGroup: FormGroup;
+    currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
   
     constructor() {}
 }

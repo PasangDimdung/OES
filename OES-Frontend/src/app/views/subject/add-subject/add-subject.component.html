@@ -33,7 +33,7 @@
                 <div class="form-group">
                   <label for="name">Full Marks</label>
                   <input formControlName="fullMarks" type="number" class="form-control" id="name"
-                    placeholder="Enter full marks"
+                    placeholder="Enter full marks" min="0" max="100"
                     [class.is-invalid]='form.get("fullMarks").errors && form.get("fullMarks").touched' />
                     <div class="invalid-feedback">&nbsp; Full marks is required</div>
                 </div>
@@ -44,7 +44,7 @@
                 <div class="form-group">
                   <label for="name">Pass Marks</label>
                   <input formControlName="passMarks" type="number" class="form-control" id="name"
-                    placeholder="Enter pass marks"  
+                    placeholder="Enter pass marks"  min="0" max="40"
                     [class.is-invalid]='form.get("passMarks").errors && form.get("passMarks").touched' />
                     <div class="invalid-feedback">&nbsp; Pass marks is required</div>
                 </div>
@@ -54,8 +54,8 @@
               <div class="col-sm-12">
                 <div class="form-group">
                   <label for="name">Duration</label>
-                  <input formControlName="duration" type="text" class="form-control" id="name"
-                    placeholder="Enter duration" 
+                  <input formControlName="duration" type="number" class="form-control" id="name"
+                    placeholder="Enter duration" min="0" max="3"
                     [class.is-invalid]='form.get("duration").errors && form.get("duration").touched' />
                     <div class="invalid-feedback">&nbsp; Duration is required</div>
                 </div>

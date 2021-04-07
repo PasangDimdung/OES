@@ -1,3 +1,4 @@
+import { formatDate } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -21,6 +22,8 @@ export enum EditMode {
 })
 export class AddExamNameComponent {
   public date: Object = new Date();
+
+  currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 
   form: FormGroup;
   formGroup: FormGroup;
