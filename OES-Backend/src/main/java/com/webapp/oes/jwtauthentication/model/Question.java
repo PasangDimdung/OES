@@ -61,7 +61,7 @@ public class Question {
     private List<QuestionPaper> qPapers;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private List<AnswerSheet> answerSheets = new ArrayList<>();
 
     public Question(String title2, List<QuestionChoice> op2, QuestionAnswer answer2, SubjectUnit subjectUnit, int points) {

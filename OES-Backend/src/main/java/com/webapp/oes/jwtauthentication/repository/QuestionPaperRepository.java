@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface QuestionPaperRepository extends JpaRepository<QuestionPaper, Integer> {
-    @Query("select qp from QuestionPaper qp where qp.department = :#{#paper. department} and qp.subject = :#{#paper.subject} and qp.semester = :#{#paper.semester} and qp.year = :#{#paper.year}")
+    @Query("select qp from QuestionPaper qp where qp.department = :#{#paper. department} and qp.subject = :#{#paper.subject} and qp.semester = :#{#paper.semester} and qp.year = :#{#paper.year} and qp.exam.id = :#{#paper. exam .id}")
     QuestionPaper findQuestionPaper(@Param("paper") QuestionPaper paper);
 }
