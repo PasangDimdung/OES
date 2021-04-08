@@ -164,7 +164,10 @@ public class QuestionDetailsController {
                         qRepository.findById(question2.getId()).get().getqPapers().add(qPaperRepository.findById(qPaper1.getId()).get());
                         qRepository.save(question2);
                     } else {
-                        qRepository.findById(question2.getId()).get().getqPapers().add(paper);
+
+                       QuestionPaper qp = qPaperRepository.save(paper);
+
+                       qRepository.findById(question2.getId()).get().getqPapers().add(qp);
                         qRepository.save(question2);
                     }
                 }

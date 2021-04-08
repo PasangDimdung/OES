@@ -1,5 +1,6 @@
 package com.webapp.oes.jwtauthentication.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -8,11 +9,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class QuestionPaper {
@@ -28,9 +30,15 @@ public class QuestionPaper {
 
     private String department;
 
+    @OneToOne()
+    @JoinColumn(name = "exam_id")
+    @JsonIgnoreProperties()
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
+    private Exam exam;
+
     @ManyToMany(mappedBy = "qPapers", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnoreProperties("qPapers") 
-    private List<Question> questions;
+    private List<Question> questions = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -78,6 +86,14 @@ public class QuestionPaper {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
     }
 
     
