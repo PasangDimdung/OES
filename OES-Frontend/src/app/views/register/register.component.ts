@@ -35,6 +35,7 @@ export class RegisterComponent implements OnInit {
   authority: string;
   roles: string[];
   stdSignUpForm: FormGroup;
+  today: number;
 
   constructor(
     private fb: FormBuilder,
@@ -46,6 +47,10 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    
+    let date: Date = new Date();
+    this.today = date.getFullYear();
+
     this.signUpForm = this.fb.group({
       name: ['', [Validators.required]],
       username: ['', [Validators.required]],

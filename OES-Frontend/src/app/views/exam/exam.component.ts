@@ -162,13 +162,14 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onStep(selectedStep: any) {
 
-    this.questionProgress = Number(selectedStep);
-
     //checks the session if there is any selected radio btn value.
     if (window.sessionStorage.getItem(this.questionProgress)) {
       //if there is any it sets to the checkedRadioBtnValue
+      console.log(this.questionProgress);
       this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
     }
+
+    this.questionProgress = Number(selectedStep);
 
   }
 

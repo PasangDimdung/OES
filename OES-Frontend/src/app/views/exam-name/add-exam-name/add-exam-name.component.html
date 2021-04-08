@@ -38,7 +38,7 @@
                 <div class="form-group">
                   <label for="startDate">Start Date</label>
                   <input formControlName="starting_date" type="date" class="form-control" id="startDate"
-                    name="startDate" 
+                    name="startDate" min="{{currentDate}}"
                     [class.is-invalid]='form.get("starting_date").errors && form.get("starting_date").touched' />
                     <div class="invalid-feedback">&nbsp; Starting date is required</div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="form-group">
                   <label for="endDate">End Date</label>
                   <input formControlName="ending_date" type="date" class="form-control" id="endDate" name="endDate" 
-                  [class.is-invalid]='form.get("ending_date").errors && form.get("ending_date").touched' />
+                  min="{{currentDate}}" [class.is-invalid]='form.get("ending_date").errors && form.get("ending_date").touched' />
                   <div class="invalid-feedback">&nbsp; Ending date is required</div>
                 </div>
               </div>
