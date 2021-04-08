@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { TokenStorageService } from "../../../_auth/token-storage.service";
 import { Subjects } from "../../../_models/subject";
+import { SD } from "../../../_sd";
 import { ExamSubjectService } from "../../../_services/exam-subject.service";
 
 @Component({
@@ -17,6 +18,7 @@ export class ExamSubjectComponent {
   public authority: string;
 
   errorMessage: string = "";
+  badgeColor: string;
   subjectList: Subjects[] = [];
   formGroup: FormGroup;
   checkForm: FormGroup;
@@ -52,17 +54,18 @@ export class ExamSubjectComponent {
       this.roles = this.token.getAuthorities();
       this.roles.every((role) => {
         if (role === "ROLE_ADMIN") {
-          this.authority = "admin";
+          this.authority = SD.admin;
           return false;
         } else if (role === "ROLE_PM") {
-          this.authority = "pm";
+          this.authority = SD.teacher;
           return false;
         }
-        this.authority = "user";
+        this.authority = SD.student;
         return true;
       });
     }
     this.loadSubject();
+    this.badgeColor = "warning";
   }
 
   x = setInterval(() => {        
@@ -73,9 +76,17 @@ export class ExamSubjectComponent {
     this.examNameID = this.route.snapshot.paramMap.get('id');
     this.http.get("http://localhost:8080/api/exam/" + this.examNameID)
       .subscribe((response) => {
+        console.log(response);
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
+        
+        for(let i=0; i< this.sDates.length; i++) {
+          if(this.sDates[i].status == SD.completed) {
+            this.badgeColor = 'success';
+          }
+        }
+
       })
   }
 
@@ -94,9 +105,9 @@ export class ExamSubjectComponent {
     this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.checkForm.value)
       .subscribe(response => {
         if (response['status'] === true) {
-          if (this.authority === "admin") {
+          if (this.authority === SD.admin) {
             this.router.navigate(['/dashboard/exam-question-paper']);
-          } else if (this.authority === "user") {
+          } else if (this.authority === SD.student) {
             this.router.navigate(['/exam-instructions']);
           }
         } else {

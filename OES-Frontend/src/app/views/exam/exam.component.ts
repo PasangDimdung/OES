@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CanDeactivateGuard } from '../../_auth/can-deactivate';
 import { TokenStorageService } from '../../_auth/token-storage.service';
 import { Question } from '../../_models/questions';
+import { SD } from '../../_sd';
 import { ExamSubjectService } from '../../_services/exam-subject.service';
 import { UserService } from '../../_services/user.service';
 
@@ -21,6 +22,7 @@ export class ExamComponent implements CanDeactivateGuard {
   //Forms
   answerForm: FormGroup;
   form: FormGroup;
+  statusForm: FormGroup;
 
   //Quesiton and answer array
   questionAnsArray = [];
@@ -59,6 +61,11 @@ export class ExamComponent implements CanDeactivateGuard {
     private userService: UserService
   ) { }
 
+  //timer
+  timeout = setInterval(() => {
+    this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
+  }, 1000);
+
   canDeactivate() {
     console.log(this.isSubmitted);
     if (this.isSubmitted) {
@@ -81,6 +88,10 @@ export class ExamComponent implements CanDeactivateGuard {
       subject: this.examSubjectService.getSubject()
     })
 
+    this.statusForm = this.formBuilder.group({
+      status: SD.completed
+    });
+
     this.answerForm = this.formBuilder.group({
       exam: {
         id: this.examSubjectService.getExamId()
@@ -101,6 +112,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
+        console.log(response);
         if (response['status'] === true) {
           let resources = response['data'];
           this.questionDetails = resources;
@@ -122,6 +134,11 @@ export class ExamComponent implements CanDeactivateGuard {
         this.toastr.error(this.errorMessage);
       })
 
+    this.getCheckedRadioBtnValue();
+
+  }
+
+  getCheckedRadioBtnValue() {
     //checks the session if there is any selected radio btn value.
     if (window.sessionStorage.getItem(this.questionProgress)) {
       //if there is any it sets to the checkedRadioBtnValue
@@ -129,18 +146,7 @@ export class ExamComponent implements CanDeactivateGuard {
     }
   }
 
-  //timer
-  timeout = setInterval(() => {
-    this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
-  }, 1000);
-
-
-  onOptionClick(questionID: any, choiceID: any, choiceName: any) {
-
-    //To store selected question and answer
-    this.selectedQuestion = questionID;
-    this.selectedAnswer = choiceID;
-
+  patchAnswer() {
     //Update value to the form after getting selected values
     this.answerForm.patchValue({
       question: {
@@ -153,6 +159,43 @@ export class ExamComponent implements CanDeactivateGuard {
         id: this.subjectID
       }
     })
+  }
+
+  patchAnswerWithSelectedChoice(progress) {
+    this.answerForm.patchValue({
+      question: {
+        id: this.questions[progress].id
+      },
+      choice: {
+        id: this.selectedAnswer
+      },
+      subject: {
+        id: this.subjectID
+      }
+    })
+  }
+
+  patchAnswerWithEmptyChoice(progress) {
+    this.answerForm.patchValue({
+      question: {
+        id: this.questions[progress].id
+      },
+      choice: {
+        id: ""
+      },
+      subject: {
+        id: this.subjectID
+      }
+    })
+  }
+
+  onOptionClick(questionID: any, choiceID: any, choiceName: any) {
+
+    //To store selected question and answer
+    this.selectedQuestion = questionID;
+    this.selectedAnswer = choiceID;
+
+    this.patchAnswer();
 
     console.log("ON OPTION CLICK", this.answerForm.value)
 
@@ -162,52 +205,20 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onStep(selectedStep: any) {
 
-    //checks the session if there is any selected radio btn value.
-    if (window.sessionStorage.getItem(this.questionProgress)) {
-      //if there is any it sets to the checkedRadioBtnValue
-      console.log(this.questionProgress);
-      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
-    }
-
     this.questionProgress = Number(selectedStep);
-
+    this.getCheckedRadioBtnValue();
   }
 
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (this.selectedAnswer == null) {
-      this.answerForm.patchValue({
-        question: {
-          id: this.questions[this.questionProgress].id
-        },
-        choice: {
-          id: ""
-        },
-        subject: {
-          id: this.subjectID
-        }
-      })
+      this.patchAnswerWithEmptyChoice(this.questionProgress);
     } else {
-      this.answerForm.patchValue({
-        question: {
-          id: this.questions[this.questionProgress].id
-        },
-        choice: {
-          id: this.selectedAnswer
-        },
-        subject: {
-          id: this.subjectID
-        }
-      })
+      this.patchAnswerWithSelectedChoice(this.questionProgress);
     }
 
     this.questionProgress++;
-
-    //checks the session if there is any selected radio btn value.
-    if (window.sessionStorage.getItem(this.questionProgress)) {
-      //if there is any it sets to the checkedRadioBtnValue
-      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
-    }
+    this.getCheckedRadioBtnValue();
 
     this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
       .subscribe(() => {
@@ -220,37 +231,12 @@ export class ExamComponent implements CanDeactivateGuard {
   onPrev() {
     //if choice isn't selected and prev button is clicked. Patch empty string to the choice id 
     if (this.selectedAnswer == null) {
-      this.answerForm.patchValue({
-        question: {
-          id: this.questions[this.questionProgress].id
-        },
-        choice: {
-          id: ""
-        },
-        subject: {
-          id: this.subjectID
-        }
-      })
+      this.patchAnswerWithEmptyChoice(this.questionProgress);
     } else {
-      this.answerForm.patchValue({
-        question: {
-          id: this.questions[this.questionProgress].id
-        },
-        choice: {
-          id: this.selectedAnswer
-        },
-        subject: {
-          id: this.subjectID
-        }
-      })
+      this.patchAnswerWithSelectedChoice(this.questionProgress);
     }
     this.questionProgress--;
-
-    //checks the session if there is any selected radio btn value.
-    if (window.sessionStorage.getItem(this.questionProgress)) {
-      //if there is any it sets to the checkedRadioBtnValue
-      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
-    }
+    this.getCheckedRadioBtnValue();
 
     this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
       .subscribe(() => {
@@ -267,6 +253,11 @@ export class ExamComponent implements CanDeactivateGuard {
       .subscribe(() => {
         this.userService.saveSubjectID(this.subjectID);
       })
+
+    this.http.put("http://localhost:8080/api/exam-subject/3/status", this.statusForm.value)
+    .subscribe(res =>{
+      console.log(res);
+    })
 
     this.isSubmitted = true;
     this.router.navigate(['dashboard/exam-result']);
