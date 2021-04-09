@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.webapp.oes.jwtauthentication.message.request.SignUpForm;
+import com.webapp.oes.jwtauthentication.message.request.singnUpFormTeacher;
 import com.webapp.oes.jwtauthentication.model.Role;
 import com.webapp.oes.jwtauthentication.model.RoleName;
 import com.webapp.oes.jwtauthentication.model.StudentDetails;
@@ -82,6 +83,47 @@ public class UserController {
             });
 
         user.setRoles(roles);
+
+        user.getsDetails().setUser(user);
+
+        return userRepository.save(user);
+    }
+
+    @PostMapping("api/teacher")
+    public User addteacher(@RequestBody singnUpFormTeacher signUpRequest) {
+
+        // Creating user's account
+		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
+        encoder.encode(signUpRequest.getPassword()), signUpRequest.getTeacher());
+
+
+        Set<String> strRoles = signUpRequest.getRole();
+        Set<Role> roles = new HashSet<>();
+
+        strRoles.forEach(role -> {
+            switch (role) {
+            case "admin":
+                Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                roles.add(adminRole);
+
+                break;
+            case "pm":
+                Role pmRole = roleRepository.findByName(RoleName.ROLE_PM)
+                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                roles.add(pmRole);
+
+                break;
+            default:
+                Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
+                        .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+                roles.add(userRole);
+            }
+            });
+
+        user.setRoles(roles);
+
+        user.getTeacher().setUser(user);
 
         return userRepository.save(user);
     }

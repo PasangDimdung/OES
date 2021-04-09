@@ -72,10 +72,13 @@ public class User{
     	inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private StudentDetails sDetails;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private Teacher teacher;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
@@ -96,6 +99,10 @@ public class User{
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User(String name2, String username2, String email2, String encode, Teacher teacher) {
+
     }
 
     public Long getId() {
@@ -168,6 +175,14 @@ public class User{
 
     public void setAnswerSheets(List<AnswerSheet> answerSheets) {
         this.answerSheets = answerSheets;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
     
 }
