@@ -47,7 +47,8 @@ export class ExamSubjectComponent {
       semester: [''],
       department: [''],
       year: this.today,
-      subject: ['']
+      subject: [''],
+      exam : {id: 1}
     })
 
     if (this.token.getToken()) {
@@ -102,6 +103,7 @@ export class ExamSubjectComponent {
       semester: this.data.semester,
       subject: subjectName
     })
+    console.log(this.checkForm.value);
     this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.checkForm.value)
       .subscribe(response => {
         if (response['status'] === true) {

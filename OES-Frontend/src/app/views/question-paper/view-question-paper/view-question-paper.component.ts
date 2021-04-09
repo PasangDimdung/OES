@@ -42,10 +42,10 @@ export class ViewQuestionPaperComponent {
 
         this.form = this.formBuilder.group({
             year: [this.today],
-            examName: [''],
             department: [''],
             semester: [''],
             subject: [''],
+            exam: {id: 1}
         });
 
         this.loadExamName()
@@ -93,8 +93,10 @@ export class ViewQuestionPaperComponent {
 
     onSubmit() {
         this.isSubmitted = true;
-        this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.form.value)
+        console.log(this.form.value);
+        this.http.post("http://localhost:8080/api/exam/" + 1 + '/subject' + '/questions', this.form.value)
             .subscribe(response => {
+                console.log(response);
                 this.isSubmitted = false;
                 if (response['status'] === true) {
                     let resources = response['data'];

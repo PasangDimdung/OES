@@ -85,7 +85,8 @@ export class ExamComponent implements CanDeactivateGuard {
       semester: this.examSubjectService.getSemester(),
       department: this.examSubjectService.getDepartment(),
       year: this.today,
-      subject: this.examSubjectService.getSubject()
+      subject: this.examSubjectService.getSubject(),
+      exam: {id: this.examSubjectService.getExamId()}
     })
 
     this.statusForm = this.formBuilder.group({

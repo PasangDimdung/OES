@@ -48,6 +48,7 @@ export class AddQuestionPaperComponent {
       department: ['', [Validators.required]],
       semester: ['', [Validators.required]],
       subject: ['', [Validators.required]],
+      exam: {id: 1}
     });
   }
 
