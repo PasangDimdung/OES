@@ -51,7 +51,7 @@ export class ExamResult implements OnInit{
             this.score = response['data'];
             console.log(response);
             if(response['status'] === true ) {
-                this.examSubjectService.clearSessionStorage();
+                // this.examSubjectService.clearSessionStorage();
             } else {
                 this.toastr.error('Error');
             }

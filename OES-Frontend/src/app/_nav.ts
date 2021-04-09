@@ -279,4 +279,9 @@ export const studentNavItems: INavData[] = [
     url: "/dashboard",
     icon: "icon-speedometer",
   },
+  {
+    name: "Report",
+    url: "/report",
+    icon: "icon-star",
+  },
 ];
