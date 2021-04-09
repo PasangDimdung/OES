@@ -94,7 +94,7 @@ export class ViewQuestionPaperComponent {
     onSubmit() {
         this.isSubmitted = true;
         console.log(this.form.value);
-        this.http.post("http://localhost:8080/api/exam/" + 1 + '/subject' + '/questions', this.form.value)
+        this.http.post("http://localhost:8080/api/exam/" + 2 + '/subject' + '/questions', this.form.value)
             .subscribe(response => {
                 console.log(response);
                 this.isSubmitted = false;

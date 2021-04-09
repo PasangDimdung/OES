@@ -48,7 +48,7 @@ export class ExamSubjectComponent {
       department: [''],
       year: this.today,
       subject: [''],
-      exam : {id: 1}
+      exam : {id: ''}
     })
 
     if (this.token.getToken()) {
@@ -81,6 +81,7 @@ export class ExamSubjectComponent {
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
+        console.log(this.sDates);
         
         for(let i=0; i< this.sDates.length; i++) {
           if(this.sDates[i].status == SD.completed) {
@@ -101,7 +102,8 @@ export class ExamSubjectComponent {
     this.checkForm.patchValue({
       department: this.data.department,
       semester: this.data.semester,
-      subject: subjectName
+      subject: subjectName,
+      exam: {id: Number(this.examNameID)}
     })
     console.log(this.checkForm.value);
     this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.checkForm.value)

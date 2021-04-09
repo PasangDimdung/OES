@@ -67,7 +67,6 @@ export class ExamComponent implements CanDeactivateGuard {
   }, 1000);
 
   canDeactivate() {
-    console.log(this.isSubmitted);
     if (this.isSubmitted) {
       return true
     } else {
@@ -111,9 +110,10 @@ export class ExamComponent implements CanDeactivateGuard {
       }
     })
 
+    console.log(this.form.value);
+
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
-        console.log(response);
         if (response['status'] === true) {
           let resources = response['data'];
           this.questionDetails = resources;
@@ -251,13 +251,15 @@ export class ExamComponent implements CanDeactivateGuard {
     console.log(this.answerForm.value);
 
     this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
-      .subscribe(() => {
+      .subscribe(response => {
+        console.log(response);
         this.userService.saveSubjectID(this.subjectID);
       })
 
-    this.http.put("http://localhost:8080/api/exam-subject/3/status", this.statusForm.value)
+    this.http.put("http://localhost:8080/api/exam-subject/2/status", this.statusForm.value)
     .subscribe(res =>{
       console.log(res);
+      console.log("hitted")
     })
 
     this.isSubmitted = true;

@@ -1,18 +1,19 @@
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { DepartmentService } from "../../../_services/department.service";
 import { ExamNameService } from "../../../_services/exam-name.service";
 import { QuestionPaperService } from "../../../_services/question-paper.service";
 import { SemesterService } from "../../../_services/semester.service";
+import { SubjectService } from "../../../_services/subject.service";
 
 @Component({
-  selector: "app-add-question-paper",
-  templateUrl: "add-question-paper.component.html",
+  selector: "view-question-paper",
+  templateUrl: "view-question.component.html",
 })
-export class AddQuestionPaperComponent {
-  questionPaperForm: FormGroup;
+export class ViewQuestionComponent {
+  form: FormGroup;
 
   errorMessage: string = '';
 
@@ -24,7 +25,7 @@ export class AddQuestionPaperComponent {
 
   isSubmitted: boolean = false;
 
-  questionPaperList: Object;
+  questionList: Object;
   questionDetails: any;
 
   selectedYear;
@@ -32,13 +33,17 @@ export class AddQuestionPaperComponent {
   selectedSemester = '';
   selectedSubject = '';
   selectExamId = '';
+  selectedUnit = "";
+
   examNameID: number;
+  units: any;
 
   constructor(
     private departmentService: DepartmentService,
     private semesterService: SemesterService,
     private questionPaperService: QuestionPaperService,
     private examNameService: ExamNameService,
+    private subjectService: SubjectService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private http: HttpClient
@@ -50,12 +55,11 @@ export class AddQuestionPaperComponent {
     let date: Date = new Date();
     this.selectedYear = date.getFullYear();
 
-    this.questionPaperForm = this.fb.group({
-      year: [this.selectedYear],
+    this.form = this.fb.group({
       department: ['', [Validators.required]],
       semester: ['', [Validators.required]],
       subject: ['', [Validators.required]],
-      exam: {id: ''}
+      unit: ['']
     });
   }
 
@@ -87,6 +91,8 @@ export class AddQuestionPaperComponent {
     this.selectedSubject = '';
     this.selectedSemester = '';
     this.subjects = [];
+    this.selectedUnit = '';
+    this.units = [];
   }
 
   onExamNameChange(id: number){
@@ -103,27 +109,34 @@ export class AddQuestionPaperComponent {
       })
   }
 
-  onSubjectChange(){
-    this.isSubmitted = true;
+  onSubjectChange() {
+    this.selectedUnit = '';
+    this.subjectService
+      .getUser(this.selectedSubject["id"])
+      .subscribe((response) => {
+        let resources = response["data"];
+        this.units = resources;
+        this.units = resources["units"];
+      });
   }
 
 
   onSubmit() {
     this.isSubmitted = true;
-    this.questionPaperForm.patchValue({
+    this.form.patchValue({
         department: this.selectedDepartment["name"],
-        year: this.selectedYear,
         semester: this.selectedSemester["name"],
         subject: this.selectedSubject["name"],
-        exam: {id: this.examNameID}
+        unit: this.selectedUnit["unit"]
     });
-    console.log(this.questionPaperForm.value)
-    this.questionPaperService.submit(this.questionPaperForm.value)
-    .subscribe((response) => {
+    console.log(this.form.value)
+    this.http.post("http://localhost:8080/api/question/filter/", this.form.value)
+    .subscribe(response => {
+        console.log(response);
         this.isSubmitted = false;
         if (response["status"] == true) {
           let resources = response["data"];
-          this.questionPaperList = resources;
+          this.questionList = resources;
           this.questionDetails = response["data"][0].questionDetails;
           this.toastr.success(response["message"]);
           this.selectedDepartment = '';
@@ -132,6 +145,8 @@ export class AddQuestionPaperComponent {
           this.selectedSubject = '';
           this.subjects = [];
           this.selectExamId = "";
+          this.units = [];
+          this.selectedUnit = "";
         } else {
           this.toastr.error(response["message"]);
           this.questionDetails = null;
@@ -141,13 +156,14 @@ export class AddQuestionPaperComponent {
           this.selectedSubject = '';
           this.subjects = [];
           this.selectExamId = "";
+          this.units = [];
+          this.selectedUnit = "";
         }
-      },
-      (error) => {
+    }, 
+    (error) => {
         this.isSubmitted = false;
         this.errorMessage = error.error.message;
         this.toastr.error(this.errorMessage);
-      }
-    );
+    })
   }
 }

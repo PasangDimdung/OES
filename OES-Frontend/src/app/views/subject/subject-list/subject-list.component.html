@@ -11,26 +11,28 @@
   <div class="form-group row pt-3">
     <label class="col-md-1" for="select-department">Department:</label>
     <div class="col-md-2">
-      <select id="select-department" name="select-department" class="form-control form-control-sm" 
+      <select (change)="onDepartmentChange(selectedDepartment.id)" class="custom-select d-block w-100" id="department"
+      [(ngModel)]="selectedDepartment" id="select-department" name="select-department" class="form-control form-control-sm" 
       style="background-color: #e4e5e6; border-color: rgb(169, 169, 169);">
-        <option value="0">All</option>
-        <option value="1">CSIT</option>
-        <option value="2">BCA</option>
+      <option hidden value="" disabled selected>
+        Select department
+      </option>
+        <option *ngFor="let department of departments" [ngValue]="department">
+          {{ department.name }}
+        </option>
       </select>
     </div>
     <label class="col-md-1" for="select-semester">Semester:</label>
     <div class="col-md-2">
-      <select id="select-semester" name="select-semester" class="form-control form-control-sm"  
+      <select  (change)="onSemesterChange(selectedSemester.id)" class="custom-select d-block w-100" id="semester"
+      [(ngModel)]="selectedSemester" id="select-semester" name="select-semester" class="form-control form-control-sm"  
       style="background-color: #e4e5e6; border-color: rgb(169, 169, 169);">
-        <option value="0">All</option>
-        <option value="1">First Semester</option>
-        <option value="2">Second Semester</option>
-        <option value="1">Third Semester</option>
-        <option value="2">Fourth Semester</option>
-        <option value="1">Fifth Semester</option>
-        <option value="2">Sixth Semester</option>
-        <option value="1">Seventh Semester</option>
-        <option value="2">Eight Semester</option>
+      <option hidden value="" disabled selected>
+        Select semester
+      </option>
+        <option *ngFor="let semester of semesters" [ngValue]="semester">
+          {{ semester.name }}
+        </option>
       </select>
     </div>
   </div>
@@ -85,7 +87,7 @@
                 </tr>
               </ng-container>
               <tr *ngIf="!subjectList">
-                <td colspan="6">Loading...</td>
+                <td colspan="6">No data to display</td>
               </tr>
               <tr *ngIf="subjectList && subjectList.length == 0">
                 <td colspan="6">No data to display</td>

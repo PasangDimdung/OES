@@ -76,6 +76,7 @@ export class DashboardComponent implements OnInit {
       )
       .subscribe((response) => {
         let resources = response["data"];
+        console.log(response);
         this.studentExamNameList = resources;
       });
   }

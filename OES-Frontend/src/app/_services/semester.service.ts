@@ -16,7 +16,7 @@ export class SemesterService {
     return this.http.post(this.baseUrl, model);
   }
 
-  getAll() {
+  getAll(): Observable<Semester[]> {
     return this.http.get<Semester[]>(this.baseUrl);
   }
 

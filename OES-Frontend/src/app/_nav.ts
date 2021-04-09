@@ -20,6 +20,11 @@ export const adminNavItems: INavData[] = [
         url: "/question/add",
         icon: "icon-layers",
       },
+      {
+        name: "View",
+        url: "/question/view",
+        icon: "icon-layers",
+      },
     ],
   },
   {

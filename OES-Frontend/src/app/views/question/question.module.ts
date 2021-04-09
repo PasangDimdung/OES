@@ -7,6 +7,7 @@ import { AddQuestionComponent } from "./add-question/add-question.component";
 
 // Components Routing
 import { QuestionRoutingModule } from "./question-routing.module";
+import { ViewQuestionComponent } from "./view-question/view-question.component";
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { QuestionRoutingModule } from "./question-routing.module";
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [AddQuestionComponent],
+  declarations: [AddQuestionComponent, ViewQuestionComponent],
 })
 export class QuestionModule {}

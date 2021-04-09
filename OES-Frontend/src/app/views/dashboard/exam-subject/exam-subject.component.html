@@ -206,7 +206,7 @@
                   <td>
                     <!-- element.status == 'pending' -->
                     <button  (click)="viewQuestionPaper(element.subject.name)" class="btn btn-sm btn-primary" 
-                    *ngIf="currentDateTime >= element.starting_date &&  element.ending_date >= currentDateTime  " > 
+                    *ngIf="currentDateTime >= element.starting_date &&  element.ending_date >= currentDateTime  && element.status == 'pending' " > 
                       Start
                     </button>
                     <div *ngIf="currentDateTime > element.starting_date && currentDateTime > element.ending_date">
