@@ -72,22 +72,22 @@ public class TestRestAPIs {
 	
 	
 
-	@PostMapping("/api/teacher")
-	public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher) {
-		Teacher t = tRepository.save(teacher);
-		if (t != null) {
-			return ResponseEntity.ok(new ApiResponse(true, "Teacher Added.", t));
-		}
+	// @PostMapping("/api/teacher")
+	// public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher) {
+	// 	Teacher t = tRepository.save(teacher);
+	// 	if (t != null) {
+	// 		return ResponseEntity.ok(new ApiResponse(true, "Teacher Added.", t));
+	// 	}
 
-		return new ResponseEntity<>(new ApiResponse(false, "Teacher not added.", null), HttpStatus.BAD_REQUEST);
-	}
+	// 	return new ResponseEntity<>(new ApiResponse(false, "Teacher not added.", null), HttpStatus.BAD_REQUEST);
+	// }
 
-	@GetMapping("/api/teacher")
-	public ResponseEntity<?> getTeachers() {
-		List<Teacher> t = tRepository.findAll();
+	// @GetMapping("/api/teacher")
+	// public ResponseEntity<?> getTeachers() {
+	// 	List<Teacher> t = tRepository.findAll();
 
-		return new ResponseEntity<>(new ApiResponse(true, "All Teacher list.", t), HttpStatus.OK);
-	}
+	// 	return new ResponseEntity<>(new ApiResponse(true, "All Teacher list.", t), HttpStatus.OK);
+	// }
 
 	@PostMapping("/api/year")
 	public ResponseEntity<?> addYear(@Valid @RequestBody Year year) {

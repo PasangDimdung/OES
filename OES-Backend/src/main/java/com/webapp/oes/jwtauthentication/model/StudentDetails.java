@@ -1,9 +1,14 @@
 package com.webapp.oes.jwtauthentication.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -22,10 +27,10 @@ public class StudentDetails {
 
     private String registration_num;
 
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "user_id")
-    // @JsonIgnoreProperties("sDetails")
-    // private User user;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("sDetails")
+    private User user;
 
     public int getId() {
         return id;
@@ -82,6 +87,14 @@ public class StudentDetails {
 	public void setRegistration_num(String registration_num) {
 		this.registration_num = registration_num;
 	}
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     
 }

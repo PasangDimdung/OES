@@ -29,7 +29,6 @@ public class SubjectUnit {
 
     @ManyToOne()
     @JsonIgnoreProperties("units")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private Subject subject;
 
     @OneToMany()
