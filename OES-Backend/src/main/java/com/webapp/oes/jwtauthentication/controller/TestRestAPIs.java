@@ -6,13 +6,11 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
-import com.webapp.oes.jwtauthentication.model.Question;
 import com.webapp.oes.jwtauthentication.model.QuestionType;
 import com.webapp.oes.jwtauthentication.model.Teacher;
 import com.webapp.oes.jwtauthentication.model.Year;
 import com.webapp.oes.jwtauthentication.repository.ExamRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionDetailsRepository;
-import com.webapp.oes.jwtauthentication.repository.QuestionRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionTypeRepository;
 import com.webapp.oes.jwtauthentication.repository.SubjectRepository;
 import com.webapp.oes.jwtauthentication.repository.TeacherRepository;
@@ -40,11 +38,6 @@ public class TestRestAPIs {
 	public ExamRepository examRepository;
 
 	@Autowired
-	public QuestionRepository qRepository;
-
-	
-
-	@Autowired
 	public TeacherRepository tRepository;
 
 	@Autowired
@@ -52,8 +45,6 @@ public class TestRestAPIs {
 
 	@Autowired
 	public QuestionTypeRepository qtRepository;
-
-	
 
 	@Autowired
 	public QuestionDetailsRepository qdRepository;
@@ -79,12 +70,7 @@ public class TestRestAPIs {
 		return ">>> Admin Contents";
 	}
 	
-	@GetMapping("/api/question")
-	public ResponseEntity<?> getQuestions() {
-		List<Question> q = qRepository.findAll();
-
-		return new ResponseEntity<>(new ApiResponse(true, "Question list.", q), HttpStatus.OK); 
-	}
+	
 
 	@PostMapping("/api/teacher")
 	public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher) {
