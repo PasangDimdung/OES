@@ -1,26 +1,19 @@
 package com.webapp.oes.jwtauthentication.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
-import com.webapp.oes.jwtauthentication.model.Department;
-import com.webapp.oes.jwtauthentication.model.Exam;
-import com.webapp.oes.jwtauthentication.model.ExamSubject;
 import com.webapp.oes.jwtauthentication.model.Question;
-import com.webapp.oes.jwtauthentication.model.QuestionDetails;
 import com.webapp.oes.jwtauthentication.model.QuestionType;
-import com.webapp.oes.jwtauthentication.model.Semester;
-import com.webapp.oes.jwtauthentication.model.Subject;
 import com.webapp.oes.jwtauthentication.model.Teacher;
 import com.webapp.oes.jwtauthentication.model.Year;
-import com.webapp.oes.jwtauthentication.repository.DepartmentRepository;
 import com.webapp.oes.jwtauthentication.repository.ExamRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionDetailsRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionTypeRepository;
-import com.webapp.oes.jwtauthentication.repository.SemesterRepository;
 import com.webapp.oes.jwtauthentication.repository.SubjectRepository;
 import com.webapp.oes.jwtauthentication.repository.TeacherRepository;
 import com.webapp.oes.jwtauthentication.repository.YearRepository;
@@ -30,8 +23,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,8 +42,7 @@ public class TestRestAPIs {
 	@Autowired
 	public QuestionRepository qRepository;
 
-	@Autowired
-	public DepartmentRepository dRepository;
+	
 
 	@Autowired
 	public TeacherRepository tRepository;
@@ -58,8 +53,7 @@ public class TestRestAPIs {
 	@Autowired
 	public QuestionTypeRepository qtRepository;
 
-	@Autowired
-	public SemesterRepository sRepository;
+	
 
 	@Autowired
 	public QuestionDetailsRepository qdRepository;
@@ -84,82 +78,12 @@ public class TestRestAPIs {
 	public String adminAccess() {
 		return ">>> Admin Contents";
 	}
-
-	@PostMapping("/api/exam")
-	public ResponseEntity<?> addExam(@RequestBody Exam exam) {
-		
-		Long id = examRepository.save(exam).getId();
-
-		if (id != null) {
-
-			var ex = examRepository.findById(id).get();
-
-        	var dep_id = dRepository.findByName(ex.getDepartment()).getId();
-
-			var sem_id = sRepository.findByName(ex.getSemester()).getId();
-
-			var sList = suRepository.findSubjects(dep_id, sem_id);
-
-			for (Subject subject: sList) {
-                ex.getsDates().add(new ExamSubject(ex, subject, null, null));
-			}
-
-			return ResponseEntity.ok(new ApiResponse(true, "Exam Added.", ex));
-		}
-
-		return new ResponseEntity<>(new ApiResponse(false, "Exam not added.", null), HttpStatus.BAD_REQUEST);
-	}
-
-	@GetMapping("/api/exam")
-	public ResponseEntity<?> examList() {
-		List<Exam> ex = examRepository.findAll();
-
-		return new ResponseEntity<>(new ApiResponse(true, "All exam list.", ex), HttpStatus.OK);
-	}
-
 	
-
-	@PostMapping("/api/test")
-	public QuestionDetails test(@Valid @RequestBody QuestionDetails question) {
-
-		return qdRepository.save(question);
-
-		// var qd = qdRepository.findQuestionDetails(question.getQuestionDetails());
-
-		// if(qd !=null ) {
-
-		// 	Question q = new Question(question.getTitle(), question.getOp(), question.getAnswer(), question.getSubjectUnit(), question.getPoints());
-
-		// 	qdRepository.findById(qd.getId()).get().getQuestions().add(q);
-			
-		// 	return new  ResponseEntity<>(new ApiResponse(true, "Question added to already existed details.", qdRepository.save(qd)), HttpStatus.OK);
-		// }
-		
-		// return new ResponseEntity<>(new ApiResponse(true, "Question added with new details..", qRepository.save(question)), HttpStatus.OK);
-	}
-
 	@GetMapping("/api/question")
 	public ResponseEntity<?> getQuestions() {
 		List<Question> q = qRepository.findAll();
 
 		return new ResponseEntity<>(new ApiResponse(true, "Question list.", q), HttpStatus.OK); 
-	}
-
-	@PostMapping("/api/department")
-	public ResponseEntity<?> addDepartment(@Valid @RequestBody Department department) {
-		Department d = dRepository.save(department);
-		if (d != null) {
-			return ResponseEntity.ok(new ApiResponse(true, "Department Added.", d));
-		}
-
-		return new ResponseEntity<>(new ApiResponse(false, "Department not added.", null), HttpStatus.BAD_REQUEST);
-	}
-
-	@GetMapping("/api/department")
-	public ResponseEntity<?> getDepartments() {
-		List<Department> d = dRepository.findAll();
-
-		return new ResponseEntity<>(new ApiResponse(true, "All department list.", d), HttpStatus.OK);
 	}
 
 	@PostMapping("/api/teacher")
@@ -196,7 +120,7 @@ public class TestRestAPIs {
 		return new ResponseEntity<>(new ApiResponse(true, "All Year list.", y), HttpStatus.OK);
 	}
 
-	@PostMapping("/api/questionType")
+	@PostMapping("/api/questionType") // add question type
 	public ResponseEntity<?> addQuestionType(@Valid @RequestBody QuestionType type) {
 		QuestionType qt = qtRepository.save(type);
 		if (qt != null) {
@@ -205,29 +129,41 @@ public class TestRestAPIs {
 
 		return new ResponseEntity<>(new ApiResponse(false, "Type not added.", null), HttpStatus.BAD_REQUEST);
 	}
-
-	@GetMapping("/api/questionType")
+ 
+	@GetMapping("/api/questionType") // get all question type
 	public ResponseEntity<?> getQuestionType() {
 		List<QuestionType> qt = qtRepository.findAll();
 
 		return new ResponseEntity<>(new ApiResponse(true, "All question type list.", qt), HttpStatus.OK);
 	}
 
-	@PostMapping("/api/semester")
-	public ResponseEntity<?> addSemester(@Valid @RequestBody Semester semester) {
-		Semester s = sRepository.save(semester);
-		if (s != null) {
-			return ResponseEntity.ok(new ApiResponse(true, "Semester Added.", s));
+	@PutMapping("/api/questionType/{typeId}") // update question type
+	public ResponseEntity<?> updateQuestionType(@PathVariable int typeId, @RequestBody QuestionType qType) {
+		Optional<QuestionType> qt = qtRepository.findById(typeId);
+
+		if(qt != null) {
+			var _qt = qt.get();
+			_qt.setName(qType.getName());
+
+			return new ResponseEntity<>(new ApiResponse(true, "Question type upated.", qtRepository.save(_qt)), HttpStatus.OK);
+
 		}
 
-		return new ResponseEntity<>(new ApiResponse(false, "Semester not added.", null), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new ApiResponse(false, "Question type id not found.", null), HttpStatus.OK);
 	}
 
-	@GetMapping("/api/semester")
-	public ResponseEntity<?> getAllSemester() {
-		List<Semester> s = sRepository.findAll();
+	@DeleteMapping("/api/questionType/{typeId}")
+    public ResponseEntity<?> deleteDepartmentOfExam(@PathVariable int typeId) {
+        Optional<QuestionType> qt = qtRepository.findById(typeId);
 
-		return new ResponseEntity<>(new ApiResponse(true, "All Semester list.", s), HttpStatus.OK);
-	}
+        if(qt != null) {
+
+			qtRepository.deleteById(typeId);
+			return new ResponseEntity<>(new ApiResponse(true, "Question type deleted.", null), HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Question type id not found.", null), HttpStatus.OK);
+    }
 	
 }

@@ -39,6 +39,7 @@ public class Question {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "answer_id")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)    
     private QuestionAnswer answer;
 
     @ManyToOne(cascade = CascadeType.ALL)

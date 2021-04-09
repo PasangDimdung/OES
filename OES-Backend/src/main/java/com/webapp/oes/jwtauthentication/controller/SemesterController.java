@@ -1,6 +1,9 @@
 package com.webapp.oes.jwtauthentication.controller;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.model.Semester;
@@ -32,6 +35,23 @@ public class SemesterController {
 
     @Autowired 
     public SubjectRepository sRepository;
+
+    @PostMapping("/api/semester")
+	public ResponseEntity<?> addSemester(@Valid @RequestBody Semester semester) {
+		Semester s = semRepository.save(semester);
+		if (s != null) {
+			return ResponseEntity.ok(new ApiResponse(true, "Semester Added.", s));
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Semester not added.", null), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/api/semester")
+	public ResponseEntity<?> getAllSemester() {
+		List<Semester> s = semRepository.findAll();
+
+		return new ResponseEntity<>(new ApiResponse(true, "All Semester list.", s), HttpStatus.OK);
+	}
 
     @GetMapping("/api/semester/{id}")
     public ResponseEntity<?> getSemesterById(@PathVariable int id) {

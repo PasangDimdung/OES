@@ -54,7 +54,41 @@ public class ExamController {
     @Autowired
     public ExamSubjectRepository eSubjectRepository;
 
-    @GetMapping("/api/exam/{id}")
+
+    @PostMapping("/api/exam") // add exam
+	public ResponseEntity<?> addExam(@RequestBody Exam exam) {
+		
+		Long id = examRepository.save(exam).getId();
+
+		if (id != null) {
+
+			var ex = examRepository.findById(id).get();
+
+        	var dep_id = dRepository.findByName(ex.getDepartment()).getId();
+
+			var sem_id = sRepository.findByName(ex.getSemester()).getId();
+
+			var sList = suRepository.findSubjects(dep_id, sem_id);
+
+			for (Subject subject: sList) {
+                ex.getsDates().add(new ExamSubject(ex, subject, null, null));
+			}
+
+			return ResponseEntity.ok(new ApiResponse(true, "Exam Added.", ex));
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Exam not added.", null), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/api/exam") // get all exam list
+	public ResponseEntity<?> examList() {
+		List<Exam> ex = examRepository.findAll();
+
+		return new ResponseEntity<>(new ApiResponse(true, "All exam list.", ex), HttpStatus.OK);
+	}
+
+
+    @GetMapping("/api/exam/{id}") // get exam by id
     public ResponseEntity<?> getExamById(@PathVariable Long id) {
         Optional<Exam> ex = examRepository.findById(id);
 
