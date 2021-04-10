@@ -109,6 +109,17 @@ public class TestRestAPIs {
 		return new ResponseEntity<>(new ApiResponse(true, "All question type list.", qt), HttpStatus.OK);
 	}
 
+	@GetMapping("/api/questionType/{typeId}") // get question type by id
+	public ResponseEntity<?> getQuestionTypeById(@PathVariable int typeId) {
+		Optional<QuestionType> qt = qtRepository.findById(typeId);
+
+		if(qt != null) {
+			return new ResponseEntity<>(new ApiResponse(true, "Question type with id "+typeId, qt), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Question type with id "+typeId+ " not found.", qt), HttpStatus.OK);
+	}
+
 	@PutMapping("/api/questionType/{typeId}") // update question type
 	public ResponseEntity<?> updateQuestionType(@PathVariable int typeId, @RequestBody QuestionType qType) {
 		Optional<QuestionType> qt = qtRepository.findById(typeId);
