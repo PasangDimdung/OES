@@ -114,6 +114,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
+        console.log(response)
         if (response['status'] === true) {
           let resources = response['data'];
           this.questionDetails = resources;
@@ -127,6 +128,7 @@ export class ExamComponent implements CanDeactivateGuard {
             semester: '',
             subject: '',
           })
+          this.getCheckedRadioBtnValue();
         } else {
           this.toastr.error(response['message']);
         }
@@ -134,16 +136,27 @@ export class ExamComponent implements CanDeactivateGuard {
         this.errorMessage = error.error.message;
         this.toastr.error(this.errorMessage);
       })
-
-    this.getCheckedRadioBtnValue();
-
   }
 
   getCheckedRadioBtnValue() {
+    console.log(this.questionLength)
     //checks the session if there is any selected radio btn value.
     if (window.sessionStorage.getItem(this.questionProgress)) {
       //if there is any it sets to the checkedRadioBtnValue
       this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
+
+      //patch answer form with stored choice id
+      this.answerForm.patchValue({
+        choice: {
+          id:  Number(window.sessionStorage.getItem( (this.questionProgress + 256).toString()))
+        },
+        question: {
+          id: this.questionLength[this.questionProgress].id
+        },
+        subject: {
+          id: this.subjectID
+        }
+      })
     }
   }
 
@@ -202,6 +215,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
     //Sets value to the session - {0,"choice1"}
     window.sessionStorage.setItem(this.questionProgress, choiceName);
+    window.sessionStorage.setItem(this.questionProgress + 256, choiceID);
   }
 
   onStep(selectedStep: any) {
@@ -212,9 +226,15 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
-    if (this.selectedAnswer == null) {
+    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+      //
+      console.log("if--")
+      console.log(this.answerForm.value);
+    } else if(this.selectedAnswer == null) {
+      console.log("elif--");
       this.patchAnswerWithEmptyChoice(this.questionProgress);
-    } else {
+    } else{
+      console.log("else--");
       this.patchAnswerWithSelectedChoice(this.questionProgress);
     }
 
