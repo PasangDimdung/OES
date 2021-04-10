@@ -45,6 +45,17 @@ public class DepartmentController {
 		return new ResponseEntity<>(new ApiResponse(true, "All department list.", d), HttpStatus.OK);
 	}
 
+	@GetMapping("/api/department/{depId}")
+	public ResponseEntity<?> getDepartments(@PathVariable("depId") int depId) {
+		Optional<Department> d = dRepository.findById(depId);
+
+		if(d != null) {
+			return new ResponseEntity<>(new ApiResponse(true, "Department with id" + depId, d), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Department with " +depId+ " not found.", null), HttpStatus.OK);
+	}
+
     @PutMapping("/api/department/{depId}")
 	public ResponseEntity<?> updateDepartment(@PathVariable("depId") int depId, @RequestBody Department department) {
 		Optional<Department> d = dRepository.findById(depId);
