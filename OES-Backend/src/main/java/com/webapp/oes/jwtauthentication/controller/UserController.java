@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.webapp.oes.jwtauthentication.message.request.SignUpForm;
 import com.webapp.oes.jwtauthentication.message.request.singnUpFormTeacher;
+import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.model.Role;
 import com.webapp.oes.jwtauthentication.model.RoleName;
 import com.webapp.oes.jwtauthentication.model.StudentDetails;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -49,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping("api/student")
-    public User addStudent(@RequestBody SignUpForm signUpRequest) {
+    public ResponseEntity<?> addStudent(@RequestBody SignUpForm signUpRequest) {
 
         // Creating user's account
 		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
@@ -86,7 +90,8 @@ public class UserController {
 
         user.getsDetails().setUser(user);
 
-        return userRepository.save(user);
+        return new ResponseEntity<>(new ApiResponse(true, "User created", userRepository.save(user) ), HttpStatus.OK);
+
     }
 
     @PostMapping("api/teacher")

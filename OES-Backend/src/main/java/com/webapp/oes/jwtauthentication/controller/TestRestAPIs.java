@@ -6,9 +6,10 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
+import com.webapp.oes.jwtauthentication.model.AcademicYear;
 import com.webapp.oes.jwtauthentication.model.QuestionType;
-import com.webapp.oes.jwtauthentication.model.Teacher;
 import com.webapp.oes.jwtauthentication.model.Year;
+import com.webapp.oes.jwtauthentication.repository.AcademicYearRepository;
 import com.webapp.oes.jwtauthentication.repository.ExamRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionDetailsRepository;
 import com.webapp.oes.jwtauthentication.repository.QuestionTypeRepository;
@@ -52,6 +53,9 @@ public class TestRestAPIs {
 	@Autowired
     public SubjectRepository suRepository;
 
+	@Autowired
+    public AcademicYearRepository aYearRepository;
+
 	@GetMapping("/api/test/user")
 	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 	public String userAccess() {
@@ -69,25 +73,7 @@ public class TestRestAPIs {
 	public String adminAccess() {
 		return ">>> Admin Contents";
 	}
-	
-	
 
-	// @PostMapping("/api/teacher")
-	// public ResponseEntity<?> addTeacher(@Valid @RequestBody Teacher teacher) {
-	// 	Teacher t = tRepository.save(teacher);
-	// 	if (t != null) {
-	// 		return ResponseEntity.ok(new ApiResponse(true, "Teacher Added.", t));
-	// 	}
-
-	// 	return new ResponseEntity<>(new ApiResponse(false, "Teacher not added.", null), HttpStatus.BAD_REQUEST);
-	// }
-
-	// @GetMapping("/api/teacher")
-	// public ResponseEntity<?> getTeachers() {
-	// 	List<Teacher> t = tRepository.findAll();
-
-	// 	return new ResponseEntity<>(new ApiResponse(true, "All Teacher list.", t), HttpStatus.OK);
-	// }
 
 	@PostMapping("/api/year")
 	public ResponseEntity<?> addYear(@Valid @RequestBody Year year) {
@@ -150,6 +136,55 @@ public class TestRestAPIs {
 		}
 
 		return new ResponseEntity<>(new ApiResponse(false, "Question type id not found.", null), HttpStatus.OK);
+    }
+
+	@PostMapping("/api/academic-year")
+	public ResponseEntity<?> addAcademicYear(@RequestBody AcademicYear year) {
+		AcademicYear y = aYearRepository.save(year);
+		if (y != null) {
+			return ResponseEntity.ok(new ApiResponse(true, "Academic year Added.", y));
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Academic year not added.", null), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/api/academic-year")
+	public ResponseEntity<?> getAcademicYear() {
+		List<AcademicYear> y = aYearRepository.findAll();
+		if (y != null) {
+			return ResponseEntity.ok(new ApiResponse(true, "Academic year List.", y));
+		}
+
+		return new ResponseEntity<>(new ApiResponse(true, "Academic year list empty.", null), HttpStatus.NO_CONTENT);
+	}
+
+	@PutMapping("/api/academic-year/{id}") // update Academic year
+	public ResponseEntity<?> updateAcademicYear(@PathVariable int id, @RequestBody QuestionType qType) {
+		Optional<AcademicYear> qt = aYearRepository.findById(id);
+
+		if(qt != null) {
+			var _qt = qt.get();
+			_qt.setName(qType.getName());
+
+			return new ResponseEntity<>(new ApiResponse(true, "Academic year upated.", aYearRepository.save(_qt)), HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Academic year id not found.", null), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/api/academic-year/{id}")
+    public ResponseEntity<?> deleteAcademicYear(@PathVariable int id) {
+        Optional<AcademicYear> qt = aYearRepository.findById(id);
+
+        if(qt != null) {
+
+			aYearRepository.deleteById(id);
+			return new ResponseEntity<>(new ApiResponse(true, "Academic year deleted.", null), HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Academic year id not found.", null), HttpStatus.OK);
     }
 	
 }

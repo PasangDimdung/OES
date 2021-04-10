@@ -108,7 +108,7 @@ public class QuestionDetailsController {
 
         List<Question> lQuestion = new ArrayList<Question>();
 
-        Integer qSize = 3;
+        Integer qSize = 10;
 
         if(question.size() < qSize) {
             return new ResponseEntity<>(new ApiResponse(false, "Insufficient questions in database", null),
