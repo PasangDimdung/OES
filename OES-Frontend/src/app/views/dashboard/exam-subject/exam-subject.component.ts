@@ -77,11 +77,9 @@ export class ExamSubjectComponent {
     this.examNameID = this.route.snapshot.paramMap.get('id');
     this.http.get("http://localhost:8080/api/exam/" + this.examNameID)
       .subscribe((response) => {
-        console.log(response);
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
-        console.log(this.sDates);
         
         for(let i=0; i< this.sDates.length; i++) {
           if(this.sDates[i].status == SD.completed) {
