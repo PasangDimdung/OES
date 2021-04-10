@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.model.AcademicYear;
 import com.webapp.oes.jwtauthentication.model.QuestionType;
-import com.webapp.oes.jwtauthentication.model.Teacher;
 import com.webapp.oes.jwtauthentication.model.Year;
 import com.webapp.oes.jwtauthentication.repository.AcademicYearRepository;
 import com.webapp.oes.jwtauthentication.repository.ExamRepository;

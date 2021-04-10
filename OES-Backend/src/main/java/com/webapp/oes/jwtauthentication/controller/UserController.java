@@ -90,7 +90,7 @@ public class UserController {
 
         user.getsDetails().setUser(user);
 
-        return new ResponseEntity<>(new ApiResponse(true, "User created", user), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(true, "User created", userRepository.save(user) ), HttpStatus.OK);
 
     }
 
