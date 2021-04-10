@@ -85,7 +85,7 @@ export class ExamComponent implements CanDeactivateGuard {
       department: this.examSubjectService.getDepartment(),
       year: this.today,
       subject: this.examSubjectService.getSubject(),
-      exam: {id: this.examSubjectService.getExamId()}
+      exam: { id: this.examSubjectService.getExamId() }
     })
 
     this.statusForm = this.formBuilder.group({
@@ -110,11 +110,8 @@ export class ExamComponent implements CanDeactivateGuard {
       }
     })
 
-    console.log(this.form.value);
-
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
-        console.log(response)
         if (response['status'] === true) {
           let resources = response['data'];
           this.questionDetails = resources;
@@ -128,7 +125,7 @@ export class ExamComponent implements CanDeactivateGuard {
             semester: '',
             subject: '',
           })
-          this.getCheckedRadioBtnValue();
+          this.getCheckedRadioBtnValue(this.questionProgress);
         } else {
           this.toastr.error(response['message']);
         }
@@ -138,30 +135,13 @@ export class ExamComponent implements CanDeactivateGuard {
       })
   }
 
-  getCheckedRadioBtnValue() {
-    console.log(this.questionLength)
-    //checks the session if there is any selected radio btn value.
-    if (window.sessionStorage.getItem(this.questionProgress)) {
-      //if there is any it sets to the checkedRadioBtnValue
-      this.checkedRadioBtnValue = window.sessionStorage.getItem(this.questionProgress).toString();
-
-      //patch answer form with stored choice id
-      this.answerForm.patchValue({
-        choice: {
-          id:  Number(window.sessionStorage.getItem( (this.questionProgress + 256).toString()))
-        },
-        question: {
-          id: this.questionLength[this.questionProgress].id
-        },
-        subject: {
-          id: this.subjectID
-        }
-      })
+  getCheckedRadioBtnValue(progress) {
+    if (window.sessionStorage.getItem(progress)) {
+      this.checkedRadioBtnValue = window.sessionStorage.getItem(progress).toString();
     }
   }
 
   patchAnswer() {
-    //Update value to the form after getting selected values
     this.answerForm.patchValue({
       question: {
         id: this.selectedQuestion
@@ -178,7 +158,7 @@ export class ExamComponent implements CanDeactivateGuard {
   patchAnswerWithSelectedChoice(progress) {
     this.answerForm.patchValue({
       question: {
-        id: this.questions[progress].id
+        id: this.questionLength[progress].id
       },
       choice: {
         id: this.selectedAnswer
@@ -192,7 +172,7 @@ export class ExamComponent implements CanDeactivateGuard {
   patchAnswerWithEmptyChoice(progress) {
     this.answerForm.patchValue({
       question: {
-        id: this.questions[progress].id
+        id: this.questionLength[progress].id
       },
       choice: {
         id: ""
@@ -203,9 +183,21 @@ export class ExamComponent implements CanDeactivateGuard {
     })
   }
 
-  onOptionClick(questionID: any, choiceID: any, choiceName: any) {
+  patchAnswerWithSessionChoice(progress) {
+    this.answerForm.patchValue({
+      choice: {
+        id: Number(window.sessionStorage.getItem((progress + 256).toString()))
+      },
+      question: {
+        id: this.questionLength[progress].id
+      },
+      subject: {
+        id: this.subjectID
+      }
+    })
+  }
 
-    //To store selected question and answer
+  onOptionClick(questionID: any, choiceID: any, choiceName: any) {
     this.selectedQuestion = questionID;
     this.selectedAnswer = choiceID;
 
@@ -219,68 +211,81 @@ export class ExamComponent implements CanDeactivateGuard {
   }
 
   onStep(selectedStep: any) {
-
     this.questionProgress = Number(selectedStep);
-    this.getCheckedRadioBtnValue();
+    this.getCheckedRadioBtnValue(this.questionProgress);
+  }
+
+  onPostAnswer(answer) {
+    this.http.post("http://localhost:8080/api/exam/subject/answer", answer)
+      .subscribe(() => {
+        this.userService.saveSubjectID(this.subjectID);
+      })
   }
 
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
-      //
-      console.log("if--")
-      console.log(this.answerForm.value);
-    } else if(this.selectedAnswer == null) {
-      console.log("elif--");
-      this.patchAnswerWithEmptyChoice(this.questionProgress);
-    } else{
-      console.log("else--");
-      this.patchAnswerWithSelectedChoice(this.questionProgress);
+      this.patchAnswerWithSessionChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress++;
+      this.getCheckedRadioBtnValue(this.questionProgress);
     }
-
-    this.questionProgress++;
-    this.getCheckedRadioBtnValue();
-
-    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
-      .subscribe(() => {
-        this.userService.saveSubjectID(this.subjectID);
-      })
-
-    console.log("ON NEXT", this.answerForm.value);
+    else if (this.selectedAnswer == null) {
+      this.patchAnswerWithEmptyChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress++;
+      this.getCheckedRadioBtnValue(this.questionProgress);
+    }
+    else {
+      this.patchAnswerWithSelectedChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress++;
+      this.getCheckedRadioBtnValue(this.questionProgress);
+    }
   }
 
   onPrev() {
-    //if choice isn't selected and prev button is clicked. Patch empty string to the choice id 
-    if (this.selectedAnswer == null) {
-      this.patchAnswerWithEmptyChoice(this.questionProgress);
-    } else {
-      this.patchAnswerWithSelectedChoice(this.questionProgress);
+    //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
+    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+      this.patchAnswerWithSessionChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress--;
+      this.getCheckedRadioBtnValue(this.questionProgress);
     }
-    this.questionProgress--;
-    this.getCheckedRadioBtnValue();
-
-    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
-      .subscribe(() => {
-        this.userService.saveSubjectID(this.subjectID);
-      })
-
-    console.log("ON PREV", this.answerForm.value);
+    else if (this.selectedAnswer == null) {
+      this.patchAnswerWithEmptyChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress--;
+      this.getCheckedRadioBtnValue(this.questionProgress);
+    }
+    else {
+      this.patchAnswerWithSelectedChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+      this.questionProgress--;
+      this.getCheckedRadioBtnValue(this.questionProgress);
+    }
   }
 
   onSubmit() {
-    console.log(this.answerForm.value);
+    //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
+    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+      this.patchAnswerWithSessionChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+    }
+    else if (this.selectedAnswer == null) {
+      this.patchAnswerWithEmptyChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+    }
+    else {
+      this.patchAnswerWithSelectedChoice(this.questionProgress);
+      this.onPostAnswer(this.answerForm.value)
+    }
 
-    this.http.post("http://localhost:8080/api/exam/subject/answer", this.answerForm.value)
-      .subscribe(response => {
-        console.log(response);
-        this.userService.saveSubjectID(this.subjectID);
-      })
-
-    this.http.put("http://localhost:8080/api/exam-subject/2/status", this.statusForm.value)
-    .subscribe(res =>{
-      console.log(res);
-      console.log("hitted")
-    })
+    // this.http.put("http://localhost:8080/api/exam-subject/2/status", this.statusForm.value)
+    // .subscribe(res =>{
+    //   console.log(res);
+    //   console.log("hitted")
+    // })
 
     this.isSubmitted = true;
     this.router.navigate(['dashboard/exam-result']);
