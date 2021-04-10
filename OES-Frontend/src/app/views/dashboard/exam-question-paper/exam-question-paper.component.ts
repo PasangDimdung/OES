@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { NavigationStart, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ExamSubjectService } from '../../../_services/exam-subject.service';
 
@@ -39,8 +38,9 @@ export class ExamQuestionPaperComponent {
             semester: this.examSubjectService.getSemester(),
             department: this.examSubjectService.getDepartment(),
             year: this.today,
-            subject: this.examSubjectService.getSubject()
-        })
+            subject: this.examSubjectService.getSubject(),
+            exam: { id: this.examSubjectService.getExamId() }
+          })
         this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
             .subscribe(response => {
                 this.isSubmitted = false;
@@ -49,7 +49,6 @@ export class ExamQuestionPaperComponent {
                     let resources = response['data'];
                     this.questionDetails = resources;
                     this.questionPaperList = resources['questions'];
-                    console.log(this.questionPaperList)
                     this.questionMarks = this.questionPaperList[0]['subjectUnit'];
                     this.form.reset({
                         year: this.today,

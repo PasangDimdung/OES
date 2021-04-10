@@ -26,9 +26,15 @@ export class DepartmentListComponent implements OnInit {
     return this._refresh$;
   }
 
-
   ngOnInit() {
     this.loadDepartment();
+    this.refresh$.subscribe(() => {
+      this.departmentService.getAll()
+      .subscribe((response) => {
+        let resources = response["data"];
+        this.departmentList = resources;
+      });
+    });
   }
 
   loadDepartment() {
@@ -51,7 +57,7 @@ export class DepartmentListComponent implements OnInit {
       )
       .subscribe(
         () => {
-          this.toastr.success("Semester deleted successfully");
+          this.toastr.success("Department deleted successfully");
         },
         (error) => {
           this.errorMessage = error.error.message;

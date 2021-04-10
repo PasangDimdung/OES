@@ -120,6 +120,10 @@ export class ViewQuestionComponent {
       });
   }
 
+  onUnitChange() {
+    this.isSubmitted = true;
+  }
+
 
   onSubmit() {
     this.isSubmitted = true;

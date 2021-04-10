@@ -15,35 +15,36 @@
           <strong>View Question Paper</strong>
         </div>
         <div class="card-body">
-          <form class="form-horizontal" [formGroup]="form" #f="ngForm">
+          <form class="form-horizontal">
             <div class="row">
               <div class="form-group col-sm-3">
                 <label for="customSelect">Year:</label>
-                <input formControlName="year" name="year" class="form-control" type="number" min="1900" max="2099"
-                  step="1" value="{{ today }}" />
+                <input [(ngModel)]="selectedYear" name="year" class="form-control" type="number" min="1900" max="2099"
+                step="1" />
               </div>
-              <!-- <div class="form-group col-sm-3">
+              <div class="form-group col-sm-3">
                 <fieldset class="form-group">
                   <label for="customSelect">Exam Name:</label>
-                  <select class="custom-select" formControlName="examName"
-                    (change)="onExamNameChange($event.target.value)">
+                  <select (change)="onExamNameChange(selectExamId.id)" class="custom-select d-block w-100" id="department"
+                    [(ngModel)]="selectExamId" name="exam" required placeholder="d.ff">
                     <option hidden value="" disabled selected>
                       Select exam name
                     </option>
-                    <option *ngFor="let examName of examNames" [value]="examName.id">
-                      {{ examName.name }}
+                    <option *ngFor="let exam of exams" [ngValue]="exam">
+                      {{ exam.name }}
                     </option>
                   </select>
                 </fieldset>
-              </div> -->
+              </div>
               <div class="form-group col-sm-3">
                 <fieldset class="form-group">
                   <label for="customSelect">Department:</label>
-                  <select class="custom-select" formControlName="department">
+                  <select (change)="onDepartmentChange(selectedDepartment.id)" class="custom-select d-block w-100" id="department"
+                    [(ngModel)]="selectedDepartment" name="department" required placeholder="d.ff">
                     <option hidden value="" disabled selected>
                       Select department
                     </option>
-                    <option *ngFor="let department of departments" [value]="department.name">
+                    <option *ngFor="let department of departments" [ngValue]="department">
                       {{ department.name }}
                     </option>
                   </select>
@@ -52,11 +53,12 @@
               <div class="form-group col-sm-3">
                 <fieldset class="form-group">
                   <label for="customSelect">Semester:</label>
-                  <select class="custom-select" formControlName="semester">
+                  <select (change)="onSemesterChange()" class="custom-select d-block w-100" id="semester"
+                    [(ngModel)]="selectedSemester" name="semester" required placeholder="d.ff">
                     <option hidden value="" disabled selected>
                       Select semester
                     </option>
-                    <option *ngFor="let semester of semesters" [value]="semester.name">
+                    <option *ngFor="let semester of semesters" [ngValue]="semester">
                       {{ semester.name }}
                     </option>
                   </select>
@@ -65,14 +67,15 @@
               <div class="form-group col-sm-3">
                 <fieldset class="form-group">
                   <label for="customSelect">Subject:</label>
-                  <select class="custom-select" formControlName="subject">
-                    <option hidden value="" disabled selected>
-                      Select subject
-                    </option>
-                    <option *ngFor="let subject of subjects" [value]="subject.name">
-                      {{ subject.name }}
-                    </option>
-                  </select>
+                  <select (change)="onSubjectChange()" class="custom-select d-block w-100" id="subject"
+                  [(ngModel)]="selectedSubject" name="subject" required placeholder="d.ff">
+                  <option hidden value="" disabled selected>
+                    Select subject
+                  </option>
+                  <option *ngFor="let subject of subjects" [ngValue]="subject">
+                    {{ subject.name }}
+                  </option>
+                </select>
                 </fieldset>
               </div>
             </div>
@@ -110,7 +113,7 @@
               </div>
             </ng-container>
             <div class="form-actions">
-              <button [disabled]="!f.valid || isSubmitted" (click)="onSubmit()" type="submit"
+              <button [disabled]="!isSubmitted" (click)="onSubmit()" type="submit"
                 class="btn btn-sm btn-primary">
                 <i class="fa fa-dot-circle-o"></i> View Paper
               </button>

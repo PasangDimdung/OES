@@ -66,6 +66,7 @@ export class AddQuestionPaperComponent {
       this.exams = resources;
     })
   }
+  
   loadDepartment() {
     this.departmentService.getAll()
     .subscribe((response) => {

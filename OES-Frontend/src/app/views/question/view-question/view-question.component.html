@@ -62,7 +62,7 @@
                 <div class="form-group col-sm-3">
                     <fieldset class="form-group">
                       <label for="customSelect">Unit:</label>
-                      <select class="custom-select d-block w-100" id="unit"
+                      <select (change)="onUnitChange()" class="custom-select d-block w-100" id="unit"
                         [(ngModel)]="selectedUnit" name="unit" required placeholder="d.ff">
                         <option hidden value="" disabled selected>
                           Select unit
@@ -104,7 +104,7 @@
                 </div>
               </ng-container>
               <div class="form-actions">
-                <button (click)="onSubmit()" type="submit"
+                <button [disabled]="!isSubmitted" (click)="onSubmit()" type="submit"
                   class="btn btn-sm btn-primary">
                   <i class="fa fa-dot-circle-o"></i> View Paper
                 </button>

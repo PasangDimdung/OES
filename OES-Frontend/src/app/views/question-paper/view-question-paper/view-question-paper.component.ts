@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { DepartmentService } from '../../../_services/department.service';
 import { ExamNameService } from '../../../_services/exam-name.service';
+import { QuestionPaperService } from '../../../_services/question-paper.service';
 import { SemesterService } from '../../../_services/semester.service';
 import { SubjectService } from '../../../_services/subject.service';
 
@@ -27,45 +28,46 @@ export class ViewQuestionPaperComponent {
     questionDetails: any;
     questionMarks: any;
 
+    questionPaperForm: FormGroup;
+    exams: any;
+
+    selectedYear;
+    selectedDepartment = '';
+    selectedSemester = '';
+    selectedSubject = '';
+    selectExamId = '';
+
     constructor(
-        private examNameService: ExamNameService,
         private departmentService: DepartmentService,
         private semesterService: SemesterService,
-        private subjectService: SubjectService,
-        private formBuilder: FormBuilder,
+        private examNameService: ExamNameService,
+        private fb: FormBuilder,
         private toastr: ToastrService,
         private http: HttpClient
     ) { }
     ngOnInit() {
-        let date: Date = new Date();
-        this.today = date.getFullYear();
-
-        this.form = this.formBuilder.group({
-            year: [this.today],
-            department: [''],
-            semester: [''],
-            subject: [''],
-            exam: {id: 1}
-        });
-
-        this.loadExamName()
         this.loadDepartment();
-        this.loadSemester();
-        this.loadSubject();
-    }
+        this.loadExamName();
 
-    onExamNameChange(examNameID) {
-        this.examNameID = examNameID;
+        let date: Date = new Date();
+        this.selectedYear = date.getFullYear();
+
+        this.questionPaperForm = this.fb.group({
+            year: [this.selectedYear],
+            department: ['', [Validators.required]],
+            semester: ['', [Validators.required]],
+            subject: ['', [Validators.required]],
+            exam: { id: '' }
+        });
     }
 
     loadExamName() {
         this.examNameService.getAll()
-            .subscribe((response) => {
+            .subscribe(response => {
                 let resources = response["data"];
-                this.examNames = resources;
-            });
+                this.exams = resources;
+            })
     }
-
 
     loadDepartment() {
         this.departmentService.getAll()
@@ -83,18 +85,42 @@ export class ViewQuestionPaperComponent {
             });
     }
 
-    loadSubject() {
-        this.subjectService.getAll()
-            .subscribe((response) => {
+    onDepartmentChange() {
+        this.loadSemester();
+        this.selectedSubject = '';
+        this.selectedSemester = '';
+        this.subjects = [];
+    }
+
+    onExamNameChange(id: number) {
+        console.log(id);
+        this.examNameID = id;
+    }
+
+    onSemesterChange() {
+        this.selectedSubject = '';
+        this.http.get("http://localhost:8080/api/department/" + this.selectedDepartment["id"] + '/semester/' + this.selectedSemester["id"] + '/subjects')
+            .subscribe(response => {
                 let resources = response["data"];
                 this.subjects = resources;
-            });
+            })
     }
+
+    onSubjectChange() {
+        this.isSubmitted = true;
+    }
+
 
     onSubmit() {
         this.isSubmitted = true;
-        console.log(this.form.value);
-        this.http.post("http://localhost:8080/api/exam/" + 2 + '/subject' + '/questions', this.form.value)
+        this.questionPaperForm.patchValue({
+            department: this.selectedDepartment["name"],
+            year: this.selectedYear,
+            semester: this.selectedSemester["name"],
+            subject: this.selectedSubject["name"],
+            exam: { id: this.examNameID }
+        });
+        this.http.post("http://localhost:8080/api/exam/" + 2 + '/subject' + '/questions', this.questionPaperForm.value)
             .subscribe(response => {
                 console.log(response);
                 this.isSubmitted = false;
@@ -104,13 +130,12 @@ export class ViewQuestionPaperComponent {
                     this.questionPaperList = resources['questions']
                     this.questionMarks = this.questionPaperList[0]['subjectUnit'];
                     this.toastr.success(response['message']);
-                    this.form.reset({
-                        year: this.today,
-                        examName: '',
-                        department: '',
-                        semester: '',
-                        subject: '',
-                    })
+                    this.selectedDepartment = '';
+                    this.selectedSemester = '';
+                    this.semesters = [];
+                    this.selectedSubject = '';
+                    this.subjects = [];
+                    this.selectExamId = "";
                 } else {
                     this.toastr.error(response['message']);
                 }
@@ -119,6 +144,7 @@ export class ViewQuestionPaperComponent {
                 this.errorMessage = error.error.message;
                 this.toastr.error(this.errorMessage);
             })
+
     }
 }
 
