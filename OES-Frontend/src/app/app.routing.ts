@@ -111,6 +111,10 @@ export const routes: Routes = [
         path: "register",
         loadChildren: () => import("./views/register/register.module").then(m => m.RegisterModule),
       },
+      {
+        path: "report",
+        loadChildren: () => import("./views/report/report.module").then(m => m.ReportModule),
+      },
     ],
   },
   { path: "**", component: P404Component },

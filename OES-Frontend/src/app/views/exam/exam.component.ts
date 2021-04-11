@@ -117,7 +117,6 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
-        console.log(response);
         if (response['status'] === true) {
           let resources = response['data'];
           this.examSubjectName = resources['subject'];
@@ -212,7 +211,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.patchAnswer();
 
-    console.log("ON OPTION CLICK", this.answerForm.value)
+    // console.log("ON OPTION CLICK", this.answerForm.value)
 
     //Sets value to the session - {0,"choice1"}
     window.sessionStorage.setItem(this.questionProgress, choiceName);
@@ -234,18 +233,22 @@ export class ExamComponent implements CanDeactivateGuard {
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+      console.log("if--");
       this.patchAnswerWithSessionChoice(this.questionProgress);
+      console.log(this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else if (this.selectedAnswer == null) {
+      console.log("elseif--");
       this.patchAnswerWithEmptyChoice(this.questionProgress);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else {
+      console.log("else--");
       this.patchAnswerWithSelectedChoice(this.questionProgress);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
@@ -279,6 +282,8 @@ export class ExamComponent implements CanDeactivateGuard {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
+      console.log("--submit")
+      console.log(this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
     }
     else if (this.selectedAnswer == null) {
@@ -306,6 +311,31 @@ export class ExamComponent implements CanDeactivateGuard {
       this.myTime = this.myTime - 1;
     } else {
       clearInterval(this.myInterval);
+      var progress = 0;
+      console.log('my interval', progress);
+      for (let index = 0; index < this.questionLength.length; index++) {
+        if (window.sessionStorage.getItem((progress + 256).toString())) {
+          this.patchAnswerWithSessionChoice(progress);
+          console.log(this.answerForm.value);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+        else if (this.selectedAnswer == null) {
+          this.patchAnswerWithEmptyChoice(progress);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+        else {
+          this.patchAnswerWithSelectedChoice(progress);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+      }
+      this.isSubmitted = true;
+      this.router.navigate(['dashboard/exam-result']);
     }
   }, 1000);
 
