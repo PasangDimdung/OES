@@ -67,7 +67,7 @@ public class AuthRestAPIs {
 		UserPrinciple userDetails = (UserPrinciple) authentication.getPrincipal();
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
 		} catch (Exception e) {
-			return ResponseEntity.ok(new ApiResponse(false, "Invalid Credentials", null));
+			return new ResponseEntity<>(new ApiResponse(false, "Invalid Credentials", null), HttpStatus.UNAUTHORIZED);
 		}
 
 		
