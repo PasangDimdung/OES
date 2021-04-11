@@ -21,8 +21,7 @@
               <div class="col-sm-12">
                 <div class="form-group">
                   <label for="name">Name</label>
-                  <input formControlName="name" type="text" class="form-control" id="name"
-                    placeholder="Enter subject" 
+                  <input formControlName="name" type="text" class="form-control" id="name" placeholder="Enter subject"
                     [class.is-invalid]='form.get("name").errors && form.get("name").touched' />
                   <div class="invalid-feedback">&nbsp; Subject name is required</div>
                 </div>
@@ -35,7 +34,7 @@
                   <input formControlName="fullMarks" type="number" class="form-control" id="name"
                     placeholder="Enter full marks" min="0" max="100"
                     [class.is-invalid]='form.get("fullMarks").errors && form.get("fullMarks").touched' />
-                    <div class="invalid-feedback">&nbsp; Full marks is required</div>
+                  <div class="invalid-feedback">&nbsp; Full marks is required</div>
                 </div>
               </div>
             </div>
@@ -44,9 +43,9 @@
                 <div class="form-group">
                   <label for="name">Pass Marks</label>
                   <input formControlName="passMarks" type="number" class="form-control" id="name"
-                    placeholder="Enter pass marks"  min="0" max="40"
+                    placeholder="Enter pass marks" min="0" max="40"
                     [class.is-invalid]='form.get("passMarks").errors && form.get("passMarks").touched' />
-                    <div class="invalid-feedback">&nbsp; Pass marks is required</div>
+                  <div class="invalid-feedback">&nbsp; Pass marks is required</div>
                 </div>
               </div>
             </div>
@@ -57,7 +56,7 @@
                   <input formControlName="duration" type="number" class="form-control" id="name"
                     placeholder="Enter duration" min="0" max="3"
                     [class.is-invalid]='form.get("duration").errors && form.get("duration").touched' />
-                    <div class="invalid-feedback">&nbsp; Duration is required</div>
+                  <div class="invalid-feedback">&nbsp; Duration is required</div>
                 </div>
               </div>
             </div>
@@ -72,6 +71,20 @@
                     <option *ngFor="let department of departments" [value]="department.id">
                       {{ department.name }}
                     </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="customSelect">Academic Year</label>
+                  <select class="custom-select">
+                    <option hidden value="" disabled selected>
+                      Select academic year
+                    </option>
+                    <option>First Year</option>
+                    <option>Second Year</option>
                   </select>
                 </div>
               </div>
@@ -94,8 +107,7 @@
           </form>
         </div>
         <div class="card-footer">
-          <button (click)="onSubmit()" [disabled]="!form.valid" type="submit"
-            class="btn btn-sm btn-primary">
+          <button (click)="onSubmit()" [disabled]="!form.valid" type="submit" class="btn btn-sm btn-primary">
             <i class="fa fa-dot-circle-o"></i> Submit
           </button>
           <button (click)="onFormReset()" type="reset" class="btn btn-sm btn-danger">

@@ -51,6 +51,11 @@ export class ExamComponent implements CanDeactivateGuard {
   //Default selected radio buttion when you step, next or previous.
   checkedRadioBtnValue;
 
+  todayDate = new Date();
+  examSubjectDuration: any;
+  myTime: any;
+  examSubjectName: any;
+
   constructor(
     private examSubjectService: ExamSubjectService,
     private tokenService: TokenStorageService,
@@ -63,7 +68,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
   //timer
   timeout = setInterval(() => {
-    this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
+    this.currentDateTime = formatDate(new Date(), 'MM/dd/yyyy', 'en');
   }, 1000);
 
   canDeactivate() {
@@ -114,10 +119,13 @@ export class ExamComponent implements CanDeactivateGuard {
       .subscribe(response => {
         if (response['status'] === true) {
           let resources = response['data'];
+          this.examSubjectName = resources['subject'];
+          console.log(this.examSubjectName);
           this.questionDetails = resources;
           this.questions = resources['questions'];
           this.questionLength = resources['questions'];
           this.subjectID = this.questions[0]['subjectUnit'].subject.id;
+          this.myTime = Number(resources['questions'][0]['subjectUnit']["subject"].duration) * 60;
           this.form.reset({
             year: this.today,
             examName: '',
@@ -203,7 +211,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.patchAnswer();
 
-    console.log("ON OPTION CLICK", this.answerForm.value)
+    // console.log("ON OPTION CLICK", this.answerForm.value)
 
     //Sets value to the session - {0,"choice1"}
     window.sessionStorage.setItem(this.questionProgress, choiceName);
@@ -226,18 +234,21 @@ export class ExamComponent implements CanDeactivateGuard {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
+      console.log("if--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else if (this.selectedAnswer == null) {
       this.patchAnswerWithEmptyChoice(this.questionProgress);
+      console.log("elseif--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else {
       this.patchAnswerWithSelectedChoice(this.questionProgress);
+      console.log("else--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
@@ -270,6 +281,8 @@ export class ExamComponent implements CanDeactivateGuard {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
+      console.log("--submit")
+      console.log(this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
     }
     else if (this.selectedAnswer == null) {
@@ -291,5 +304,41 @@ export class ExamComponent implements CanDeactivateGuard {
     this.router.navigate(['dashboard/exam-result']);
     this.questionAnsArray.push(this.answerForm.value);
   }
+
+  myInterval = setInterval(() => {
+    if (this.myTime > 0) {
+      this.myTime = this.myTime - 1;
+    } else {
+      clearInterval(this.myInterval);
+      var progress = 0;
+      console.log('my interval', progress);
+      for (let index = 0; index < this.questionLength.length; index++) {
+        if (window.sessionStorage.getItem((progress + 256).toString())) {
+          this.patchAnswerWithSessionChoice(progress);
+          console.log(this.answerForm.value);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+        else if (this.selectedAnswer == null) {
+          this.patchAnswerWithEmptyChoice(progress);
+          console.log("elseif--", this.answerForm.value);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+        else {
+          this.patchAnswerWithSelectedChoice(progress);
+          console.log("else--", this.answerForm.value);
+          this.onPostAnswer(this.answerForm.value)
+          progress++;
+          this.getCheckedRadioBtnValue(progress);
+        }
+      }
+      this.isSubmitted = true;
+      this.router.navigate(['dashboard/exam-result']);
+    }
+  }, 1000);
+
 }
 

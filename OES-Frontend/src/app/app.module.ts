@@ -64,6 +64,7 @@ import { ResetPasswordComponent } from "./views/forget-password/reset-password.c
 import { ExamInstruction } from "./views/exam/exam-instructions.component";
 import { ExamSubjectService } from "./_services/exam-subject.service";
 import { CanDeactivateGuard } from "./_auth/can-deactivate";
+import { SecondsTransformModule } from "./second-transform.pipe";
 
 @NgModule({
   imports: [
@@ -79,13 +80,14 @@ import { CanDeactivateGuard } from "./_auth/can-deactivate";
     AppHeaderModule,
     AppSidebarModule,
     PerfectScrollbarModule,
+    SecondsTransformModule,
     TabsModule.forRoot(),
     BsDropdownModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 1500,
       closeButton: true,
       preventDuplicates: true,
-    }),
+    })
   ],
   declarations: [
     AppComponent,
