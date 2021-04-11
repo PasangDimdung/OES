@@ -61,19 +61,19 @@ export class ExamResult implements OnInit{
         .subscribe(res => {
             console.log(res);
             if(res['status'] == true){
-                this.http.post("http://localhost:8080/api/exam/report", this.form.value)
+                this.http.post("http://localhost:8080/api/exam/get-report", this.form.value)
                 .subscribe(response => {
                     console.log(response);
                     var resources = response['data'];
-                    this.score = resources['marks_obtained'];
-                    this.subjectName = resources['subject']['name'];
-                    this.fullMarks = resources['subject']['fullMarks'];
-                    this.passMarks = resources['subject']['passMarks'];
-                    this.department = resources['exam']['department'];
-                    this.registrationNumber = resources['user']['sDetails']['registration_num'];
-                    this.userName = (resources['user']['name']).toUpperCase();
-                    this.academicYear = resources['exam']['academic_year'];
-                    this.semester = resources['exam']['semester'];
+                    this.score = resources[0]['marksObtained'];
+                    this.subjectName = resources[0]['subjectName'];
+                    this.fullMarks = resources[0]['subjectFullMarks'];
+                    this.passMarks = resources[0]['subjectPassMarks'];
+                    this.department = resources[0]['department'];
+                    this.registrationNumber = resources[0]['registration_num'];
+                    this.userName = resources[0]['name'].toUpperCase();
+                    this.academicYear = "1st year";
+                    this.semester = resources[0]['semester'];
                     this.dated = new Date()
                 })
             }
