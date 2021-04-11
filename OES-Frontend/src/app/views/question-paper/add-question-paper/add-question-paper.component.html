@@ -37,6 +37,16 @@
                 </fieldset>
               </div>
               <div class="form-group col-sm-3">
+                <label for="ccyear">Academic Year:</label>
+                <select class="custom-select d-block w-100" id="ccyear">
+                  <option hidden value="" disabled selected>
+                    Select academic year
+                  </option>
+                  <option>First Year</option>
+                  <option>Second Year</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-3">
                 <fieldset class="form-group">
                   <label for="customSelect">Department:</label>
                   <select (change)="onDepartmentChange(selectedDepartment.id)" class="custom-select d-block w-100" id="department"

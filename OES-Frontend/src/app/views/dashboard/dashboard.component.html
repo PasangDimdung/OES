@@ -170,6 +170,7 @@
               <tr>
                 <th>No.</th>
                 <th>Exam Name</th>
+                <th>Academic Year</th>
                 <th>Department</th>
                 <th>Semester</th>
                 <th>Start Date</th>
@@ -184,6 +185,11 @@
                   <td>
                     <a [routerLink]="['/dashboard/exam-subject', element.id]">
                       {{ element.name }}
+                    </a>
+                  </td>
+                  <td>
+                    <a>
+                      {{ element.academic_year }}
                     </a>
                   </td>
                   <td>

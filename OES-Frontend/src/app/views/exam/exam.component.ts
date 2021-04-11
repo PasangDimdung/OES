@@ -233,23 +233,22 @@ export class ExamComponent implements CanDeactivateGuard {
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
     if (window.sessionStorage.getItem((this.questionProgress + 256))) {
-      console.log("if--");
       this.patchAnswerWithSessionChoice(this.questionProgress);
-      console.log(this.answerForm.value);
+      console.log("if--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else if (this.selectedAnswer == null) {
-      console.log("elseif--");
       this.patchAnswerWithEmptyChoice(this.questionProgress);
+      console.log("elseif--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
     }
     else {
-      console.log("else--");
       this.patchAnswerWithSelectedChoice(this.questionProgress);
+      console.log("else--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress++;
       this.getCheckedRadioBtnValue(this.questionProgress);
@@ -323,12 +322,14 @@ export class ExamComponent implements CanDeactivateGuard {
         }
         else if (this.selectedAnswer == null) {
           this.patchAnswerWithEmptyChoice(progress);
+          console.log("elseif--", this.answerForm.value);
           this.onPostAnswer(this.answerForm.value)
           progress++;
           this.getCheckedRadioBtnValue(progress);
         }
         else {
           this.patchAnswerWithSelectedChoice(progress);
+          console.log("else--", this.answerForm.value);
           this.onPostAnswer(this.answerForm.value)
           progress++;
           this.getCheckedRadioBtnValue(progress);

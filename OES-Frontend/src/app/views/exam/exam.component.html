@@ -2,7 +2,7 @@
   <div class="row">
     <div class="pl-2" *ngFor="let option of questions; let i = index">
       <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button"
-        value="{{i}}">Qn{{i+1}}</button>
+        value="{{i}}">Q{{i+1}}</button>
     </div>
   </div>
 </div>
