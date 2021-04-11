@@ -33,7 +33,7 @@ public class ReportsController {
     
     
     @PostMapping("/api/exam/report")
-    public ResponseEntity<?> generateReport(@RequestBody AnswerSheet answerSheet) {
+    public ResponseEntity<?> createReport(@RequestBody AnswerSheet answerSheet) {
 
         var a = aSheetRepository.findAnswer1(answerSheet);
 
@@ -66,7 +66,7 @@ public class ReportsController {
             return new ResponseEntity<>(new ApiResponse(false, "No reports", null), HttpStatus.OK);
     }
 
-    @GetMapping("/api/exam/report")
+    @PostMapping("/api/exam/get-report")
     public ResponseEntity<?> getReport(@RequestBody AnswerSheet answerSheet) {
 
         var rep = reportRepository.getReport(answerSheet);
