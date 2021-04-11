@@ -51,6 +51,11 @@ export class ExamComponent implements CanDeactivateGuard {
   //Default selected radio buttion when you step, next or previous.
   checkedRadioBtnValue;
 
+  todayDate = new Date();
+  examSubjectDuration: any;
+  myTime: any;
+  examSubjectName: any;
+
   constructor(
     private examSubjectService: ExamSubjectService,
     private tokenService: TokenStorageService,
@@ -63,7 +68,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
   //timer
   timeout = setInterval(() => {
-    this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm:ss', 'en');
+    this.currentDateTime = formatDate(new Date(), 'MM/dd/yyyy', 'en');
   }, 1000);
 
   canDeactivate() {
@@ -112,12 +117,16 @@ export class ExamComponent implements CanDeactivateGuard {
 
     this.http.post("http://localhost:8080/api/exam/" + this.examSubjectService.getExamId() + '/subject' + '/questions', this.form.value)
       .subscribe(response => {
+        console.log(response);
         if (response['status'] === true) {
           let resources = response['data'];
+          this.examSubjectName = resources['subject'];
+          console.log(this.examSubjectName);
           this.questionDetails = resources;
           this.questions = resources['questions'];
           this.questionLength = resources['questions'];
           this.subjectID = this.questions[0]['subjectUnit'].subject.id;
+          this.myTime = Number(resources['questions'][0]['subjectUnit']["subject"].duration) * 60;
           this.form.reset({
             year: this.today,
             examName: '',
@@ -291,5 +300,14 @@ export class ExamComponent implements CanDeactivateGuard {
     this.router.navigate(['dashboard/exam-result']);
     this.questionAnsArray.push(this.answerForm.value);
   }
+
+  myInterval = setInterval(() => {
+    if (this.myTime > 0) {
+      this.myTime = this.myTime - 1;
+    } else {
+      clearInterval(this.myInterval);
+    }
+  }, 1000);
+
 }
 

@@ -1,15 +1,17 @@
 <div class="container pt-4" style="margin-left:20px;">
-    <div class="row">
-        <div class="pl-2" *ngFor="let option of questions; let i = index">
-          <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">Qn{{i+1}}</button>
-        </div>
-       </div>
+  <div class="row">
+    <div class="pl-2" *ngFor="let option of questions; let i = index">
+      <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button"
+        value="{{i}}">Qn{{i+1}}</button>
+    </div>
+  </div>
 </div>
+
 
 <div class="animated fadeIn">
   <div class="card mt-4 mx-4">
     <div class="card-header text-muted">
-      Question {{ questionProgress + 1 }} of {{ questionLength.length }}
+      {{ examSubjectName }} Exam
     </div>
     <div class="card-body" *ngIf="questions && questions[0]">
       <p><strong>{{ questions[questionProgress].title }}</strong></p>
@@ -29,22 +31,21 @@
       <button *ngIf="questionProgress > 0" (click)="onPrev()" type="submit" class="btn btn-sm btn-primary">
         <em class="fa fa-arrow-left"></em> Prev
       </button>
-      <button  *ngIf="(questionLength.length -1 ) > questionProgress" (click)="onNext()" type="submit" class="btn btn-sm btn-primary"> Next
-        <em class="fa fa-arrow-right"></em> 
+      <button *ngIf="(questionLength.length -1 ) > questionProgress" (click)="onNext()" type="submit"
+        class="btn btn-sm btn-primary"> Next
+        <em class="fa fa-arrow-right"></em>
       </button>
-      <button *ngIf="questionProgress == (questionLength.length - 1)" (click)="onSubmit()" type="submit" class="btn btn-sm btn-primary"> 
-         <em class="fa fa-dot-circle-o"></em> Finish
-       </button>
+      <button *ngIf="questionProgress == (questionLength.length - 1)" (click)="onSubmit()" type="submit"
+        class="btn btn-sm btn-primary">
+        <em class="fa fa-dot-circle-o"></em> Finish
+      </button>
 
       <div *ngIf="!questions">
         <div class="container m-4">Loading...</div>
       </div>
     </div>
-    <!-- <div class="card-footer">
-      <div class="row">
-        <div class="pl-2" *ngFor="let option of questions; let i = index">
-          <button class="btn btn-sm btn-block btn-outline-primary" (click)="onStep($event.target.value)" type="button" value="{{i}}">{{i+1}}</button>
-        </div>
-       </div>
-    </div> -->
+    <div class="card-footer">
+      Q{{ questionProgress + 1 }}/{{ questionLength.length }} &nbsp;
+      {{ myTime | secondsTransform }}
+    </div>
   </div>
