@@ -58,19 +58,25 @@ export class ExamResult implements OnInit{
             }
         })
         this.http.post("http://localhost:8080/api/exam/report", this.form.value)
-        .subscribe(response => {
-            console.log(response);
-            var resources = response['data'];
-            this.score = resources['marks_obtained'];
-            this.subjectName = resources['subject']['name'];
-            this.fullMarks = resources['subject']['fullMarks'];
-            this.passMarks = resources['subject']['passMarks'];
-            this.department = resources['exam']['department'];
-            this.registrationNumber = resources['user']['sDetails']['registration_num'];
-            this.userName = (resources['user']['name']).toUpperCase();
-            this.academicYear = resources['exam']['academic_year'];
-            this.semester = resources['exam']['semester'];
-            this.dated = new Date()
+        .subscribe(res => {
+            console.log(res);
+            if(res['status'] == true){
+                this.http.post("http://localhost:8080/api/exam/report", this.form.value)
+                .subscribe(response => {
+                    console.log(response);
+                    var resources = response['data'];
+                    this.score = resources['marks_obtained'];
+                    this.subjectName = resources['subject']['name'];
+                    this.fullMarks = resources['subject']['fullMarks'];
+                    this.passMarks = resources['subject']['passMarks'];
+                    this.department = resources['exam']['department'];
+                    this.registrationNumber = resources['user']['sDetails']['registration_num'];
+                    this.userName = (resources['user']['name']).toUpperCase();
+                    this.academicYear = resources['exam']['academic_year'];
+                    this.semester = resources['exam']['semester'];
+                    this.dated = new Date()
+                })
+            }
 
             if(this.passMarks > this.score) {
                 this.result = SD.failed.toUpperCase();
@@ -78,7 +84,7 @@ export class ExamResult implements OnInit{
                 this.result = SD.passed.toUpperCase();
             }
 
-            if(response['status'] === true ) {
+            if(true === true ) {
                 // this.examSubjectService.clearSessionStorage();
             } else {
                 this.toastr.error('Error');
