@@ -30,8 +30,16 @@ public class AnswerSheetController {
     public ResponseEntity<?> submitAnswer(@RequestBody AnswerSheet answerSheet) {
 
        var a = aSheetRepository.findAnswer(answerSheet);
+
+       var num = answerSheet.getChoice().getId();
         
         if(a != null) {
+
+            if(num == 0) {
+    
+                return new ResponseEntity<>(new ApiResponse(true, "Answer submitted.", a), HttpStatus.OK);
+    
+            }
 
             var aSheet = aSheetRepository.findById(a.getId()).get();
 
@@ -47,8 +55,6 @@ public class AnswerSheetController {
 
             return new ResponseEntity<>(new ApiResponse(true, "Answer updated.",  aSheet), HttpStatus.OK);
         }
-
-        var num = answerSheet.getChoice().getId();
 
         if(num == 0) {
             answerSheet.setChoice(null);
