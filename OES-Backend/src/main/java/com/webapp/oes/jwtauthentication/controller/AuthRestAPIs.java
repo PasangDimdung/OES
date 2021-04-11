@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.oes.jwtauthentication.message.request.LoginForm;
 import com.webapp.oes.jwtauthentication.message.request.SignUpForm;
+import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.message.response.JwtResponse;
 import com.webapp.oes.jwtauthentication.message.response.ResponseMessage;
 import com.webapp.oes.jwtauthentication.model.Role;
@@ -56,7 +57,8 @@ public class AuthRestAPIs {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginForm loginRequest) {
 
-		Authentication authentication = authenticationManager.authenticate(
+		try {
+			Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -64,6 +66,11 @@ public class AuthRestAPIs {
 		String jwt = jwtProvider.generateJwtToken(authentication);
 		UserPrinciple userDetails = (UserPrinciple) authentication.getPrincipal();
 		return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
+		} catch (Exception e) {
+			return new ResponseEntity<>(new ApiResponse(false, "Invalid Credentials", null), HttpStatus.UNAUTHORIZED);
+		}
+
+		
 	}
 
 	@PostMapping("/signup")
