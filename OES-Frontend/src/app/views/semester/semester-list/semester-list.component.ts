@@ -59,11 +59,12 @@ export class SemesterListComponent implements OnInit {
       })
     )
     .subscribe(
-      () => {
+      (response) => {
         this.isSubmitted = false;
-        this.toastr.success("Semester deleted successfully");
+        this.toastr.success(response['message']);
       },
       (error) => {
+        console.log(error);
         this.isSubmitted = false;
         this.errorMessage = error.error.message;
         this.toastr.error(this.errorMessage);

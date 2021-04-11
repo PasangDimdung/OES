@@ -1,60 +1,69 @@
 <div class="animated fadeIn">
- 
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card">
-          <div class="card-body">
-              <h6 class="text-center">Tribhuwan University</h6>
-              <h5 class="text-center">INSTITUTE OF SCIENCE AND TECHNOLOGY</h5>
-              <h6 class="text-center">Dean's Office</h6>
-              <h5 class="text-center">SEMESTER EXAMINATION</h5>
 
-              <h5 class="text-center"> <u> PROVISIONAL STATEMENT OF MARKS</u> </h5>
+    <div class="row" *ngIf="studentReport">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="text-center">Tribhuwan University</h6>
+                    <h5 class="text-center">INSTITUTE OF SCIENCE AND TECHNOLOGY</h5>
+                    <h6 class="text-center">Dean's Office</h6>
+                    <h5 class="text-center">SEMESTER EXAMINATION</h5>
 
-              <div class="row">
-                  <div class="col">
-                      <p> <b>Name :</b> {{userName}}</p>
-                      <p> <b>T.U. Regd. No. :</b> {{ registrationNumber }} </p>
-                      <p> <b>Level : Four Years {{ department }} </b> </p>
-                      <p> <b>Campus : Amrit Science Campus, Lainchaur</b> </p>
-                  </div>
-              </div>
+                    <h5 class="text-center"> <u> PROVISIONAL STATEMENT OF MARKS</u> </h5>
 
-              <hr>
-              <h6 class="text-center">{{ academicYear }} : {{semester}} Examination</h6>
-              <h6 class="text-center">Period : 2076 Jestha - 2076 Kartik</h6>
-              <hr>
+                    <div class="row">
+                        <div class="col">
+                            <p> <b>Name :</b> {{studentReport[0].name}}</p>
+                            <p> <b>T.U. Regd. No. :</b> {{ studentReport[0].registration_num }} </p>
+                            <p> <b>Level : Four Years {{ studentReport[0].department }} </b> </p>
+                            <p> <b>Campus : Amrit Science Campus, Lainchaur</b> </p>
+                        </div>
+                    </div>
 
-              <div class="row">
-                <div class="col-4">
-                    <label for="subject"><b> Subject</b></label>
-                    <p class="subject">{{ subjectName }}</p>
-                </div>
-                <div class="col-2">
-                    <label for="fullmarks"><b> Full Marks</b></label>
-                    <p class="fullmarks">{{ fullMarks }}</p>
-                </div>
-                <div class="col-3">
-                    <label for="passmarks"><b>Pass Marks</b></label>
-                    <p class="passmarks">{{ passMarks }}</p>
-                </div>
-                <div class="col-2">
-                    <label for="marksObtained"><b>Marks Obtained</b></label>
-                    <p class="marksObtained" style="color: brown;">{{score}}</p>
+                    <hr>
+                    <h6 class="text-center">{{ academicYear }} : {{studentReport[0].semester}} Examination</h6>
+                    <h6 class="text-center">Period : 2076 Jestha - 2076 Kartik</h6>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="subject"><b> Subject</b></label>
+                            <p class="subject" *ngFor="let element of studentReport">
+                                {{ element.subjectName }}
+                            </p>
+                        </div>
+                        <div class="col-2">
+                            <label for="fullmarks"><b> Full Marks</b></label>
+                            <p class="fullmarks" *ngFor="let element of studentReport">
+                                {{ element.subjectFullMarks }}
+                            </p>
+                        </div>
+                        <div class="col-3">
+                            <label for="passmarks"><b>Pass Marks</b></label>
+                            <p class="passmarks" *ngFor="let element of studentReport">
+                                {{ element.subjectPassMarks }}
+                            </p>
+                        </div>
+                        <div class="col-2">
+                            <label for="marksObtained"><b>Marks Obtained</b></label>
+                            <p class="marksObtained" style="color: brown;" *ngFor="let element of studentReport">
+                                {{ element.marksObtained }}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+
+                            <p *ngIf="var3 == true ">Result : PASSED</p>
+                            <p *ngIf="var3 == false ">Result : FAILED</p>
+                            <p>Dated : {{dated | date: "fullDate"}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr>
-            <div class="row">
-                <div class="col">
-                    <p >Result : {{result}}</p>
-                    <p>Dated : {{dated | date: "fullDate"}}</p>
-                </div>
-            </div>
-          </div>
         </div>
-      </div>
-      <!--/.col-->
+        <!--/.col-->
     </div>
     <!--/.row-->
-  </div>
-  
+</div>

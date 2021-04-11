@@ -31,6 +31,6 @@ export class DepartmentService {
   }
 
   deleteList(id: number) {
-    return this.http.delete(this.baseUrl + id, { responseType: "text" });
+    return this.http.delete(this.baseUrl + id);
   }
 }

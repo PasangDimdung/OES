@@ -8,9 +8,9 @@ import { ExamSubjectService } from "../../../_services/exam-subject.service";
 import { UserService } from "../../../_services/user.service";
 
 @Component({
-    templateUrl:"exam-result.component.html"
+    templateUrl: "exam-result.component.html"
 })
-export class ExamResult implements OnInit{
+export class ExamResult implements OnInit {
     errorMessage: string = '';
     score: any;
     subjectName: any;
@@ -35,15 +35,20 @@ export class ExamResult implements OnInit{
     semester: any;
     dated: Date;
     result: any;
+    studentReport: any;
+
+    var1 = true;
+    var2 = true;
+    var3: any;
 
     constructor(
-        private http : HttpClient, 
+        private http: HttpClient,
         private fb: FormBuilder,
         private examSubjectService: ExamSubjectService,
         private tokenStorageService: TokenStorageService,
         private userService: UserService,
         private toastr: ToastrService
-        ){}
+    ) { }
 
     ngOnInit() {
         this.form.patchValue({
@@ -58,42 +63,36 @@ export class ExamResult implements OnInit{
             }
         })
         this.http.post("http://localhost:8080/api/exam/report", this.form.value)
-        .subscribe(res => {
-            console.log(res);
-            if(res['status'] == true){
-                this.http.post("http://localhost:8080/api/exam/get-report", this.form.value)
-                .subscribe(response => {
-                    console.log(response);
-                    var resources = response['data'];
-                    this.score = resources[0]['marksObtained'];
-                    this.subjectName = resources[0]['subjectName'];
-                    this.fullMarks = resources[0]['subjectFullMarks'];
-                    this.passMarks = resources[0]['subjectPassMarks'];
-                    this.department = resources[0]['department'];
-                    this.registrationNumber = resources[0]['registration_num'];
-                    this.userName = resources[0]['name'].toUpperCase();
-                    this.academicYear = "1st year";
-                    this.semester = resources[0]['semester'];
-                    this.dated = new Date()
-                })
-            }
+            .subscribe(res => {
+                console.log(res);
+                if (res['status'] == true) {
+                    this.http.post("http://localhost:8080/api/exam/get-report", this.form.value)
+                        .subscribe(response => {
+                            this.studentReport = response['data'];
+                            this.dated = new Date()
+                            console.log(this.studentReport);
 
-            if(this.passMarks > this.score) {
-                this.result = SD.failed.toUpperCase();
-            }else {
-                this.result = SD.passed.toUpperCase();
-            }
-
-            if(true === true ) {
-                // this.examSubjectService.clearSessionStorage();
-            } else {
-                this.toastr.error('Error');
-            }
-        }, 
-        (error) => {
-            this.errorMessage = error.error.message;
-            this.toastr.error(this.errorMessage);
-        }
-        )
+                            for (let index = 0; index < this.studentReport.length; index++) {
+                                this.score = this.studentReport[index]['marksObtained'];
+                                this.passMarks = this.studentReport[index]['subjectPassMarks'];
+                                if (this.passMarks > this.score) {
+                                    this.var2 = false;
+                                } else {
+                                    this.var2 = true;
+                                }
+                                this.var3 = this.var2 && this.var1;
+                                this.var1 = this.var3;
+                            }
+                           
+                        })
+                } else {
+                    this.toastr.error('Error');
+                }
+            },
+                (error) => {
+                    this.errorMessage = error.error.message;
+                    this.toastr.error(this.errorMessage);
+                }
+            )
     }
 }

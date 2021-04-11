@@ -56,8 +56,9 @@ export class DepartmentListComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
-          this.toastr.success("Department deleted successfully");
+        response => {
+          console.log(response);
+          this.toastr.success(response["message"]);
         },
         (error) => {
           this.errorMessage = error.error.message;
