@@ -3,5 +3,7 @@ export const SD = {
     admin: 'admin',
     student: 'user',
     teacher: 'pm',
-    pending: 'pending'
+    pending: 'pending',
+    passed: 'passed',
+    failed: 'failed'
   };
