@@ -14,27 +14,22 @@
           <div class="bd-example my-4 mx-2">
             <dl class="row">
               <dt class="col-sm-3">Full Name:</dt>
-              <dd class="col-sm-9">{{ info.username }}</dd>
+              <dd class="col-sm-9">{{ fullName }}</dd>
 
               <dt class="col-sm-3">Username:</dt>
               <dd class="col-sm-9">
-                <p>{{ info.username }}</p>
+                <p>{{ userName }}</p>
               </dd>
 
               <dt class="col-sm-3">Email:</dt>
-              <dd class="col-sm-9">{{ info.username }}@gmail.com</dd>
+              <dd class="col-sm-9">{{ email }}</dd>
 
-              <dt class="col-sm-3 text-truncate">Department:</dt>
-              <dd class="col-sm-9">Computer science and information technology (CSIT)</dd>
+              <!-- <dt *ngIf="department" class="col-sm-3 text-truncate">Department:</dt>
+              <dd *ngIf="department" class="col-sm-9">{{department}}</dd>
 
-              <dt class="col-sm-3 text-truncate">Semester:</dt>
-              <dd class="col-sm-9">Seventh Semester</dd>
+              <dt *ngIf="semester" class="col-sm-3 text-truncate">Semester:</dt>
+              <dd *ngIf="semester" class="col-sm-9">{{semester}}</dd> -->
             </dl>
-            <!-- 
-            <button type="button" class="btn btn-sm btn-light">
-              <i class="fa fa-dot-circle-o"></i> Edit
-            </button> -->
-
             <button (click)="logout()" type="button" class="btn btn-sm btn-primary">
               <i class="fa fa-dot-circle-o"></i> Logout
             </button>

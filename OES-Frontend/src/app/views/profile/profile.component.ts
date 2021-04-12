@@ -11,6 +11,11 @@ import { ForgetPasswordService } from "../../_services/forget-password.service";
 export class ProfileComponent implements OnInit {
   info: any;
   changePasswordForm: any;
+  fullName: any;
+  userName: any;
+  email: any;
+  department: any;
+  semester: any;
 
   constructor(private token: TokenStorageService,
               private router: Router,
@@ -25,6 +30,17 @@ export class ProfileComponent implements OnInit {
       username: this.token.getUsername(),
       authorities: this.token.getAuthorities(),
     };
+
+    this.http.get("http://localhost:8080/api/user/" + this.token.getUserId())
+    .subscribe(response => {
+      console.log(response);
+      var resources = response['data'];
+      this.fullName = resources['name'];
+      this.userName = resources['username'];
+      this.email = resources['email'];
+      // this.department = resources['sDetails']['department'];
+      // this.semester = resources['sDetails']['semester'];
+    })
 
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(10)]],
