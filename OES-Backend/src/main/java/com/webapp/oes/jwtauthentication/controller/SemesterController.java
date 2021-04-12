@@ -81,12 +81,19 @@ public class SemesterController {
     @DeleteMapping("api/semester/{id}")
     public ResponseEntity<?> deleteSemesterById(@PathVariable int id) {
 
-        try {
-            semRepository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse(true, "Semester with id "+id+ " deleted.", null), HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Semester with id "+id+ " not found.", null), HttpStatus.NOT_FOUND);
+        var sem = semRepository.findById(id);
+
+        if(sem != null) {
+            try {
+                semRepository.deleteById(id);
+                return new ResponseEntity<>(new ApiResponse(true, "Semester with id "+id+ " deleted.", null), HttpStatus.OK);
+            } catch(Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
         }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Semester with id "+id+ " not found.", null), HttpStatus.NOT_FOUND);
+        
     }
 
     @PostMapping("api/semester/{semesterId}/addSubject")
@@ -101,12 +108,18 @@ public class SemesterController {
 
     @DeleteMapping("api/semester/{semesterId}/removeSubject/{subjectId}")
     public ResponseEntity<?> removeSubjectForSemester(@PathVariable int subjectId, @PathVariable int semesterId) {
-        try {
-            sRepository.deleteById(subjectId);
-            return new ResponseEntity<>(new ApiResponse(true, "Subject with id " + subjectId + " deleted.", null), HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Subject with id " + subjectId + " not found.", null), HttpStatus.NOT_FOUND);
+        var subj = sRepository.findById(semesterId);
+
+        if(subj != null) {
+            try {
+                sRepository.deleteById(subjectId);
+                return new ResponseEntity<>(new ApiResponse(true, "Subject with id " + subjectId + " deleted.", null), HttpStatus.OK);
+            } catch(Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
         }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Subject with id " + subjectId + " not found.", null), HttpStatus.NOT_FOUND);
     }
 
     

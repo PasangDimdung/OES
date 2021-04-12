@@ -89,12 +89,22 @@ public class SubjectController {
     @DeleteMapping("api/subject/{id}")
     public ResponseEntity<?> deleteSubjectById(@PathVariable int id) {
 
-        try {
-            sRepository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse(true, "Subject with id "+id+ " deleted.", null), HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Subject with id "+id+ " not found.", null), HttpStatus.NOT_FOUND);
+        var subject = sRepository.findById(id);
+
+        if(subject != null) {
+
+            try {
+                sRepository.deleteById(id);
+                return new ResponseEntity<>(new ApiResponse(true, "Subject with id "+id+ " deleted.", null), HttpStatus.OK);
+            } catch(Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
+
         }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Subject with id "+id+ " not found.", null), HttpStatus.NOT_FOUND);
+
+       
     }
 
     @GetMapping("api/subject/{subjectId}/addSemester/{semesterId}")
@@ -108,11 +118,22 @@ public class SubjectController {
 
     @DeleteMapping("api/subject/{subjectId}/removeSemester/{semesterId}")
     public ResponseEntity<?> removeSemesterForSubject(@PathVariable int subjectId, @PathVariable int semesterId) {
+
         var sem = semRepository.findById(semesterId);
-        Semester s = sem.get();
-        s.getSubjects().remove(sRepository.findById(subjectId).get());
-        semRepository.save(s);
-        return new ResponseEntity<>(new ApiResponse(true, "Semester removed for subject.", s), HttpStatus.OK);
+
+        if(sem != null) {
+            try {
+                Semester s = sem.get();
+                s.getSubjects().remove(sRepository.findById(subjectId).get());
+                semRepository.save(s);
+                return new ResponseEntity<>(new ApiResponse(true, "Semester removed for subject.", s), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }       
+        }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Semester with "+semesterId+" not found.", null), HttpStatus.NOT_FOUND);
+
     }
 
     @GetMapping("api/subject/{subjectId}/addDepartment/{departmentId}")
@@ -127,10 +148,22 @@ public class SubjectController {
     @DeleteMapping("api/subject/{subjectId}/removeDepartment/{departmentId}")
     public ResponseEntity<?> deleteDepartmentForSubject(@PathVariable int subjectId, @PathVariable int departmentId) {
         var department = dRepository.findById(departmentId);
-        Department d = department.get();
-        d.getSubjects().remove(sRepository.findById(subjectId).get());
-        dRepository.save(d);
-        return new ResponseEntity<>(new ApiResponse(true, "Subject removed from department.", d), HttpStatus.OK);
+        
+        if(department != null ) {
+            try {
+                Department d = department.get();
+                d.getSubjects().remove(sRepository.findById(subjectId).get());
+                dRepository.save(d);
+                return new ResponseEntity<>(new ApiResponse(true, "Subject removed from department.", d), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
+
+        }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Department with "+ departmentId +" not found.", null), HttpStatus.NOT_FOUND);
+
+       
     }
 
     @PostMapping("api/subject/{subjectId}/addUnit")
@@ -161,12 +194,17 @@ public class SubjectController {
 
     @DeleteMapping("api/subject/{subjectId}/deleteUnit/{unitId}")
     public ResponseEntity<?> deleteUnitForSubject(@PathVariable int subjectId, @PathVariable int unitId) {
-        try {
-            sUnitRepository.deleteById(unitId);
-            return new ResponseEntity<>(new ApiResponse(true, "Semester with id "+unitId+ " deleted.", null), HttpStatus.OK);
-        } catch(Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Semester with id "+unitId+ " not found.", null), HttpStatus.NOT_FOUND);
+        var unit = sUnitRepository.findById(unitId);
+
+        if (unit != null) {
+            try {
+                sUnitRepository.deleteById(unitId);
+                return new ResponseEntity<>(new ApiResponse(true, "Semester with id "+unitId+ " deleted.", null), HttpStatus.OK);
+            } catch(Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
         }
+        return new ResponseEntity<>(new ApiResponse(false, "Semester with id "+unitId+ " not found.", null), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/api/department/{deptId}/semester/{semId}/subjects")
@@ -180,7 +218,5 @@ public class SubjectController {
 
         return new ResponseEntity<>(new ApiResponse(false, "Subject list", null), HttpStatus.NO_CONTENT);
     }
-
-    
 
 }
