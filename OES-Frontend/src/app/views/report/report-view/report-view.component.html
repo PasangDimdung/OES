@@ -1,6 +1,6 @@
 <div class="animated fadeIn">
 
-    <div class="row" *ngIf="studentReport">
+    <div class="row" *ngIf="studentReport.length >= 1">
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
@@ -62,7 +62,8 @@
                 </div>
             </div>
         </div>
-        <!--/.col-->
     </div>
-    <!--/.row-->
+    <div class="container" *ngIf="studentReport.length == 0">
+ No report to display
+    </div>
 </div>

@@ -1,75 +1,92 @@
 <div class="animated fadeIn">
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Report</li>
-        </ol>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/report']">Report</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">View</li>
+      </ol>
     </nav>
-    <!-- Student Dashboard -->
-    <div class="row" *ngIf="authority === 'user'">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <i class="fa fa-align-justify"></i> Exam Table
-                </div>
-                <div class="card-body table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Exam Name</th>
-                                <th>Academic Year</th>
-                                <th>Department</th>
-                                <th>Semester</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <ng-container
-                                *ngFor=" let element of studentExamNameList | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
-                                <tr>
-                                    <td>{{ i + 1 }}</td>
-                                    <td>
-                                        <a [routerLink]="['/dashboard/exam-subject', element.id]">
-                                            {{ element.name }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            {{ element.academic_year }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            {{ element.department }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            {{ element.semester }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <span class="badge badge-pill badge-warning">
-                                            {{ element.status }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </ng-container>
-                            <tr *ngIf="!studentExamNameList">
-                                <td colspan="10">Loading...</td>
-                            </tr>
-                            <tr *ngIf="studentExamNameList && studentExamNameList.length == 0">
-                                <td colspan="10">No data to display</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer" style="padding-bottom: 0px">
-                    <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right">
-                    </pagination-controls>
-                </div>
-            </div>
-        </div>
+    <div class="form-group row pt-3">
+      <label class="col-md-1" for="select-semester">Semester:</label>
+      <div class="col-md-2">
+        <select  (change)="onSemesterChange(selectedSemester)" class="custom-select d-block w-100" id="semester"
+        [(ngModel)]="selectedSemester" id="select-semester" name="select-semester" class="form-control form-control-sm"  
+        style="background-color: #e4e5e6; border-color: rgb(169, 169, 169);">
+        <option hidden value="" disabled selected>
+          Select semester
+        </option>
+          <option *ngFor="let semester of semesters" [ngValue]="semester">
+            {{ semester.name }}
+          </option>
+        </select>
+      </div>
     </div>
-</div>
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">  
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i>Exam Table
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Exam Name</th>
+                  <th>Academic Year</th>
+                  <th>Department</th>
+                  <th>Semester</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let element of subjectList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
+                  <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <a [routerLink]="['/report/view-report', element.id]">
+                        {{ element.name }}
+                      </a>
+                    </td>
+                    <td>
+                        <a>
+                          {{ element.academic_year }}
+                        </a>
+                      </td>
+                      <td>
+                        <a>
+                          {{ element.department }}
+                        </a>
+                      </td>
+                      <td>
+                        <a>
+                          {{ element.semester }}
+                        </a>
+                      </td>
+                      <td>
+                        <span *ngIf=" element.status == 'completed' "
+                        class="badge badge-pill badge-success">{{element.status}}</span>
+                      <span *ngIf=" element.status == 'pending' "
+                        class="badge badge-pill badge-warning">{{element.status}}</span>
+                      </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="!subjectList">
+                  <td colspan="6">No data to display</td>
+                </tr>
+                <tr *ngIf="subjectList && subjectList.length == 0">
+                  <td colspan="6">No data to display</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer" style="padding-bottom: 0px">
+            <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
