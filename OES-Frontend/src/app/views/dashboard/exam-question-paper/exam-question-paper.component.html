@@ -23,10 +23,10 @@
             <ng-container>
               <div class="row mb-4">
                 <div class="col-lg-10">
-                  <p *ngIf="questionMarks">
-                    Total Questions: {{ questionPaperList.length }},
-                    FullMarks: {{ questionMarks.subject.fullMarks }},
-                    PassMarks: {{ questionMarks.subject.passMarks }}
+                  <p style="font-weight: bold;" *ngIf="questionMarks">
+                    Total Questions : {{ questionPaperList.length }},
+                    FullMarks : {{ questionMarks.subject.fullMarks }},
+                    PassMarks : {{ questionMarks.subject.passMarks }}
                   </p>
                   <table>
                     <tbody>

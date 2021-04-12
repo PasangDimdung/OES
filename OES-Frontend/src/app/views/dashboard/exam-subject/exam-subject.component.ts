@@ -18,7 +18,7 @@ export class ExamSubjectComponent {
   public authority: string;
 
   errorMessage: string = "";
-  badgeColor: string;
+  badgeColor;
   subjectList: Subjects[] = [];
   formGroup: FormGroup;
   checkForm: FormGroup;
@@ -66,7 +66,6 @@ export class ExamSubjectComponent {
       });
     }
     this.loadSubject();
-    this.badgeColor = "warning";
   }
 
   x = setInterval(() => {        
@@ -80,12 +79,15 @@ export class ExamSubjectComponent {
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
+        console.log(this.sDates[0]);
         
-        for(let i=0; i< this.sDates.length; i++) {
-          if(this.sDates[i].status == SD.completed) {
-            this.badgeColor = 'success';
-          }
-        }
+        // for(let i=0; i< this.sDates.length; i++) {
+        //   if(this.sDates[i].status == SD.completed) {
+        //     this.badgeColor = 'success';
+        //   }else {
+        //     this.badgeColor = 'warning';
+        //   }
+        // }
 
       })
   }

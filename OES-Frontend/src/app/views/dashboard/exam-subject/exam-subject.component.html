@@ -39,12 +39,12 @@
                       {{ element.subject.name }}
                     </a>
                   </td>
-                    <td >
-                      <a> {{element.starting_date}} </a>
-                    </td>
-                    <td>
-                      <a> {{element.ending_date}} </a>
-                    </td>
+                  <td>
+                    <a> {{element.starting_date}} </a>
+                  </td>
+                  <td>
+                    <a> {{element.ending_date}} </a>
+                  </td>
                   <td>
                     {{ element.subject.duration }}
                   </td>
@@ -59,10 +59,14 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-{{badgeColor}}">{{element.status}}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                      class="badge badge-pill badge-success">{{element.status}}</span>
+                    <span *ngIf=" element.status == 'pending' "
+                      class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                   <td style="padding-left: 33px">
-                    <button (click)="viewQuestionPaper(element.subject.name)"class="btn btn-sm btn-primary">View</button>
+                    <button (click)="viewQuestionPaper(element.subject.name)"
+                      class="btn btn-sm btn-primary">View</button>
                   </td>
                 </tr>
               </ng-container>
@@ -111,12 +115,12 @@
                       {{ element.subject.name }}
                     </a>
                   </td>
-                    <td >
-                      <a> {{element.starting_date}} </a>
-                    </td>
-                    <td>
-                      <a> {{element.ending_date}} </a>
-                    </td>
+                  <td>
+                    <a> {{element.starting_date}} </a>
+                  </td>
+                  <td>
+                    <a> {{element.ending_date}} </a>
+                  </td>
                   <td>
                     {{ element.subject.duration }}
                   </td>
@@ -131,7 +135,10 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-{{badgeColor}}">{{element.status}}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                    class="badge badge-pill badge-success">{{element.status}}</span>
+                  <span *ngIf=" element.status == 'pending' "
+                    class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                 </tr>
               </ng-container>
@@ -181,12 +188,12 @@
                       {{ element.subject.name }}
                     </a>
                   </td>
-                    <td >
-                      <a> {{element.starting_date}} </a>
-                    </td>
-                    <td>
-                      <a> {{element.ending_date}} </a>
-                    </td>
+                  <td>
+                    <a> {{element.starting_date}} </a>
+                  </td>
+                  <td>
+                    <a> {{element.ending_date}} </a>
+                  </td>
                   <td>
                     {{ element.subject.duration }}
                   </td>
@@ -201,25 +208,28 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-{{badgeColor}}">{{element.status}}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                    class="badge badge-pill badge-success">{{element.status}}</span>
+                  <span *ngIf=" element.status == 'pending' "
+                    class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                   <td>
                     <!-- element.status == 'pending' -->
-                    <button  (click)="viewQuestionPaper(element.subject.name)" class="btn btn-sm btn-primary" 
-                    *ngIf="currentDateTime >= element.starting_date &&  element.ending_date >= currentDateTime  && element.status == 'pending' " > 
+                    <button (click)="viewQuestionPaper(element.subject.name)" class="btn btn-sm btn-primary"
+                      *ngIf="currentDateTime >= element.starting_date &&  element.ending_date >= currentDateTime  && element.status == 'pending' ">
                       Start
                     </button>
-                    <div *ngIf="currentDateTime > element.starting_date && currentDateTime > element.ending_date">
+                    <div *ngIf="currentDateTime > element.starting_date && currentDateTime > element.ending_date && element.status == 'pending'">
                       <button disabled class="btn btn-sm btn-primary">
                         Start
                       </button>
                     </div>
-                    <div *ngIf="element.starting_date >  currentDateTime &&  element.ending_date > currentDateTime">
+                    <div *ngIf="element.starting_date >  currentDateTime &&  element.ending_date > currentDateTime && element.status == 'pending'">
                       <button disabled class="btn btn-sm btn-primary">
                         Start
                       </button>
                     </div>
-                  </td>  
+                  </td>
                 </tr>
               </ng-container>
               <tr *ngIf="!sDates">
