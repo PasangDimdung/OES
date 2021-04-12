@@ -21,6 +21,7 @@
                                 <th>Academic Year</th>
                                 <th>Department</th>
                                 <th>Semester</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,6 +48,11 @@
                                         <a>
                                             {{ element.semester }}
                                         </a>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-pill badge-warning">
+                                            {{ element.status }}
+                                        </span>
                                     </td>
                                 </tr>
                             </ng-container>

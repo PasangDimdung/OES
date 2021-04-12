@@ -76,18 +76,21 @@ export class ExamSubjectComponent {
     this.examNameID = this.route.snapshot.paramMap.get('id');
     this.http.get("http://localhost:8080/api/exam/" + this.examNameID)
       .subscribe((response) => {
+        console.log(response);
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
       })
   }
 
-  viewQuestionPaper(subjectName: string) {
+  viewQuestionPaper(subjectName: string, examSubjectId) {
+    
     //Store values in session storage;
     this.examSubjectService.saveSubject(subjectName);
     this.examSubjectService.saveExamID(this.examNameID);
     this.examSubjectService.saveDepartment(this.data.department);
     this.examSubjectService.saveSemester(this.data.semester);
+    this.examSubjectService.saveExamSubjectID(examSubjectId)
 
     this.checkForm.patchValue({
       department: this.data.department,

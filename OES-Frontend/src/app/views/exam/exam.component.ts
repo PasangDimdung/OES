@@ -293,13 +293,15 @@ export class ExamComponent implements CanDeactivateGuard {
       this.onPostAnswer(this.answerForm.value)
     }
 
-    // this.http.put("http://localhost:8080/api/exam-subject/2/status", this.statusForm.value)
-    // .subscribe(res =>{
-    //   console.log(res);
-    //   console.log("hitted")
-    // })
+    console.log('status form', this.statusForm.value)
+    this.http.put("http://localhost:8080/api/exam-subject/" + this.examSubjectService.getExamSubjectID() + '/status', this.statusForm.value)
+    .subscribe(res =>{
+      console.log(res);
+      console.log("hitted")
+    })
 
     this.isSubmitted = true;
+    clearInterval(this.myInterval);
     this.router.navigate(['dashboard/exam-result']);
     this.questionAnsArray.push(this.answerForm.value);
   }

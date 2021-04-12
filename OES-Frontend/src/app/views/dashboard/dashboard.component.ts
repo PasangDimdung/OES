@@ -61,6 +61,8 @@ export class DashboardComponent implements OnInit {
         this.studentExamNameList = resources;
       });
     });
+
+    // if()
   }
 
   loadAdminExamName() {

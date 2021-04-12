@@ -24,7 +24,7 @@
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let element of questionTypeList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
+              <ng-container *ngFor="let element of academicYearList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
                 <tr>
                   <td>{{ i + 1 }}</td>
                   <td>
@@ -33,7 +33,7 @@
                     </a>
                   </td>
                   <td>
-                    <button [routerLink]="['/question-type/edit', element.id]" class="btn btn-link btn-icon btn-md edit" style="color: #51bcda">
+                    <button [routerLink]="['/academic-year/edit', element.id]" class="btn btn-link btn-icon btn-md edit" style="color: #51bcda">
                       <i class="fa fa-edit"></i>
                     </button>
                     <button (click)="onDelete(element.id)" class="btn btn-link btn-icon btn-md remove" style="color: #ef8157">
@@ -42,10 +42,10 @@
                   </td>
                 </tr>
               </ng-container>
-              <tr *ngIf="!questionTypeList">
+              <tr *ngIf="!academicYearList">
                 <td colspan="8">Loading...</td>
               </tr>
-              <tr *ngIf="questionTypeList && questionTypeList.length == 0">
+              <tr *ngIf="academicYearList && academicYearList.length == 0">
                 <td colspan="8">No data to display</td>
               </tr>
             </tbody>

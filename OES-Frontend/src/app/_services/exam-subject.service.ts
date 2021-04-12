@@ -5,6 +5,7 @@ const EXAM_ID = "examId";
 const SEMESTER = "semester";
 const DEPARTMENT = "department";
 const SUBJECT = "subject";
+const EXAMSUBJECTID = 'exam_subject_id';
 
 @Injectable({
   providedIn: "root",
@@ -16,6 +17,16 @@ export class ExamSubjectService {
     window.sessionStorage.removeItem(DEPARTMENT);
     window.sessionStorage.removeItem(SEMESTER);
     window.sessionStorage.removeItem(SUBJECT);
+    window.sessionStorage.removeItem(EXAMSUBJECTID);
+  }
+
+  public saveExamSubjectID(examSubjectID: string) {
+    window.sessionStorage.removeItem(EXAMSUBJECTID);
+    window.sessionStorage.setItem(EXAMSUBJECTID, examSubjectID);
+  }
+
+  public getExamSubjectID(): string {
+    return sessionStorage.getItem(EXAMSUBJECTID);
   }
 
   public saveExamID(examID: string) {

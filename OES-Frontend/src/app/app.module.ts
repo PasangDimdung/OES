@@ -65,6 +65,7 @@ import { ExamInstruction } from "./views/exam/exam-instructions.component";
 import { ExamSubjectService } from "./_services/exam-subject.service";
 import { CanDeactivateGuard } from "./_auth/can-deactivate";
 import { SecondsTransformModule } from "./second-transform.pipe";
+import { AcademicService, AcademicYearService } from "./_services/academic-year.service";
 
 @NgModule({
   imports: [
@@ -118,6 +119,7 @@ import { SecondsTransformModule } from "./second-transform.pipe";
     ForgetPasswordService,
     ExamNameResolver,
     ExamSubjectService,
+    AcademicYearService,
     DepartmentResolver,
     SemesterResolver,
     QuestionTypeResolver,
