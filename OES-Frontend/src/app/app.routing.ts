@@ -115,6 +115,10 @@ export const routes: Routes = [
         path: "report",
         loadChildren: () => import("./views/report/report.module").then(m => m.ReportModule),
       },
+      {
+        path: "academic-year",
+        loadChildren: () => import("./views/academic-year/academic-year.module").then(m => m.AcademicYearModule),
+      },
     ],
   },
   { path: "**", component: P404Component },
