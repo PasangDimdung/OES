@@ -52,17 +52,18 @@ export class AddQuestionTypeComponent implements OnInit {
     this.isSubmitted = true;
     if (this.form.value.id) {
       this.questionTypeService.update(this.form.value as QuestionType)
-      .subscribe(() => {
+      .subscribe((response) => {
         this.isSubmitted = false;
         this.onFormReset();
+        this.toastr.success(response['message']);
         this.goToQuestionTypeList();
       });
     } else {
       this.questionTypeService.submit(this.form.value)
-      .subscribe(() => {
+      .subscribe((response) => {
         this.isSubmitted = false;
         this.onFormReset();
-        this.toastr.success("Question Type added successfully");
+        this.toastr.success(response['message']);
         this.goToQuestionTypeList();
       });
     }

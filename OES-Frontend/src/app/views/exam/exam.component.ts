@@ -144,8 +144,8 @@ export class ExamComponent implements CanDeactivateGuard {
   }
 
   getCheckedRadioBtnValue(progress) {
-    if (window.sessionStorage.getItem(progress)) {
-      this.checkedRadioBtnValue = window.sessionStorage.getItem(progress).toString();
+    if (window.localStorage.getItem(progress)) {
+      this.checkedRadioBtnValue = window.localStorage.getItem(progress).toString();
     }
   }
 
@@ -194,7 +194,7 @@ export class ExamComponent implements CanDeactivateGuard {
   patchAnswerWithSessionChoice(progress) {
     this.answerForm.patchValue({
       choice: {
-        id: Number(window.sessionStorage.getItem((progress + 256).toString()))
+        id: Number(window.localStorage.getItem((progress + 256).toString()))
       },
       question: {
         id: this.questionLength[progress].id
@@ -214,8 +214,10 @@ export class ExamComponent implements CanDeactivateGuard {
     // console.log("ON OPTION CLICK", this.answerForm.value)
 
     //Sets value to the session - {0,"choice1"}
-    window.sessionStorage.setItem(this.questionProgress, choiceName);
-    window.sessionStorage.setItem(this.questionProgress + 256, choiceID);
+    window.localStorage.removeItem(this.questionProgress);
+    window.localStorage.setItem(this.questionProgress, choiceName);
+    window.localStorage.removeItem(this.questionProgress + 256);
+    window.localStorage.setItem(this.questionProgress + 256, choiceID);
   }
 
   onStep(selectedStep: any) {
@@ -232,7 +234,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onNext() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
-    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+    if (window.localStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
       console.log("if--", this.answerForm.value);
       this.onPostAnswer(this.answerForm.value)
@@ -257,7 +259,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onPrev() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
-    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+    if (window.localStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
       this.onPostAnswer(this.answerForm.value)
       this.questionProgress--;
@@ -279,7 +281,7 @@ export class ExamComponent implements CanDeactivateGuard {
 
   onSubmit() {
     //if choice isn't selected and next button is clicked. Patch empty string to the choice id 
-    if (window.sessionStorage.getItem((this.questionProgress + 256))) {
+    if (window.localStorage.getItem((this.questionProgress + 256))) {
       this.patchAnswerWithSessionChoice(this.questionProgress);
       console.log("--submit")
       console.log(this.answerForm.value);
@@ -313,7 +315,7 @@ export class ExamComponent implements CanDeactivateGuard {
       var progress = 0;
       console.log('my interval', progress);
       for (let index = 0; index < this.questionLength.length; index++) {
-        if (window.sessionStorage.getItem((progress + 256).toString())) {
+        if (window.localStorage.getItem((progress + 256).toString())) {
           this.patchAnswerWithSessionChoice(progress);
           console.log(this.answerForm.value);
           this.onPostAnswer(this.answerForm.value)

@@ -25,9 +25,7 @@ export class SemesterService {
   }
 
   update(model: Semester) {
-    return this.http.put(this.baseUrl + model.id, model, {
-      responseType: "text",
-    });
+    return this.http.put(this.baseUrl + model.id, model);
   }
 
   deleteList(id: number) {

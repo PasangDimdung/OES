@@ -52,17 +52,17 @@ export class AddSemesterComponent implements OnInit {
     this.isSubmitted = true;
     if (this.form.value.id) {
       this.semesterService.update(this.form.value as Semester)
-      .subscribe(() => {
+      .subscribe((response) => {
         this.isSubmitted = false;
         this.goToSemesterList();
-        this.toastr.success("Semester updated successfully");
+        this.toastr.success(response['message']);
       });
     } else {
       this.semesterService.submit(this.form.value)
-      .subscribe(() => {
+      .subscribe((response) => {
         this.isSubmitted = false;
         this.goToSemesterList();
-        this.toastr.success("Semester added successfully");
+        this.toastr.success(response['message']);
       });
     }
   }
