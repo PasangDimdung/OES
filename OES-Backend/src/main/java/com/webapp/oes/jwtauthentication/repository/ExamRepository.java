@@ -15,5 +15,8 @@ public interface ExamRepository extends JpaRepository<Exam, Long>{
 
     List<Exam> findByDepartment(String department);
 
+    @Query("SELECT e FROM Exam e WHERE e.semester = :semester and e.department = :department")
+    List<Exam> reportOfExams(@Param("semester") String semester, @Param("department") String department);
+
     
 }

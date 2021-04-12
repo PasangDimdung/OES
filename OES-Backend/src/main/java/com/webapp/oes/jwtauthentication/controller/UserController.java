@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -133,11 +135,11 @@ public class UserController {
         return new ResponseEntity<>(new ApiResponse(true, "User list", userRepository.findAll()), HttpStatus.OK);
     }
 
-    // @PutMapping("api/user/{id}")
+    @GetMapping("api/user/{id}")
 
-    // public ResponseEntity<?> updateUser(@) {
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
 
-    //     return new ResponseEntity<>(new ApiResponse(true, "User list", userRepository.findAll()), HttpStatus.OK);
-    // }
+        return new ResponseEntity<>(new ApiResponse(true, "User details", userRepository.findById(id)), HttpStatus.OK);
+    }
 
 }

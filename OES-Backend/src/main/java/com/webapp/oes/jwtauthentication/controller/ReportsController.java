@@ -3,17 +3,24 @@ package com.webapp.oes.jwtauthentication.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import com.webapp.oes.jwtauthentication.message.request.Paper;
 import com.webapp.oes.jwtauthentication.message.response.ApiResponse;
 import com.webapp.oes.jwtauthentication.message.response.ReportResponse;
 import com.webapp.oes.jwtauthentication.model.AnswerSheet;
+import com.webapp.oes.jwtauthentication.model.Exam;
 import com.webapp.oes.jwtauthentication.model.Report;
+import com.webapp.oes.jwtauthentication.model.User;
 import com.webapp.oes.jwtauthentication.repository.AnswerSheetRepository;
+import com.webapp.oes.jwtauthentication.repository.ExamRepository;
 import com.webapp.oes.jwtauthentication.repository.ReportRepository;
+import com.webapp.oes.jwtauthentication.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +35,12 @@ public class ReportsController {
 
     @Autowired
     private ReportRepository reportRepository;
+
+    @Autowired
+    private ExamRepository eRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     
     
@@ -93,5 +106,17 @@ public class ReportsController {
 
     }
 
- 
+    @PostMapping("api/{userId}/exams")
+    public ResponseEntity<?> getExams(@PathVariable Long userId, @RequestBody Paper paper) {
+
+        User user = userRepository.findById(userId).get();
+
+        List<Exam> exams = eRepository.reportOfExams(paper.getSemester(), user.getsDetails().getDepartment());
+
+        if(exams != null) {
+            return new ResponseEntity<>(new ApiResponse(true, "Exam list.", exams), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new ApiResponse(true, "Exam list.", null), HttpStatus.OK);
+    }
 }
