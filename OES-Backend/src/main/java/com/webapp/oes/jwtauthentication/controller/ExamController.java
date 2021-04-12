@@ -254,11 +254,11 @@ public class ExamController {
             _examSubject.setStatus(eSubject.getStatus());
 
             return new ResponseEntity<>(
-                    new ApiResponse(true, "Exam with id " + id + " updated.", eSubjectRepository.save(_examSubject)),
+                    new ApiResponse(true, "Exam-Subject with id " + id + " updated.", eSubjectRepository.save(_examSubject)),
                     HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(new ApiResponse(false, "Exam with id " + id + " not found.", null),
+        return new ResponseEntity<>(new ApiResponse(false, "Exam-subject with id " + id + " not found.", null),
                 HttpStatus.NOT_FOUND);
     }
 }

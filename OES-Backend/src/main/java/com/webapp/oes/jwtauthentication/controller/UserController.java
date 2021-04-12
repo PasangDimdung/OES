@@ -1,7 +1,6 @@
 package com.webapp.oes.jwtauthentication.controller;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,6 @@ import com.webapp.oes.jwtauthentication.model.User;
 import com.webapp.oes.jwtauthentication.repository.RoleRepository;
 import com.webapp.oes.jwtauthentication.repository.UserRepository;
 import com.webapp.oes.jwtauthentication.repository.StudentDetailsRepository;
-
-
-
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
