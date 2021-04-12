@@ -12,5 +12,8 @@ public interface ExamSubjectRepository extends JpaRepository<ExamSubject, Long> 
 
     @Query("SELECT e FROM ExamSubject e WHERE e.exam.id = :examId")
     List<ExamSubject> findSubject(@Param("examId") Long examId);
+
+    @Query("SELECT e FROM ExamSubject e WHERE e.exam.id = :examId AND e.status = 'completed'")
+    List<ExamSubject>  getCompletedExamSubjects(@Param("examId") Long examId);
     
 }
