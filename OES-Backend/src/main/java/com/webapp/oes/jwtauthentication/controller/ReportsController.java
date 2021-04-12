@@ -93,5 +93,6 @@ public class ReportsController {
         return new ResponseEntity<>(new ApiResponse(true, "Reports of all subject.", repList), HttpStatus.OK);
 
     }
+
  
 }

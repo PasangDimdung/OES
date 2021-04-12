@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +44,29 @@ public class QuestionController {
 
         return new ResponseEntity<>(new ApiResponse(false, "Questions not found.", null), HttpStatus.OK); 
 
+    }
+
+    @DeleteMapping("api/question/{qId}")
+
+    public ResponseEntity<?> deleteQuestion(@PathVariable int qId) {
+
+        var que = qRepository.findById(qId);
+
+        if(que != null) {
+
+            try {
+                qRepository.deleteById(qId);
+                return new ResponseEntity<>(new ApiResponse(true, "Subject with id " + qId + " deleted.", null),
+                        HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+        }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Subject with id " + qId + " not found.", null),
+                        HttpStatus.NOT_FOUND);
+       
     }
 }

@@ -112,10 +112,19 @@ public class ExamController {
     @DeleteMapping("/api/exam/{examId}/department/{id}")
     public ResponseEntity<?> deleteDepartmentOfExam(@PathVariable long examId, @PathVariable int id) {
         var ex = examRepository.findById(examId);
-        Exam e = ex.get();
-        e.getDepartments().remove(dRepository.findById(id).get());
-        examRepository.save(e);
-        return new ResponseEntity<>(new ApiResponse(true, "Department removed for exam", e), HttpStatus.OK);
+
+        if(ex != null) {
+            try {
+                Exam e = ex.get();
+                e.getDepartments().remove(dRepository.findById(id).get());
+                examRepository.save(e);
+                return new ResponseEntity<>(new ApiResponse(true, "Department removed for exam", e), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+            }
+        }
+        return new ResponseEntity<>(new ApiResponse(true, "Exam  " +id+" not found.", null), HttpStatus.NOT_FOUND);
+        
     }
 
     @PutMapping("/api/exam/{id}") // update exam name
@@ -155,13 +164,22 @@ public class ExamController {
     @DeleteMapping("api/exam/{id}")
     public ResponseEntity<?> deleteExamById(@PathVariable Long id) {
 
-        try {
-            examRepository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse(true, "Exam with id " + id + " deleted.", null), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Exam with id " + id + " not found.", null),
-                    HttpStatus.NOT_FOUND);
+        var exam = examRepository.findById(id);
+
+        if(exam != null) {
+
+            try {
+                examRepository.deleteById(id);
+                return new ResponseEntity<>(new ApiResponse(true, "Exam with id " + id + " deleted.", null), HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(new ApiResponse(false, "cannot delete", null),
+                        HttpStatus.BAD_REQUEST);
+            }
+
         }
+
+        return new ResponseEntity<>(new ApiResponse(false, "Exam with id " + id + " not found.", null),
+        HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("api/user/{id}/exams")

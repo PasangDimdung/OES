@@ -47,6 +47,7 @@ public class UserController {
     @Autowired
 	PasswordEncoder encoder;
 
+
     @PostMapping("api/addStudent")
     public StudentDetails addS(@RequestBody StudentDetails sDetails) {
         return sDetailsRepository.save(sDetails);
@@ -135,8 +136,16 @@ public class UserController {
 
 
     @GetMapping("api/user")
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public ResponseEntity<?> getAllUsers() {
+
+        return new ResponseEntity<>(new ApiResponse(true, "User list", userRepository.findAll()), HttpStatus.OK);
     }
+
+    // @PutMapping("api/user/{id}")
+
+    // public ResponseEntity<?> updateUser(@) {
+
+    //     return new ResponseEntity<>(new ApiResponse(true, "User list", userRepository.findAll()), HttpStatus.OK);
+    // }
 
 }

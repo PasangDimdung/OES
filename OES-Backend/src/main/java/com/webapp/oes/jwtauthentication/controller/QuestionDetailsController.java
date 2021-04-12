@@ -78,19 +78,6 @@ public class QuestionDetailsController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("api/question/{qId}")
-
-    public ResponseEntity<?> deleteQuestion(@PathVariable int qId) {
-        try {
-            qRepository.deleteById(qId);
-            return new ResponseEntity<>(new ApiResponse(true, "Subject with id " + qId + " deleted.", null),
-                    HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, "Subject with id " + qId + " not found.", null),
-                    HttpStatus.NOT_FOUND);
-        }
-    }
-
     @PostMapping("api/generatePaper")
 
     public ResponseEntity<?> generatePaper(@RequestBody QuestionPaper paper) {
