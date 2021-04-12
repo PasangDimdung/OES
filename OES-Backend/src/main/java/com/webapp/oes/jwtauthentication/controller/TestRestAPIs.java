@@ -169,6 +169,16 @@ public class TestRestAPIs {
 		return new ResponseEntity<>(new ApiResponse(true, "Academic year list empty.", null), HttpStatus.NO_CONTENT);
 	}
 
+	@GetMapping("/api/academic-year/{id}")
+	public ResponseEntity<?> getAcademicYearById(@PathVariable int id) {
+		Optional<AcademicYear> y = aYearRepository.findById(id);
+		if (y != null) {
+			return ResponseEntity.ok(new ApiResponse(true, "Academic year with id " + id, y));
+		}
+
+		return new ResponseEntity<>(new ApiResponse(false, "Academic year with id " + id+ "not found.", null), HttpStatus.NOT_FOUND);
+	}
+
 	@PutMapping("/api/academic-year/{id}") // update Academic year
 	public ResponseEntity<?> updateAcademicYear(@PathVariable int id, @RequestBody QuestionType qType) {
 		Optional<AcademicYear> qt = aYearRepository.findById(id);
@@ -190,12 +200,16 @@ public class TestRestAPIs {
 
         if(qt != null) {
 
-			aYearRepository.deleteById(id);
-			return new ResponseEntity<>(new ApiResponse(true, "Academic year deleted.", null), HttpStatus.OK);
+			try {
+				aYearRepository.deleteById(id);
+				return new ResponseEntity<>(new ApiResponse(true, "Academic year deleted.", null), HttpStatus.OK);
+			} catch (Exception e) {
+				return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
+			}
 
 		}
 
-		return new ResponseEntity<>(new ApiResponse(false, "Academic year id not found.", null), HttpStatus.OK);
+		return new ResponseEntity<>(new ApiResponse(false, "Academic year with " + id+" id not found.", null), HttpStatus.NOT_FOUND);
     }
 	
 }

@@ -56,9 +56,6 @@ public class UserController {
 		User user = new User(signUpRequest.getName(), signUpRequest.getUsername(), signUpRequest.getEmail(),
         encoder.encode(signUpRequest.getPassword()), signUpRequest.getsDetails());
 
-        // var sDetails = signUpRequest.getsDetails();
-        // sDetails.setUser(user);
-
         Set<String> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
@@ -114,7 +111,6 @@ public class UserController {
                 Role pmRole = roleRepository.findByName(RoleName.ROLE_PM)
                         .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
                 roles.add(pmRole);
-
                 break;
             default:
                 Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
