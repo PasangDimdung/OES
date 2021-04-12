@@ -29,6 +29,7 @@ export class AddUnitComponent implements OnInit {
   });
 
   private _refresh$ = new Subject<void>();
+  errorMessage: any;
 
   constructor(
     private subjectService: SubjectService,
@@ -78,11 +79,11 @@ export class AddUnitComponent implements OnInit {
         this._refresh$.next();
       })
     )
-    .subscribe(() => {
+    .subscribe((response) => {
       this.form.reset({
         unit: "",
       });
-      this.toastr.success("Unit added for " + this.subject.name);
+      this.toastr.success(response['message']);
     });
   }
 
@@ -94,11 +95,12 @@ export class AddUnitComponent implements OnInit {
       })
     )
     .subscribe(
-      () => {
-        this.toastr.success("Unit deleted for " + this.subject.name);
+      (response) => {
+        this.toastr.success(response['message']);
       },
       (error) => {
-        console.log(error);
+        this.errorMessage = error.error.message;
+        this.toastr.error(this.errorMessage);
       }
     );
   }

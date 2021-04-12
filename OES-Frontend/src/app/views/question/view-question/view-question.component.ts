@@ -37,6 +37,7 @@ export class ViewQuestionComponent {
 
   examNameID: number;
   units: any;
+  subjectUnit: any;
 
   constructor(
     private departmentService: DepartmentService,
@@ -133,14 +134,14 @@ export class ViewQuestionComponent {
         subject: this.selectedSubject["name"],
         unit: this.selectedUnit["unit"]
     });
-    console.log(this.form.value)
     this.http.post("http://localhost:8080/api/question/filter/", this.form.value)
     .subscribe(response => {
-        console.log(response);
         this.isSubmitted = false;
         if (response["status"] == true) {
           let resources = response["data"];
           this.questionList = resources;
+          console.log(this.questionList);
+          this.subjectUnit = resources[0]['subjectUnit'].unit;
           this.questionDetails = response["data"][0].questionDetails;
           this.toastr.success(response["message"]);
           this.selectedDepartment = '';

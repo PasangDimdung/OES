@@ -1,0 +1,60 @@
+<div class="animated fadeIn">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/academic-year/add']">Academic Year</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">List</li>
+    </ol>
+  </nav>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Academic Year Table
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let element of questionTypeList | paginate: { itemsPerPage: 5, currentPage: p }; trackBy: trackById; let i = index">
+                <tr>
+                  <td>{{ i + 1 }}</td>
+                  <td>
+                    <a>
+                      {{ element.name }}
+                    </a>
+                  </td>
+                  <td>
+                    <button [routerLink]="['/question-type/edit', element.id]" class="btn btn-link btn-icon btn-md edit" style="color: #51bcda">
+                      <i class="fa fa-edit"></i>
+                    </button>
+                    <button (click)="onDelete(element.id)" class="btn btn-link btn-icon btn-md remove" style="color: #ef8157">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="!questionTypeList">
+                <td colspan="8">Loading...</td>
+              </tr>
+              <tr *ngIf="questionTypeList && questionTypeList.length == 0">
+                <td colspan="8">No data to display</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer" style="padding-bottom: 0px">
+          <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

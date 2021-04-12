@@ -93,7 +93,6 @@ export class ViewQuestionPaperComponent {
     }
 
     onExamNameChange(id: number) {
-        console.log(id);
         this.examNameID = id;
     }
 
@@ -122,7 +121,6 @@ export class ViewQuestionPaperComponent {
         });
         this.http.post("http://localhost:8080/api/exam/" + 2 + '/subject' + '/questions', this.questionPaperForm.value)
             .subscribe(response => {
-                console.log(response);
                 this.isSubmitted = false;
                 if (response['status'] === true) {
                     let resources = response['data'];

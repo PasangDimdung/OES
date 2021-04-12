@@ -25,9 +25,7 @@ export class DepartmentService {
   }
 
   update(model: Department) {
-    return this.http.put(this.baseUrl + model.id, model, {
-      responseType: "text",
-    });
+    return this.http.put(this.baseUrl + model.id, model);
   }
 
   deleteList(id: number) {

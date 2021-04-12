@@ -55,6 +55,12 @@ export class SubjectListComponent implements OnInit {
     // this.loadSemester();
     this.refresh$.subscribe(() => {
       this.http.get("http://localhost:8080/api/department/" + this.selectedDepartmentId + "/semester/" + this.selectedSemesterId + "/subjects/")
+      .subscribe(response => {
+        // this.selectedSemester = '';
+        // this.selectedDepartment = '';
+        var resources = response["data"];  
+        this.subjectList = resources;  
+      })
     });
   }
 
@@ -80,7 +86,9 @@ export class SubjectListComponent implements OnInit {
 
   onDepartmentChange(id: number) {
     this.selectedDepartmentId = id;
+    this.selectedSemester = '';
     this.loadSemester();
+    this.subjectList = [];
   }
 
   onSemesterChange(id: number) {
@@ -92,9 +100,8 @@ export class SubjectListComponent implements OnInit {
       })
     )
     .subscribe(response => {
-      console.log(response);
-      this.selectedSemester = '';
-      this.selectedDepartment = '';
+      // this.selectedSemester = '';
+      // this.selectedDepartment = '';
       var resources = response["data"];  
       this.subjectList = resources;  
     })
@@ -108,8 +115,8 @@ export class SubjectListComponent implements OnInit {
         })
       )
       .subscribe(
-        () => {
-          this.toastr.success("Subject deleted for " + 1);
+        (response) => {
+          this.toastr.success(response['message']);
         },
         (error) => {
           this.errorMessage = error.error.message;

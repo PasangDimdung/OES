@@ -11,10 +11,10 @@ export enum EditMode {
 }
 
 @Component({
-  selector: "app-add-department",
-  templateUrl: "add-question-type.component.html",
+  selector: "app-add-academic-year",
+  templateUrl: "add-academic-year.component.html",
 })
-export class AddQuestionTypeComponent implements OnInit {
+export class AddAcademicYearComponent implements OnInit {
   questionTypeForm: QuestionType = {} as QuestionType;
   editMode: EditMode = EditMode.Create;
 

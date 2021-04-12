@@ -120,7 +120,6 @@ export class ExamComponent implements CanDeactivateGuard {
         if (response['status'] === true) {
           let resources = response['data'];
           this.examSubjectName = resources['subject'];
-          console.log(this.examSubjectName);
           this.questionDetails = resources;
           this.questions = resources['questions'];
           this.questionLength = resources['questions'];

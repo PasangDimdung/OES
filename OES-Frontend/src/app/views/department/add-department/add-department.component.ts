@@ -51,9 +51,10 @@ export class AddDepartmentComponent implements OnInit {
   onSubmit() {
     if (this.form.value.id) {
       this.departmentService.update(this.form.value as Department)
-      .subscribe(() => {
+      .subscribe((response) => {
+        console.log(response);
           this.goToDepartmentList();
-          this.toastr.success("Department updated successfully");
+          this.toastr.success(response['message']);
         },
         (error) => {
           this.errorMessage = error.error.message;
@@ -62,9 +63,10 @@ export class AddDepartmentComponent implements OnInit {
       );
     } else {
       this.departmentService.submit(this.form.value)
-      .subscribe(() => {
+      .subscribe((response) => {
+        console.log(response);
           this.goToDepartmentList();
-          this.toastr.success("Department added successfully");
+          this.toastr.success(response['message']);
         },
         (error) => {
           this.errorMessage = error.error.message;

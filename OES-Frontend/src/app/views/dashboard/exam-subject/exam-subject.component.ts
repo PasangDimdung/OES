@@ -18,7 +18,7 @@ export class ExamSubjectComponent {
   public authority: string;
 
   errorMessage: string = "";
-  badgeColor: string;
+  badgeColor;
   subjectList: Subjects[] = [];
   formGroup: FormGroup;
   checkForm: FormGroup;
@@ -66,7 +66,6 @@ export class ExamSubjectComponent {
       });
     }
     this.loadSubject();
-    this.badgeColor = "warning";
   }
 
   x = setInterval(() => {        
@@ -80,13 +79,6 @@ export class ExamSubjectComponent {
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
-        
-        for(let i=0; i< this.sDates.length; i++) {
-          if(this.sDates[i].status == SD.completed) {
-            this.badgeColor = 'success';
-          }
-        }
-
       })
   }
 
@@ -103,7 +95,6 @@ export class ExamSubjectComponent {
       subject: subjectName,
       exam: {id: Number(this.examNameID)}
     })
-    console.log(this.checkForm.value);
     this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.checkForm.value)
       .subscribe(response => {
         if (response['status'] === true) {

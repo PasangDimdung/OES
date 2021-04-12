@@ -1,1 +1,69 @@
-<p>Report works</p>
+<div class="animated fadeIn">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a [routerLink]="['/dashboard']">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Report</li>
+        </ol>
+    </nav>
+    <!-- Student Dashboard -->
+    <div class="row" *ngIf="authority === 'user'">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Exam Table
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Exam Name</th>
+                                <th>Academic Year</th>
+                                <th>Department</th>
+                                <th>Semester</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container
+                                *ngFor=" let element of studentExamNameList | paginate: { itemsPerPage: 5, currentPage: p }; let i = index">
+                                <tr>
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                        <a [routerLink]="['/dashboard/exam-subject', element.id]">
+                                            {{ element.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            {{ element.academic_year }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            {{ element.department }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a>
+                                            {{ element.semester }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <tr *ngIf="!studentExamNameList">
+                                <td colspan="10">Loading...</td>
+                            </tr>
+                            <tr *ngIf="studentExamNameList && studentExamNameList.length == 0">
+                                <td colspan="10">No data to display</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer" style="padding-bottom: 0px">
+                    <pagination-controls previousLabel="Prev" (pageChange)="p = $event" class="float-right">
+                    </pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

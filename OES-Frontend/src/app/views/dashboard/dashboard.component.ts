@@ -1,12 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { Subject } from "rxjs";
 import { tap } from "rxjs/operators";
 import { TokenStorageService } from "../../_auth/token-storage.service";
-import { SD } from "../../_sd";
 import { ExamNameService } from "../../_services/exam-name.service";
 
 @Component({
@@ -21,7 +19,6 @@ export class DashboardComponent implements OnInit {
   studentExamNameList: any = [];
 
   enroll: boolean = false;
-  statusForm: FormGroup;
 
   private _refresh$ = new Subject<void>();
 
@@ -31,7 +28,6 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private formBuilder: FormBuilder
   ) {}
 
   get refresh$() {
@@ -53,15 +49,6 @@ export class DashboardComponent implements OnInit {
         return true;
       });
     }
-
-    this.statusForm = this.formBuilder.group({
-      status: SD.completed
-    });
-        this.http.put("http://localhost:8080/api/exam-subject/2/status", this.statusForm.value)
-    .subscribe(res =>{
-      console.log(res);
-      console.log("hitted")
-    })
 
     this.loadAdminExamName();
     if(this.authority == "user")
@@ -87,7 +74,6 @@ export class DashboardComponent implements OnInit {
     this.http.get("http://localhost:8080/api/user/" + this.tokenStorageService.getUserId() + "/exams/")
       .subscribe((response) => {
         let resources = response["data"];
-        console.log(response);
         this.studentExamNameList = resources;
       });
   }

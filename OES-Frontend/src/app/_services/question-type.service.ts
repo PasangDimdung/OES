@@ -25,12 +25,10 @@ export class QuestionTypeService {
   }
 
   update(model: QuestionType) {
-    return this.http.put(this.baseUrl + model.id, model, {
-      responseType: "text",
-    });
+    return this.http.put(this.baseUrl + model.id, model);
   }
 
   deleteList(id: number) {
-    return this.http.delete(this.baseUrl + id, { responseType: "text" });
+    return this.http.delete(this.baseUrl + id);
   }
 }

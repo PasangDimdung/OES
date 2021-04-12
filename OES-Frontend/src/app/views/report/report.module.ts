@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportRoutingModule } from './report-routing.module';
 import { ReportComponent } from './report.component';
 
@@ -9,6 +10,7 @@ import { ReportComponent } from './report.component';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
     ReportRoutingModule,
   ],
   declarations: [ ReportComponent ]
