@@ -46,7 +46,7 @@ public class ExamSubjectController {
 
             e.setStatus("completed");
 
-            return new ResponseEntity<>(new ApiResponse(true, "exam completed.", null), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(true, "exam completed.", examRepository.save(e)), HttpStatus.OK);
 
         }
 
