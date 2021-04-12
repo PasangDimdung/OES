@@ -38,7 +38,6 @@ export class LoginComponent {
 
     this.authService.attemptAuth(this.loginInfo)
     .subscribe((response) => {
-      console.log(response);
         this.isSubmitted = false;
         this.tokenStorage.saveUserId(response["userId"]);
         this.tokenStorage.saveToken(response.accessToken);

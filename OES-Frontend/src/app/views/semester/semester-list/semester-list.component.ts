@@ -64,7 +64,6 @@ export class SemesterListComponent implements OnInit {
         this.toastr.success(response['message']);
       },
       (error) => {
-        console.log(error);
         this.isSubmitted = false;
         this.errorMessage = error.error.message;
         this.toastr.error(this.errorMessage);

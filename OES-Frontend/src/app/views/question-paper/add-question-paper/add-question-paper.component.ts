@@ -91,7 +91,6 @@ export class AddQuestionPaperComponent {
   }
 
   onExamNameChange(id: number){
-    console.log(id);
     this.examNameID = id; 
   }
 
@@ -118,7 +117,6 @@ export class AddQuestionPaperComponent {
         subject: this.selectedSubject["name"],
         exam: {id: this.examNameID}
     });
-    console.log(this.questionPaperForm.value)
     this.questionPaperService.submit(this.questionPaperForm.value)
     .subscribe((response) => {
         this.isSubmitted = false;

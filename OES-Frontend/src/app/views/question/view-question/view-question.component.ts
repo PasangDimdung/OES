@@ -133,10 +133,8 @@ export class ViewQuestionComponent {
         subject: this.selectedSubject["name"],
         unit: this.selectedUnit["unit"]
     });
-    console.log(this.form.value)
     this.http.post("http://localhost:8080/api/question/filter/", this.form.value)
     .subscribe(response => {
-        console.log(response);
         this.isSubmitted = false;
         if (response["status"] == true) {
           let resources = response["data"];
