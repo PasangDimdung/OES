@@ -199,12 +199,12 @@ public class SubjectController {
         if (unit != null) {
             try {
                 sUnitRepository.deleteById(unitId);
-                return new ResponseEntity<>(new ApiResponse(true, "Semester with id "+unitId+ " deleted.", null), HttpStatus.OK);
+                return new ResponseEntity<>(new ApiResponse(true, "Unit with id "+unitId+ " deleted.", null), HttpStatus.OK);
             } catch(Exception e) {
                 return new ResponseEntity<>(new ApiResponse(false, "cannot delete.", null), HttpStatus.BAD_REQUEST);
             }
         }
-        return new ResponseEntity<>(new ApiResponse(false, "Semester with id "+unitId+ " not found.", null), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiResponse(false, "Unit with id "+unitId+ " not found.", null), HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/api/department/{deptId}/semester/{semId}/subjects")
