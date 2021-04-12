@@ -48,7 +48,7 @@ export class ExamSubjectComponent {
       department: [''],
       year: this.today,
       subject: [''],
-      exam : {id: ''}
+      exam: { id: '' }
     })
 
     if (this.token.getToken()) {
@@ -68,7 +68,7 @@ export class ExamSubjectComponent {
     this.loadSubject();
   }
 
-  x = setInterval(() => {        
+  x = setInterval(() => {
     this.currentDateTime = formatDate(new Date(), 'yyyy-MM-ddTHH:mm', 'en');
   }, 1000);
 
@@ -76,7 +76,6 @@ export class ExamSubjectComponent {
     this.examNameID = this.route.snapshot.paramMap.get('id');
     this.http.get("http://localhost:8080/api/exam/" + this.examNameID)
       .subscribe((response) => {
-        console.log(response);
         let resources = response["data"];
         this.data = resources;
         this.sDates = resources["sDates"];
@@ -84,7 +83,6 @@ export class ExamSubjectComponent {
   }
 
   viewQuestionPaper(subjectName: string, examSubjectId) {
-    
     //Store values in session storage;
     this.examSubjectService.saveSubject(subjectName);
     this.examSubjectService.saveExamID(this.examNameID);
@@ -96,7 +94,7 @@ export class ExamSubjectComponent {
       department: this.data.department,
       semester: this.data.semester,
       subject: subjectName,
-      exam: {id: Number(this.examNameID)}
+      exam: { id: Number(this.examNameID) }
     })
     this.http.post("http://localhost:8080/api/exam/" + this.examNameID + '/subject' + '/questions', this.checkForm.value)
       .subscribe(response => {

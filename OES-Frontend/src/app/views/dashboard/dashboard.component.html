@@ -61,7 +61,10 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-warning">{{ element.status }}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                    class="badge badge-pill badge-success">{{element.status}}</span>
+                  <span *ngIf=" element.status == 'pending' "
+                    class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                 </tr>
               </ng-container>
@@ -137,7 +140,10 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-warning">{{ element.status }}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                    class="badge badge-pill badge-success">{{element.status}}</span>
+                  <span *ngIf=" element.status == 'pending' "
+                    class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                 </tr>
               </ng-container>
@@ -213,7 +219,10 @@
                     </a>
                   </td>
                   <td>
-                    <span class="badge badge-pill badge-warning">{{ element.status }}</span>
+                    <span *ngIf=" element.status == 'completed' "
+                    class="badge badge-pill badge-success">{{element.status}}</span>
+                  <span *ngIf=" element.status == 'pending' "
+                    class="badge badge-pill badge-warning">{{element.status}}</span>
                   </td>
                 </tr>
               </ng-container>

@@ -52,7 +52,16 @@ export class DashboardComponent implements OnInit {
 
     this.loadAdminExamName();
     if (this.authority == "user") {
-      this.loadStudentExamName();
+      this.http.get("http://localhost:8080/api/user/" + this.tokenStorageService.getUserId() + "/exams/")
+        .subscribe((response) => {
+          let resources = response["data"];
+          this.studentExamNameList = resources;
+
+          for (let index = 0; index < this.studentExamNameList.length; index++) {
+            this.http.get("http://localhost:8080/api/" + this.studentExamNameList[index]['id'] + "/exam-subject/completed")
+              .subscribe();
+          }
+        });
     }
     this._refresh$.subscribe(() => {
       this.examNameService.getAll().subscribe((response) => {
@@ -60,12 +69,6 @@ export class DashboardComponent implements OnInit {
         this.studentExamNameList = resources;
       });
     });
-
-    //for exam status
-    this.http.get("http://localhost:8080/api/" + 3 + "/exam-subject/completed")
-      .subscribe((response) => {
-        console.log(response);
-      });
   }
 
   loadAdminExamName() {
