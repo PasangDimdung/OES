@@ -38,14 +38,18 @@
                 </fieldset>
               </div>
               <div class="form-group col-sm-3">
-                <label for="ccyear">Academic Year:</label>
-                <select class="custom-select d-block w-100" id="ccyear">
-                  <option hidden value="" disabled selected>
-                    Select academic year
-                  </option>
-                  <option>First Year</option>
-                  <option>Second Year</option>
-                </select>
+                <fieldset class="form-group">
+                  <label for="customSelect">Academic Year:</label>
+                  <select (change)="onAcademicYearChange()" class="custom-select d-block w-100" id="semester"
+                    [(ngModel)]="selectedAcademicYear" name="semester" required placeholder="d.ff">
+                    <option hidden value="" disabled selected>
+                      Select academic year
+                    </option>
+                    <option *ngFor="let academicyear of academicyears" [ngValue]="academicyear">
+                      {{ academicyear.name }}
+                    </option>
+                  </select>
+                </fieldset>
               </div>
               <div class="form-group col-sm-3">
                 <fieldset class="form-group">
