@@ -1,9 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {
   AbstractControl,
-  FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
@@ -16,6 +14,8 @@ import { DepartmentService } from "../../_services/department.service";
 import { SemesterService } from "../../_services/semester.service";
 import { UserService } from "../../_services/user.service";
 import { TokenStorageService } from "../../_auth/token-storage.service";
+import { AcademicYearService } from "../../_services/academic-year.service";
+import { AcademicYear } from "../../_models/academic-year";
 
 @Component({
   selector: "app-dashboard",
@@ -32,6 +32,7 @@ export class RegisterComponent implements OnInit {
 
   semesters: Semester[];
   departments: Department[];
+  academicyears: AcademicYear[];
   authority: string;
   roles: string[];
   stdSignUpForm: FormGroup;
@@ -42,6 +43,7 @@ export class RegisterComponent implements OnInit {
     private userService: UserService,
     private semesterService: SemesterService,
     private departmentService: DepartmentService,
+    private academicYearService: AcademicYearService,
     private toastr: ToastrService,
     private tokenStorageService : TokenStorageService
   ) {}
@@ -81,8 +83,6 @@ export class RegisterComponent implements OnInit {
           return true;
       });
   }
-
-    this.loadSemester();
     this.loadDepartment();
   }
 
@@ -121,12 +121,29 @@ export class RegisterComponent implements OnInit {
     });
   }
 
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+        .subscribe((response) => {
+            console.log(response);
+            let resources = response["data"];
+            this.academicyears = resources;
+        });
+}
+
   loadSemester() {
     this.semesterService.getAll().subscribe((response) => {
       let resources = response["data"];
       this.semesters = resources;
     });
   }
+
+  onDepartmentChange() {
+    this.loadAcademicYear();
+}
+
+onAcademicYearChange() {
+    this.loadSemester();
+}
 
   onSubmit() {
     this.isSubmitted = true;

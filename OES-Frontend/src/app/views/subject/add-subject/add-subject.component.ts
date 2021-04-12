@@ -1,9 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { FormGroup, Validators, FormControl } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { AcademicYear } from "../../../_models/academic-year";
 import { Department } from "../../../_models/department";
 import { Semester } from "../../../_models/semester";
 import { Subjects } from "../../../_models/subject";
+import { AcademicYearService } from "../../../_services/academic-year.service";
 import { DepartmentService } from "../../../_services/department.service";
 import { SemesterService } from "../../../_services/semester.service";
 import { SubjectService } from "../../../_services/subject.service";
@@ -23,6 +25,7 @@ export class AddSubjectComponent implements OnInit {
   semesters: Semester[];
   subjectList: any;
   departments: Department[];
+  academicyears: AcademicYear[];
 
   form = new FormGroup({
     name: new FormControl(this.subjectForm.name, [Validators.required]),
@@ -39,6 +42,7 @@ export class AddSubjectComponent implements OnInit {
 
   constructor(
     private departmentService: DepartmentService,
+    private academicYearService: AcademicYearService,
     private semesterService: SemesterService,
     private subjectService: SubjectService,
     private toastr: ToastrService
@@ -46,7 +50,6 @@ export class AddSubjectComponent implements OnInit {
 
   ngOnInit() {
     this.loadDepartment();
-    this.loadSemester();
   }
 
   loadDepartment() {
@@ -57,6 +60,15 @@ export class AddSubjectComponent implements OnInit {
     });
   }
 
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+        .subscribe((response) => {
+            console.log(response);
+            let resources = response["data"];
+            this.academicyears = resources;
+        });
+}
+
   loadSemester() {
     this.semesterService.getAll()
     .subscribe((response) => {
@@ -64,6 +76,15 @@ export class AddSubjectComponent implements OnInit {
       this.semesters = resources;
     });
   }
+
+  onDepartmentChange() {
+    this.loadAcademicYear();
+  }
+
+  onAcademicYearChange() {
+    this.loadSemester();
+  }
+
 
   onSubmit() {
    this.subjectService.submit(this.form.value)

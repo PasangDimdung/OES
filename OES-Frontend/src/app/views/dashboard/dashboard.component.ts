@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-  ) {}
+  ) { }
 
   get refresh$() {
     return this._refresh$;
@@ -51,8 +51,7 @@ export class DashboardComponent implements OnInit {
     }
 
     this.loadAdminExamName();
-    if(this.authority == "user")
-    {
+    if (this.authority == "user") {
       this.loadStudentExamName();
     }
     this._refresh$.subscribe(() => {
@@ -62,7 +61,11 @@ export class DashboardComponent implements OnInit {
       });
     });
 
-    // if()
+    //for exam status
+    this.http.get("http://localhost:8080/api/" + 3 + "/exam-subject/completed")
+      .subscribe((response) => {
+        console.log(response);
+      });
   }
 
   loadAdminExamName() {

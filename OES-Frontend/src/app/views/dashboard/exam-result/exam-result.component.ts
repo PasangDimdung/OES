@@ -3,7 +3,6 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { TokenStorageService } from "../../../_auth/token-storage.service";
-import { SD } from "../../../_sd";
 import { ExamSubjectService } from "../../../_services/exam-subject.service";
 import { UserService } from "../../../_services/user.service";
 

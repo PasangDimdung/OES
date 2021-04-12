@@ -4,9 +4,11 @@ import { Component } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { AcademicYear } from "../../../_models/academic-year";
 import { Department } from "../../../_models/department";
 import { ExamName } from "../../../_models/exam-name";
 import { Semester } from "../../../_models/semester";
+import { AcademicYearService } from "../../../_services/academic-year.service";
 import { DepartmentService } from "../../../_services/department.service";
 import { ExamNameService } from "../../../_services/exam-name.service";
 import { SemesterService } from "../../../_services/semester.service";
@@ -35,6 +37,7 @@ export class AddExamNameComponent {
   semesters: Semester[];
   editMode: EditMode = EditMode.Create;
   subjectList: any = [];
+  academicyears: AcademicYear[];
   sDates: any;
   examNameID: number;
 
@@ -44,6 +47,7 @@ export class AddExamNameComponent {
     private examNameService: ExamNameService,
     private semesterService: SemesterService,
     private departmentService: DepartmentService,
+    private academicYearService: AcademicYearService,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -66,10 +70,8 @@ export class AddExamNameComponent {
     this.formGroup = this.formBuilder.group({
       subjectDates: this.formBuilder.array([])
     })
-
     this.loadExamName();
     this.loadDepartment();
-    this.loadSemester();
   }
 
   loadExamName() {
@@ -92,12 +94,29 @@ export class AddExamNameComponent {
     });
   }
 
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+        .subscribe((response) => {
+            console.log(response);
+            let resources = response["data"];
+            this.academicyears = resources;
+        });
+}
+
   loadSemester() {
     this.semesterService.getAll()
     .subscribe((response) => {
       let resources = response["data"];
       this.semesters = resources;
     });
+  }
+
+  onDepartmentChange() {
+    this.loadAcademicYear();
+  }
+
+  onAcademicYearChange() {
+    this.loadSemester();
   }
 
   onSubmit() {

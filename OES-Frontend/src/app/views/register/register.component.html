@@ -102,23 +102,9 @@
               <div class="row">
                 <div class="form-group col-sm-12 input-group mb-3">
                   <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-calendar-plus-o"></i></span>
-                  </div>
-                  <select class="custom-select" formControlName="academic_year">
-                    <option hidden value="" disabled selected>
-                      Select academic year
-                    </option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
-                  </select>
-                </div>
-              </div>
-              <div class="row">
-                <div class="form-group col-sm-12 input-group mb-3">
-                  <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fa fa-briefcase"></i></span>
                   </div>
-                  <select class="custom-select" formControlName="department">
+                  <select (change)="onDepartmentChange()" class="custom-select" formControlName="department">
                     <option hidden value="" disabled selected>
                       Select department
                     </option>
@@ -128,7 +114,21 @@
                   </select>
                 </div>
               </div>
-
+              <div class="row">
+                <div class="form-group col-sm-12 input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-calendar-plus-o"></i></span>
+                  </div>
+                  <select (change)="onAcademicYearChange()" class="custom-select" formControlName="academic_year">
+                    <option hidden value="" disabled selected>
+                      Select academic year
+                    </option>
+                    <option *ngFor="let academicyear of academicyears" [value]="academicyear.name">
+                      {{ academicyear.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
               <div class="row">
                 <div class="form-group col-sm-12 input-group mb-3">
                   <div class="input-group-prepend">
