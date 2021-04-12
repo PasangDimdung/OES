@@ -2,6 +2,8 @@ import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { AcademicYear } from "../../../_models/academic-year";
+import { AcademicYearService } from "../../../_services/academic-year.service";
 import { DepartmentService } from "../../../_services/department.service";
 import { ExamNameService } from "../../../_services/exam-name.service";
 import { QuestionPaperService } from "../../../_services/question-paper.service";
@@ -39,16 +41,19 @@ export class ViewQuestionComponent {
   units: any;
   subjectUnit: any;
 
+  academicyears: AcademicYear[];
+
   constructor(
     private departmentService: DepartmentService,
     private semesterService: SemesterService,
     private questionPaperService: QuestionPaperService,
+    private academicYearService: AcademicYearService,
     private examNameService: ExamNameService,
     private subjectService: SubjectService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private http: HttpClient
-  ) {}
+  ) { }
   ngOnInit() {
     this.loadDepartment();
     this.loadExamName();
@@ -66,39 +71,51 @@ export class ViewQuestionComponent {
 
   loadExamName() {
     this.examNameService.getAll()
-    .subscribe(response => {
-      let resources = response["data"];
-      this.exams = resources;
-    })
+      .subscribe(response => {
+        let resources = response["data"];
+        this.exams = resources;
+      })
   }
   loadDepartment() {
     this.departmentService.getAll()
-    .subscribe((response) => {
-      let resources = response["data"];
-      this.departments = resources;
-    });
+      .subscribe((response) => {
+        let resources = response["data"];
+        this.departments = resources;
+      });
+  }
+
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+      .subscribe((response) => {
+        console.log(response);
+        let resources = response["data"];
+        this.academicyears = resources;
+      });
   }
 
   loadSemester() {
     this.semesterService.getAll()
-    .subscribe((response) => {
-      let resources = response["data"];
-      this.semesters = resources;
-    });
+      .subscribe((response) => {
+        let resources = response["data"];
+        this.semesters = resources;
+      });
   }
 
   onDepartmentChange() {
-    this.loadSemester();
+    this.loadAcademicYear();
+  }
+
+  onExamNameChange(id: number) {
+    this.examNameID = id;
+  }
+
+  onAcademicYearChange() {
     this.selectedSubject = '';
     this.selectedSemester = '';
     this.subjects = [];
     this.selectedUnit = '';
     this.units = [];
-  }
-
-  onExamNameChange(id: number){
-    console.log(id);
-    this.examNameID = id; 
+    this.loadSemester();
   }
 
   onSemesterChange() {
@@ -129,13 +146,14 @@ export class ViewQuestionComponent {
   onSubmit() {
     this.isSubmitted = true;
     this.form.patchValue({
-        department: this.selectedDepartment["name"],
-        semester: this.selectedSemester["name"],
-        subject: this.selectedSubject["name"],
-        unit: this.selectedUnit["unit"]
+      department: this.selectedDepartment["name"],
+      semester: this.selectedSemester["name"],
+      subject: this.selectedSubject["name"],
+      unit: this.selectedUnit["unit"]
     });
+    console.log(this.form.value);
     this.http.post("http://localhost:8080/api/question/filter/", this.form.value)
-    .subscribe(response => {
+      .subscribe(response => {
         this.isSubmitted = false;
         if (response["status"] == true) {
           let resources = response["data"];
@@ -164,11 +182,11 @@ export class ViewQuestionComponent {
           this.units = [];
           this.selectedUnit = "";
         }
-    }, 
-    (error) => {
-        this.isSubmitted = false;
-        this.errorMessage = error.error.message;
-        this.toastr.error(this.errorMessage);
-    })
+      },
+        (error) => {
+          this.isSubmitted = false;
+          this.errorMessage = error.error.message;
+          this.toastr.error(this.errorMessage);
+        })
   }
 }

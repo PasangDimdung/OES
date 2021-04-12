@@ -58,7 +58,7 @@
               <div class="form-group col-sm-12">
                 <fieldset>
                   <label for="customSelect">Department:</label>
-                  <select class="custom-select" formControlName="department">
+                  <select (change)="onDepartmentChange()" class="custom-select" formControlName="department">
                     <option hidden value="" disabled selected>
                       Select department
                     </option>
@@ -73,12 +73,13 @@
               <div class="form-group col-sm-12">
                 <fieldset>
                   <label for="customSelect">Academic Year:</label>
-                  <select class="custom-select" formControlName="academic_year">
+                  <select (change)="onAcademicYearChange()" class="custom-select" formControlName="academic_year">
                     <option hidden value="" disabled selected>
                       Select academic year
                     </option>
-                    <option>First Year</option>
-                    <option>Second Year</option>
+                    <option *ngFor="let academicyear of academicyears" [value]="academicyear.name">
+                      {{ academicyear.name }}
+                    </option>
                   </select>
                 </fieldset>
               </div>

@@ -3,11 +3,13 @@ import { Component, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, Validators, FormGroup } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { AcademicYear } from "../../../_models/academic-year";
 import { Department } from "../../../_models/department";
 import { QuestionType } from "../../../_models/question-type";
 import { Semester } from "../../../_models/semester";
 import { Subjects } from "../../../_models/subject";
 import { Unit } from "../../../_models/unit";
+import { AcademicYearService } from "../../../_services/academic-year.service";
 import { QuestionDetailService } from "../../../_services/question-details.service";
 import { QuestionTypeService } from "../../../_services/question-type.service";
 import { SemesterService } from "../../../_services/semester.service";
@@ -31,6 +33,7 @@ export class AddQuestionComponent implements OnInit {
   selectedSubject = "";
   selectedSemester = "";
   selectedDepartment = "";
+  selectedAcademicYear = "";
 
   isAddOption: boolean = false;
 
@@ -39,11 +42,13 @@ export class AddQuestionComponent implements OnInit {
   semesters: Semester[];
   types: QuestionType[];
   departments: Department[];
+  academicyears: AcademicYear[];
 
   constructor(
     private semesterService: SemesterService,
     private subjectService: SubjectService,
     private questionTypeService: QuestionTypeService,
+    private academicYearService: AcademicYearService,
     private questionDetailsService: QuestionDetailService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -102,6 +107,16 @@ export class AddQuestionComponent implements OnInit {
     });
   }
 
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+      .subscribe((response) => {
+        console.log(response);
+        let resources = response["data"];
+        this.academicyears = resources;
+      });
+
+  }
+
   loadSemester() {
     this.semesterService.getAll()
       .subscribe((response) => {
@@ -120,12 +135,16 @@ export class AddQuestionComponent implements OnInit {
   }
 
   onDepartmentChange() {
-    this.loadSemester();
+    this.loadAcademicYear();
+  }
+
+  onAcademicYearChange() {
     this.selectedSubject = '';
     this.selectedSemester = '';
     this.subjects = [];
     this.selectedUnit = '';
     this.units = [];
+    this.loadSemester();
   }
 
   onSemesterChange() {
@@ -159,7 +178,7 @@ export class AddQuestionComponent implements OnInit {
       questionDetails: {
         department: this.selectedDepartment["name"],
         year: this.selectedYear,
-        academic_year: "First year",
+        academic_year: this.selectedAcademicYear["name"],
         semester: this.selectedSemester["name"],
         type: this.selectedType["name"],
         subject: this.selectedSubject["name"]

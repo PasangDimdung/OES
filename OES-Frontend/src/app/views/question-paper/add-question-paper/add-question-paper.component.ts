@@ -1,7 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { AcademicYear } from "../../../_models/academic-year";
+import { AcademicYearService } from "../../../_services/academic-year.service";
 import { DepartmentService } from "../../../_services/department.service";
 import { ExamNameService } from "../../../_services/exam-name.service";
 import { QuestionPaperService } from "../../../_services/question-paper.service";
@@ -34,17 +36,19 @@ export class AddQuestionPaperComponent {
   selectExamId = '';
   examNameID: number;
 
+  academicyears: AcademicYear[];
+
   constructor(
     private departmentService: DepartmentService,
     private semesterService: SemesterService,
     private questionPaperService: QuestionPaperService,
+    private academicYearService: AcademicYearService,
     private examNameService: ExamNameService,
     private fb: FormBuilder,
     private toastr: ToastrService,
     private http: HttpClient
   ) {}
   ngOnInit() {
-    this.loadDepartment();
     this.loadExamName();
 
     let date: Date = new Date();
@@ -84,14 +88,28 @@ export class AddQuestionPaperComponent {
   }
 
   onDepartmentChange() {
-    this.loadSemester();
-    this.selectedSubject = '';
-    this.selectedSemester = '';
-    this.subjects = [];
+    this.loadAcademicYear();
+  }
+
+  loadAcademicYear() {
+    this.academicYearService.getAll()
+      .subscribe((response) => {
+        console.log(response);
+        let resources = response["data"];
+        this.academicyears = resources;
+      });
   }
 
   onExamNameChange(id: number){
     this.examNameID = id; 
+    this.loadDepartment();
+  }
+
+  onAcademicYearChange() {
+    this.selectedSubject = '';
+    this.selectedSemester = '';
+    this.subjects = [];
+    this.loadSemester();
   }
 
   onSemesterChange() {

@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AcademicYear } from '../../../_models/academic-year';
+import { AcademicYearService } from '../../../_services/academic-year.service';
 import { DepartmentService } from '../../../_services/department.service';
 import { ExamNameService } from '../../../_services/exam-name.service';
-import { QuestionPaperService } from '../../../_services/question-paper.service';
 import { SemesterService } from '../../../_services/semester.service';
-import { SubjectService } from '../../../_services/subject.service';
 
 @Component({
     templateUrl: 'view-question-paper.component.html'
@@ -37,16 +37,18 @@ export class ViewQuestionPaperComponent {
     selectedSubject = '';
     selectExamId = '';
 
+    academicyears: AcademicYear[];
+
     constructor(
         private departmentService: DepartmentService,
         private semesterService: SemesterService,
         private examNameService: ExamNameService,
+        private academicYearService: AcademicYearService,
         private fb: FormBuilder,
         private toastr: ToastrService,
         private http: HttpClient
     ) { }
     ngOnInit() {
-        this.loadDepartment();
         this.loadExamName();
 
         let date: Date = new Date();
@@ -77,6 +79,15 @@ export class ViewQuestionPaperComponent {
             });
     }
 
+    loadAcademicYear() {
+        this.academicYearService.getAll()
+            .subscribe((response) => {
+                console.log(response);
+                let resources = response["data"];
+                this.academicyears = resources;
+            });
+    }
+
     loadSemester() {
         this.semesterService.getAll()
             .subscribe((response) => {
@@ -86,14 +97,19 @@ export class ViewQuestionPaperComponent {
     }
 
     onDepartmentChange() {
-        this.loadSemester();
+        this.loadAcademicYear();
+    }
+
+    onAcademicYearChange() {
         this.selectedSubject = '';
         this.selectedSemester = '';
         this.subjects = [];
+        this.loadSemester();
     }
 
     onExamNameChange(id: number) {
         this.examNameID = id;
+        this.loadDepartment();
     }
 
     onSemesterChange() {
