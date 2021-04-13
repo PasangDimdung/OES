@@ -63,7 +63,6 @@ export class AddSubjectComponent implements OnInit {
   loadAcademicYear() {
     this.academicYearService.getAll()
         .subscribe((response) => {
-            console.log(response);
             let resources = response["data"];
             this.academicyears = resources;
         });

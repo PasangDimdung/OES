@@ -40,7 +40,6 @@ export class AddDepartmentComponent implements OnInit {
       this.editMode = EditMode.Edit;
       this.departmentService.getUser(this.route.snapshot.params.id)
       .subscribe((response) => {
-        console.log(response);
         let resources = response["data"];
         this.departmentForm = resources;
         this.form.reset(this.departmentForm);
@@ -64,7 +63,6 @@ export class AddDepartmentComponent implements OnInit {
     } else {
       this.departmentService.submit(this.form.value)
       .subscribe((response) => {
-        console.log(response);
           this.goToDepartmentList();
           this.toastr.success(response['message']);
         },

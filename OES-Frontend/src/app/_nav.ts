@@ -285,6 +285,23 @@ export const teacherNavItems: INavData[] = [
     ],
   },
   {
+    name: "Academic Year",
+    url: "/academic-year",
+    icon: "icon-map",
+    children: [
+      {
+        name: "Add",
+        url: "/academic-year/add",
+        icon: "icon-map",
+      },
+      {
+        name: "List",
+        url: "/academic-year/list",
+        icon: "icon-map",
+      },
+    ],
+  },
+  {
     title: true,
     name: "More",
   },

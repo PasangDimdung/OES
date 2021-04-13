@@ -77,13 +77,11 @@ public class DepartmentController {
         if(d != null) {
 			try {
 				dRepository.deleteById(depId);
+				return new ResponseEntity<>(new ApiResponse(false, "Department name deleted.",  null), HttpStatus.OK);
 			} catch (Exception e) {
-				return new ResponseEntity<>(new ApiResponse(false, "Cannot delete",  null), HttpStatus.OK);
+				return new ResponseEntity<>(new ApiResponse(false, "Cannot delete",  null), HttpStatus.BAD_REQUEST);
 			}
-        
-            return new ResponseEntity<>(new ApiResponse(false, "Department name deleted.",  null), HttpStatus.BAD_REQUEST);
         }
-
 		return new ResponseEntity<>(new ApiResponse(false, "Department id not found.", null), HttpStatus.NOT_FOUND);
     }
 

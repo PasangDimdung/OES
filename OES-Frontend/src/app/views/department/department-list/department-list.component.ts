@@ -61,7 +61,7 @@ export class DepartmentListComponent implements OnInit {
           if(response['status'] == true){
             this.toastr.success(response["message"]);
           } else {
-            this.toastr.error(response["message"]);
+            this.toastr.success(response["message"]);
           }
         },
         (error) => {
