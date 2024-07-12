@@ -11,7 +11,7 @@ The Online Examination System addresses these issues by being efficient, fast, a
 
 ``` bash
 # clone the repo
-$ git clone https://github.com/PasangDimdung/OES-Final.git
+$ git clone https://github.com/PasangDimdung/OES.git
 
 OES-Frontend/
 # go into app's directory
